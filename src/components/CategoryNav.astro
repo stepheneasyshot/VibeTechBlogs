@@ -1,0 +1,78 @@
+---
+import { site } from '../data/site';
+import { cn } from '../utils/cn';
+
+interface Props {
+  categories: { name: string; count: number }[];
+  activeCategory: string | null;
+}
+
+const { categories, activeCategory } = Astro.props;
+
+function getIcon(name: string) {
+  return site.categoryIcons[name] ?? site.categoryIcons.default;
+}
+
+function categoryHref(name: string | null) {
+  return name ? `/?category=${encodeURIComponent(name)}` : '/';
+}
+---
+
+<aside class="w-full lg:w-64 flex-shrink-0">
+  <div class="sticky top-24">
+    <h3 class="font-label text-label-md text-on-surface-variant uppercase mb-4 tracking-tighter">分类</h3>
+    <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0">
+      <a
+        href="/"
+        class={cn(
+          'flex items-center gap-3 px-4 py-3 rounded-xl font-label text-label-md whitespace-nowrap transition-all shrink-0',
+          !activeCategory
+            ? 'bg-secondary-container text-on-secondary-container'
+            : 'text-on-surface-variant hover:bg-surface-container-high',
+        )}
+      >
+        <span class="material-symbols-outlined text-[20px]">apps</span>
+        <span>全部</span>
+      </a>
+      {categories.map(({ name, count }) => (
+        <a
+          href={categoryHref(name)}
+          class={cn(
+            'flex items-center gap-3 px-4 py-3 rounded-xl font-label text-label-md whitespace-nowrap transition-all shrink-0',
+            activeCategory === name
+              ? 'bg-secondary-container text-on-secondary-container'
+              : 'text-on-surface-variant hover:bg-surface-container-high',
+          )}
+        >
+          <span class="material-symbols-outlined text-[20px]">{getIcon(name)}</span>
+          <span>{name}</span>
+          <span class="text-on-surface-variant/60 text-[12px]">({count})</span>
+        </a>
+      ))}
+    </nav>
+
+    <div class="mt-12 hidden lg:block p-6 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-high">
+          <img
+            class="w-full h-full object-cover"
+            src={site.author.avatar}
+            alt={site.author.name}
+            loading="lazy"
+          />
+        </div>
+        <div>
+          <p class="font-headline text-[16px] font-semibold">{site.author.name}</p>
+          <p class="font-label text-[12px] text-on-surface-variant">{site.author.role}</p>
+        </div>
+      </div>
+      <p class="font-body text-[14px] text-on-surface-variant mb-4">{site.author.sidebarBio}</p>
+      <button
+        type="button"
+        class="w-full py-2 bg-primary text-on-primary rounded font-label text-label-md hover:opacity-90 transition-opacity cursor-pointer"
+      >
+        订阅更新
+      </button>
+    </div>
+  </div>
+</aside>

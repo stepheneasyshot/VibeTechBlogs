@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryNav from '../components/CategoryNav.astro';
+import BlogCard from '../components/BlogCard.astro';
+import CoverImage from '../components/CoverImage.astro';
+import { site } from '../data/site';
+import {
+  getPublishedPosts,
+  getCategories,
+  filterByCategory,
+  getFeaturedPost,
+  getNonFeaturedPosts,
+  formatDate,
+  getPostUrl,
+  getPostSlug,
+  getReadingTime,
+} from '../utils/posts';
+
+const activeCategory = Astro.url.searchParams.get('category');
+const allPosts = await getPublishedPosts();
+const filteredPosts = filterByCategory(allPosts, activeCategory);
+const categories = getCategories(allPosts);
+const featured = getFeaturedPost(filteredPosts);
+const gridPosts = getNonFeaturedPosts(filteredPosts, featured);
+---
+
+<BaseLayout title={site.title} description={site.description}>
+  <div class="pt-32 pb-stack-xl max-w-[1200px] mx-auto px-gutter" data-pagefind-ignore="all">
+    <section class="mb-stack-xl">
+      <div class="max-w-content-width">
+        <p class="font-label text-label-md text-on-primary-container mb-2 tracking-widest uppercase">
+          {site.hero.eyebrow}
+        </p>
+        <h1 class="font-headline text-headline-lg mb-stack-md leading-tight font-bold">
+          {site.hero.title}
+        </h1>
+        <p class="font-body text-body-lg text-on-surface-variant max-w-[600px]">
+          {site.hero.description}
+        </p>
+        <div class="mt-stack-lg flex gap-4 flex-wrap">
+          <a
+            href="#articles"
+            class="bg-primary text-on-primary px-6 py-3 rounded-lg font-label text-label-md hover:opacity-90 transition-all"
+          >
+            {site.hero.primaryCta}
+          </a>
+          <a
+            href="/about"
+            class="border border-outline-variant text-primary px-6 py-3 rounded-lg font-label text-label-md hover:bg-surface-container-high transition-all"
+          >
+            {site.hero.secondaryCta}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex flex-col lg:flex-row gap-12" id="articles">
+      <CategoryNav categories={categories} activeCategory={activeCategory} />
+
+      <section class="flex-grow min-w-0">
+        {
+          filteredPosts.length === 0 ? (
+            <p class="font-body text-body-md text-on-surface-variant py-12 text-center">
+              该分类下暂无文章。
+            </p>
+          ) : (
+            <div class="flex flex-col gap-12">
+              {
+                featured && (
+                  <article class="group">
+                    <a href={getPostUrl(featured)} class="block cursor-pointer">
+                      <div class="relative overflow-hidden rounded-xl border border-outline-variant mb-6 bg-surface-container-lowest">
+                        <CoverImage
+                          src={featured.data.image}
+                          alt={featured.data.title}
+                          class="aspect-video w-full group-hover:scale-105 transition-transform duration-700"
+                        />
+                      </div>
+                      <div class="max-w-[720px]">
+                        <div class="flex items-center gap-3 mb-3 flex-wrap">
+                          <span class="font-label text-label-md text-tertiary-fixed-dim bg-primary-container px-2 py-0.5 rounded">
+                            精选
+                          </span>
+                          <span class="font-label text-label-md text-on-surface-variant">
+                            {formatDate(featured.data.pubDate)} · {getReadingTime(featured.body ?? featured.data.description)}
+                          </span>
+                        </div>
+                        <h2
+                          class="font-headline text-headline-md mb-3 group-hover:text-on-primary-container transition-colors font-semibold"
+                          transition:name={`title-${getPostSlug(featured)}`}
+                        >
+                          {featured.data.title}
+                        </h2>
+                        <p class="font-body text-body-md text-on-surface-variant mb-6">
+                          {featured.data.description}
+                        </p>
+                        <span class="font-label text-label-md text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+                          阅读全文
+                          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                        </span>
+                      </div>
+                    </a>
+                  </article>
+                )
+              }
+
+              {featured && gridPosts.length > 0 && <div class="h-px bg-outline-variant/30" />}
+
+              {
+                gridPosts.length > 0 && (
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+                    {gridPosts.map((post) => (
+                      <BlogCard post={post} />
+                    ))}
+                  </div>
+                )
+              }
+            </div>
+          )
+        }
+      </section>
+    </div>
+  </div>
+</BaseLayout>

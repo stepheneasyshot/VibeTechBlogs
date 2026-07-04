@@ -1,0 +1,66 @@
+---
+import { site } from '../data/site';
+import ThemeToggle from './ThemeToggle.astro';
+import Search from './Search.astro';
+import { cn } from '../utils/cn';
+
+interface Props {
+  currentPath: string;
+  showProgress?: boolean;
+}
+
+const { currentPath, showProgress = false } = Astro.props;
+
+function isActive(href: string) {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant/30 glass-header">
+  {showProgress && (
+    <div id="progress-bar" class="absolute bottom-0 left-0 h-0.5 bg-tertiary-fixed-dim transition-[width] duration-100 ease-out" style="width: 0%"></div>
+  )}
+  <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-16">
+    <div class="flex items-center gap-8">
+      <a
+        href="/"
+        class="font-headline text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight"
+        transition:name="site-logo"
+      >
+        {site.name}
+      </a>
+      <div class="hidden md:flex gap-6 items-center">
+        {site.nav.map((item) => (
+          <a
+            href={item.href}
+            class={cn(
+              'font-headline text-[16px] pb-1 transition-colors duration-200 cursor-pointer active:opacity-70',
+              isActive(item.href)
+                ? 'text-primary dark:text-inverse-primary border-b-2 border-tertiary-fixed-dim'
+                : 'text-on-surface-variant hover:text-primary dark:hover:text-inverse-primary',
+            )}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <Search />
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('header');
+    if (!nav) return;
+    if (window.scrollY > 20) {
+      nav.classList.add('shadow-sm');
+    } else {
+      nav.classList.remove('shadow-sm');
+    }
+  });
+</script>

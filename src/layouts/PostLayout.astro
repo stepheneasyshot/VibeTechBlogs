@@ -1,0 +1,127 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import CoverImage from '../components/CoverImage.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import { site } from '../data/site';
+import { formatDate, getReadingTime, type TocHeading } from '../utils/posts';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  category: string;
+  body: string;
+  headings: TocHeading[];
+  slug: string;
+  image?: string;
+}
+
+const { title, description, pubDate, category, body, headings, slug, image } = Astro.props;
+const readTime = getReadingTime(body);
+---
+
+<BaseLayout
+  title={`${title} | ${site.name}`}
+  description={description}
+  showProgress={true}
+>
+  <div class="mt-24 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
+    <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
+      <header class="mb-stack-lg">
+        <div class="flex items-center gap-3 mb-stack-md flex-wrap">
+          <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full">
+            {category}
+          </span>
+          <span class="text-on-surface-variant font-label text-label-md">{readTime}</span>
+        </div>
+        <h1
+          class="font-headline text-[32px] md:text-[48px] leading-tight font-bold text-on-surface mb-stack-md"
+          transition:name={`title-${slug}`}
+        >
+          {title}
+        </h1>
+        <div class="flex items-center gap-4 pt-stack-md border-t border-outline-variant/30">
+          <img
+            class="w-12 h-12 rounded-full object-cover"
+            src={site.author.avatar}
+            alt={site.author.name}
+            loading="lazy"
+          />
+          <div>
+            <div class="font-headline text-[18px] leading-tight font-semibold">{site.author.name}</div>
+            <div class="font-label text-label-md text-on-surface-variant">
+              {site.author.role} · 发布于 {formatDate(pubDate)}
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <CoverImage
+        src={image}
+        alt={title}
+        class="mb-stack-xl rounded-xl border border-outline-variant/20 shadow-sm aspect-video"
+      />
+
+      <div class="prose-blog">
+        <slot />
+      </div>
+
+      <div class="mt-stack-xl pt-stack-md border-t border-outline-variant/30 flex flex-wrap gap-2">
+        <span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label text-label-md text-on-surface-variant">
+          #{category.toLowerCase()}
+        </span>
+      </div>
+    </article>
+
+    <TableOfContents headings={headings} />
+  </div>
+</BaseLayout>
+
+<script>
+  function initCodeCopy() {
+    document.querySelectorAll('.prose-blog pre').forEach((pre) => {
+      if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block-wrapper';
+
+      const header = document.createElement('div');
+      header.className = 'code-block-header';
+
+      const label = document.createElement('span');
+      label.className = 'text-label-md text-on-primary-container font-code text-[11px] uppercase tracking-widest';
+      label.textContent = '代码';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'flex items-center gap-2 text-on-primary-container hover:text-white transition-colors cursor-pointer';
+      btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">content_copy</span><span class="text-label-md text-[12px]">复制</span>';
+
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
+        await navigator.clipboard.writeText(code);
+        btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span><span class="text-label-md text-[12px]">已复制</span>';
+        setTimeout(() => {
+          btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">content_copy</span><span class="text-label-md text-[12px]">复制</span>';
+        }, 2000);
+      });
+
+      header.append(label, btn);
+      pre.parentNode?.insertBefore(wrapper, pre);
+      wrapper.append(header, pre);
+    });
+  }
+
+  initCodeCopy();
+  document.addEventListener('astro:page-load', initCodeCopy);
+</script>
+
+<script is:inline>
+  window.onscroll = function () {
+    const bar = document.getElementById('progress-bar');
+    if (!bar) return;
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    bar.style.width = height > 0 ? (winScroll / height) * 100 + '%' : '0%';
+  };
+</script>

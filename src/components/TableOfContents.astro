@@ -1,0 +1,64 @@
+---
+import type { TocHeading } from '../utils/posts';
+
+interface Props {
+  headings: TocHeading[];
+}
+
+const { headings } = Astro.props;
+const tocItems = headings.filter((h) => h.depth <= 3);
+---
+
+{
+  tocItems.length > 0 && (
+    <aside class="hidden lg:block w-64 sticky top-24 self-start">
+      <div class="p-6 border border-outline-variant/30 rounded-xl bg-surface-container-lowest">
+        <h4 class="font-headline text-[16px] uppercase tracking-widest text-on-surface-variant mb-stack-md font-semibold">
+          目录
+        </h4>
+        <ul class="space-y-4">
+          {tocItems.map((heading) => (
+            <li style={heading.depth === 3 ? 'padding-left: 1rem' : undefined}>
+              <a
+                href={`#${heading.slug}`}
+                class="font-label text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2"
+              >
+                <span class="w-1 h-1 bg-tertiary-fixed-dim rounded-full shrink-0" />
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-stack-lg pt-stack-md border-t border-outline-variant/20">
+          <p class="font-label text-label-md text-on-surface-variant mb-4">分享文章</p>
+          <div class="flex gap-4">
+            <button
+              type="button"
+              id="share-btn"
+              class="material-symbols-outlined text-[20px] text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors cursor-pointer"
+              aria-label="分享"
+            >
+              share
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+<script>
+  function initShare() {
+    const btn = document.getElementById('share-btn');
+    if (!btn) return;
+    btn.onclick = async () => {
+      if (navigator.share) {
+        await navigator.share({ title: document.title, url: window.location.href });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+      }
+    };
+  }
+  initShare();
+  document.addEventListener('astro:page-load', initShare);
+</script>

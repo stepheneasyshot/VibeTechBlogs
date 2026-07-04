@@ -1,0 +1,33 @@
+---
+import CoverImage from './CoverImage.astro';
+import { formatDate, getPostUrl, getPostSlug, type BlogEntry } from '../utils/posts';
+
+interface Props {
+  post: BlogEntry;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, category, image } = post.data;
+const url = getPostUrl(post);
+const slug = getPostSlug(post);
+---
+
+<article class="group cursor-pointer">
+  <a href={url} class="block">
+    <CoverImage
+      src={image}
+      alt={title}
+      class="mb-4 aspect-[4/3] rounded-xl border border-outline-variant group-hover:scale-[1.02] transition-transform duration-500"
+    />
+    <p class="font-label text-label-md text-secondary mb-2">
+      {category} · {formatDate(pubDate)}
+    </p>
+    <h3
+      class="font-headline text-headline-sm mb-3 group-hover:text-on-primary-container transition-colors font-semibold"
+      transition:name={`title-${slug}`}
+    >
+      {title}
+    </h3>
+    <p class="font-body text-[16px] text-on-surface-variant line-clamp-3">{description}</p>
+  </a>
+</article>

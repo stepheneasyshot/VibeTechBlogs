@@ -1,0 +1,25 @@
+---
+import { cn } from '../utils/cn';
+
+interface Props {
+  src?: string;
+  alt: string;
+  class?: string;
+  imgClass?: string;
+}
+
+const { src, alt, class: className, imgClass } = Astro.props;
+---
+
+<div class={cn('overflow-hidden', className, !src && 'placeholder-cover')}>
+  {
+    src ? (
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        class={cn('w-full h-full object-cover', imgClass)}
+      />
+    ) : null
+  }
+</div>
