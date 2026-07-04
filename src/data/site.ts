@@ -4,7 +4,7 @@ export const site = {
   description:
     'Android 应用层开发者的技术笔记 — 智能座舱 IVI、移动端 AI 应用与个人效率工具。',
   tagline: 'Android 应用开发与移动端 AI 的探索与实践。',
-  url: 'https://stephens-blog.example.com',
+  url: 'https://stepheneasyshot.cn',
   author: {
     name: 'Stephen',
     role: 'Android / AI 应用开发者',
