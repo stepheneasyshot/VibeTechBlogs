@@ -18,10 +18,40 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const pageTransition = {
+  forwards: {
+    old: {
+      name: 'page-fade-out',
+      duration: '0.22s',
+      easing: 'ease-in',
+      fillMode: 'forwards' as const,
+    },
+    new: {
+      name: 'page-fade-in',
+      duration: '0.32s',
+      easing: 'ease-out',
+      delay: '0.04s',
+    },
+  },
+  backwards: {
+    old: {
+      name: 'page-fade-out',
+      duration: '0.22s',
+      easing: 'ease-in',
+      fillMode: 'forwards' as const,
+    },
+    new: {
+      name: 'page-fade-in',
+      duration: '0.32s',
+      easing: 'ease-out',
+    },
+  },
+};
 ---
 
 <!doctype html>
-<html lang="zh-CN" transition:animate="fade">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -62,20 +92,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body class="min-h-screen flex flex-col">
     <Header showProgress={showProgress} currentPath={Astro.url.pathname} />
-    <main class="flex-1">
+    <main class="flex-1" transition:name="main-content" transition:animate={pageTransition}>
       <slot />
     </main>
     <Footer />
   </body>
 </html>
-
-<style is:global>
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes fade-out {
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
-</style>

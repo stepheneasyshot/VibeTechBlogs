@@ -51,6 +51,10 @@ export function filterByCategory(
   return posts.filter((p) => p.data.category === category);
 }
 
+export function getCategoryUrl(category: string): string {
+  return `/category/${encodeURIComponent(category)}`;
+}
+
 export function getFeaturedPost(posts: BlogEntry[]): BlogEntry | undefined {
   return posts.find((p) => p.data.featured) ?? posts[0];
 }

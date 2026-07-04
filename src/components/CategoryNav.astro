@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site';
 import { cn } from '../utils/cn';
+import { getCategoryUrl } from '../utils/posts';
 
 interface Props {
   categories: { name: string; count: number }[];
@@ -13,8 +14,13 @@ function getIcon(name: string) {
   return site.categoryIcons[name] ?? site.categoryIcons.default;
 }
 
-function categoryHref(name: string | null) {
-  return name ? `/?category=${encodeURIComponent(name)}` : '/';
+function linkClass(active: boolean) {
+  return cn(
+    'flex items-center gap-3 px-4 py-3 rounded-xl font-label text-label-md whitespace-nowrap transition-all shrink-0',
+    active
+      ? 'bg-secondary-container text-on-secondary-container'
+      : 'text-on-surface-variant hover:bg-surface-container-high',
+  );
 }
 ---
 
@@ -22,28 +28,12 @@ function categoryHref(name: string | null) {
   <div class="sticky top-24">
     <h3 class="font-label text-label-md text-on-surface-variant uppercase mb-4 tracking-tighter">分类</h3>
     <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0">
-      <a
-        href="/"
-        class={cn(
-          'flex items-center gap-3 px-4 py-3 rounded-xl font-label text-label-md whitespace-nowrap transition-all shrink-0',
-          !activeCategory
-            ? 'bg-secondary-container text-on-secondary-container'
-            : 'text-on-surface-variant hover:bg-surface-container-high',
-        )}
-      >
+      <a href="/" class={linkClass(!activeCategory)}>
         <span class="material-symbols-outlined text-[20px]">apps</span>
         <span>全部</span>
       </a>
       {categories.map(({ name, count }) => (
-        <a
-          href={categoryHref(name)}
-          class={cn(
-            'flex items-center gap-3 px-4 py-3 rounded-xl font-label text-label-md whitespace-nowrap transition-all shrink-0',
-            activeCategory === name
-              ? 'bg-secondary-container text-on-secondary-container'
-              : 'text-on-surface-variant hover:bg-surface-container-high',
-          )}
-        >
+        <a href={getCategoryUrl(name)} class={linkClass(activeCategory === name)}>
           <span class="material-symbols-outlined text-[20px]">{getIcon(name)}</span>
           <span>{name}</span>
           <span class="text-on-surface-variant/60 text-[12px]">({count})</span>

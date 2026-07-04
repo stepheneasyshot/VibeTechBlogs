@@ -1,22 +1,22 @@
 export const site = {
-  name: 'Syntactic Clarity',
-  title: 'Syntactic Clarity | 技术博客',
-  description: '探索逻辑与代码的交汇 — 分布式系统、高性能架构与 AI 的深度分析。',
-  url: 'https://syntactic-clarity.example.com',
+  name: "Stephen's Blog",
+  title: "Stephen's Blog | 技术博客",
+  description:
+    'Android 应用层开发者的技术笔记 — 智能座舱 IVI、移动端 AI 应用与个人效率工具。',
+  tagline: 'Android 应用开发与移动端 AI 的探索与实践。',
+  url: 'https://stephens-blog.example.com',
   author: {
-    name: 'Julian Chen',
-    role: '系统架构师',
-    bio: '我搭建复杂系统架构与人类可读文字之间的桥梁。在分布式系统与函数式编程领域拥有超过十年经验，创立 Syntactic Clarity 以分享工程卓越与整洁代码哲学。',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZmtiSKh9L5EFx2tyju8jUcfx4VG-ozCiSZwQszwOB5MaWY7MPgQ8APZmK0h_7vmBS3hlceQ919DmPcLo2H9cHB7JiW_N2ZOaUKfsleyHfDSgAUQpTzbR0wY-reRL2yRKk8vbUIy1DNK65io4KUc-r2Uly_ZEh3fWZ_tjlQG_qqIl16wpMmFgNW5yQ-M_ey3dpWa3a_HRuaID3NZWzQ9FiTLv73BqETCNl9VyxDH-jR0odjKI7cr50',
-    sidebarBio: '分享在构建可扩展系统与优化开发者体验方面的见解。',
+    name: 'Stephen',
+    role: 'Android / AI 应用开发者',
+    bio: 'Android 应用层开发者，目前聚焦移动端 AI 应用。2018—2022 年本科就读于武汉理工大学自动化学院物联网工程专业，在校期间主要做嵌入式软件开发。2022 年 6 月至 2025 年 9 月在某国企新能源厂从事智能座舱 Android 应用开发，负责车控方向的 IVI 软件。2022 年 11 月至今在头部手机厂 AI 中心做移动端 AI 软件，负责个人记忆助理类应用与 AI 效率工具研发。',
+    avatar: '/images/avatar/avatar_512.png',
+    sidebarBio: 'Android 应用层开发，目前在做移动端 AI 与效率工具。',
   },
   hero: {
-    eyebrow: '系统架构与工程哲学',
-    title: '探索逻辑与代码的交汇。',
+    eyebrow: 'Android 应用层 · 智能座舱 · 移动端 AI',
+    title: '以应用层视角，联接座舱系统与 AI 原生移动体验',
     description:
-      '深入分析分布式系统、高性能前端架构，以及通过清晰表达实现人机协作的未来。',
-    primaryCta: '最新文章',
-    secondaryCta: '阅读宣言',
+      '聚焦 Android 应用层与移动端 AI，曾参与智能座舱车控 IVI 系统研发，现探索 AI 原生个人记忆与效率应用。本站汇集跨车载与消费级场景的工程实践、架构洞察，以及对智能化交互演进的前瞻思考。',
   },
   nav: [
     { href: '/', label: '博客' },
@@ -29,32 +29,32 @@ export const site = {
     twitter: '#',
   },
   skills: [
-    'Rust & WebAssembly',
-    '分布式系统',
-    'TypeScript',
-    '云基础设施',
-    '技术写作',
+    'Android / Kotlin',
+    '智能座舱 IVI',
+    '移动端 AI 应用',
+    'AI 效率工具',
+    '嵌入式开发',
   ],
   timeline: [
     {
-      title: '首席工程师',
-      period: '2021 — 至今',
+      title: '移动端 AI 软件工程师',
+      period: '2025.11 — 至今',
       description:
-        '领导金融科技独角兽的核心架构团队，将微服务扩展至每秒 10k+ 交易，同时保持 99.99% 可用性。',
+        '头部手机厂 AI 中心，负责个人记忆助理类应用与 AI 效率工具研发。',
       active: true,
     },
     {
-      title: '高级解决方案架构师',
-      period: '2017 — 2021',
+      title: '智能座舱 Android 开发',
+      period: '2022.6 — 2025.9',
       description:
-        '为企业客户设计云原生迁移方案，倡导「文档即代码」，将开发者效率提升 40%。',
+        '某国企新能源厂，从事智能座舱 Android 应用开发，负责车控方向的 IVI 软件。',
       active: false,
     },
     {
-      title: '全栈开发者',
-      period: '2013 — 2017',
+      title: '本科 · 物联网工程',
+      period: '2018 — 2022',
       description:
-        '在创意机构开启职业生涯，构建高性能 Web 应用，深入理解浏览器引擎原理。',
+        '武汉理工大学自动化学院，在校期间主做嵌入式软件开发。',
       active: false,
     },
   ],

@@ -1,16 +1,23 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
-  site: 'https://syntactic-clarity.example.com',
+  site: 'https://stephens-blog.example.com',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },
   markdown: {
+    remarkPlugins: [[remarkMath, { singleDollarTextMath: false }]],
+    rehypePlugins: [rehypeKatex],
     shikiConfig: {
-      theme: 'github-dark',
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
       wrap: true,
     },
   },

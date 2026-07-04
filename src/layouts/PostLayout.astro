@@ -78,8 +78,41 @@ const readTime = getReadingTime(body);
 </BaseLayout>
 
 <script>
+  const LANG_LABELS: Record<string, string> = {
+    kotlin: 'Kotlin',
+    java: 'Java',
+    javascript: 'JavaScript',
+    typescript: 'TypeScript',
+    ts: 'TypeScript',
+    js: 'JavaScript',
+    python: 'Python',
+    rust: 'Rust',
+    go: 'Go',
+    sql: 'SQL',
+    bash: 'Bash',
+    shell: 'Shell',
+    sh: 'Shell',
+    json: 'JSON',
+    yaml: 'YAML',
+    yml: 'YAML',
+    xml: 'XML',
+    html: 'HTML',
+    css: 'CSS',
+    markdown: 'Markdown',
+    md: 'Markdown',
+    plaintext: 'Text',
+    text: 'Text',
+  };
+
+  function getLanguageLabel(pre: HTMLPreElement) {
+    const lang = pre.dataset.language?.toLowerCase();
+    if (!lang) return 'Code';
+    return LANG_LABELS[lang] ?? lang.charAt(0).toUpperCase() + lang.slice(1);
+  }
+
   function initCodeCopy() {
     document.querySelectorAll('.prose-blog pre').forEach((pre) => {
+      if (!(pre instanceof HTMLPreElement)) return;
       if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
 
       const wrapper = document.createElement('div');
@@ -89,12 +122,12 @@ const readTime = getReadingTime(body);
       header.className = 'code-block-header';
 
       const label = document.createElement('span');
-      label.className = 'text-label-md text-on-primary-container font-code text-[11px] uppercase tracking-widest';
-      label.textContent = '代码';
+      label.className = 'code-block-lang text-label-md font-code text-[11px] uppercase tracking-widest';
+      label.textContent = getLanguageLabel(pre);
 
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'flex items-center gap-2 text-on-primary-container hover:text-white transition-colors cursor-pointer';
+      btn.className = 'code-block-copy flex items-center gap-2 transition-colors cursor-pointer';
       btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">content_copy</span><span class="text-label-md text-[12px]">复制</span>';
 
       btn.addEventListener('click', async () => {

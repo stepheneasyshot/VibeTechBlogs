@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@import "katex/dist/katex.min.css";
 
 @theme {
   --color-outline: #76777d;
@@ -85,7 +86,7 @@
   --text-label-md: 0.875rem;
   --text-label-md--line-height: 1.25rem;
   --text-code-block: 0.875rem;
-  --text-code-block--line-height: 1.5rem;
+  --text-code-block--line-height: 1.1rem;
 }
 
 @utility font-headline {
@@ -150,6 +151,36 @@
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     vertical-align: middle;
+  }
+
+  @keyframes page-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes page-fade-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(main-content),
+    ::view-transition-new(main-content),
+    ::view-transition-group(main-content) {
+      animation: none !important;
+    }
   }
 }
 
@@ -226,17 +257,23 @@
   }
 
   .prose-blog pre {
-    background-color: var(--color-primary-container) !important;
     border-radius: 0.5rem;
-    border: 1px solid var(--color-primary-container);
+    border: 1px solid var(--color-outline-variant);
     overflow-x: auto;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   .prose-blog pre code {
     font-family: var(--font-code);
     font-size: 0.875rem;
-    line-height: 1.5rem;
-    color: var(--color-inverse-primary);
+    line-height: 1.1rem;
+    background: transparent;
+  }
+
+  .prose-blog pre code .line {
+    display: block;
+    line-height: 1.1rem;
   }
 
   .prose-blog ul,
@@ -267,12 +304,84 @@
     color: var(--color-on-tertiary-container);
   }
 
+  .prose-blog .katex {
+    color: var(--color-on-surface);
+    font-size: 1.05em;
+  }
+
+  .prose-blog .katex-display {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.25rem 0;
+  }
+
+  .prose-blog .katex-display > .katex {
+    white-space: normal;
+  }
+
   .code-block-wrapper {
-    @apply my-stack-lg rounded-xl overflow-hidden shadow-lg border border-primary-container;
+    --code-block-bg: #ffffff;
+    --code-block-label: #57606a;
+    @apply my-stack-md rounded-xl overflow-hidden shadow-lg border border-outline-variant;
+  }
+
+  html.dark .code-block-wrapper {
+    --code-block-bg: #24292e;
+    --code-block-label: #8b949e;
+  }
+
+  html.dark .astro-code,
+  html.dark .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+  }
+
+  .prose-blog pre.astro-code {
+    line-height: 1.1rem !important;
+    white-space: normal !important;
+  }
+
+  .code-block-wrapper pre {
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0.625rem 1.25rem !important;
+    line-height: 1.1rem !important;
+    white-space: normal !important;
+  }
+
+  .code-block-wrapper pre code {
+    display: block;
+    font-size: 0.875rem !important;
+    line-height: 1.1rem !important;
+  }
+
+  .code-block-wrapper pre code .line {
+    display: block;
+    line-height: 1.1rem !important;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .code-block-header {
-    @apply bg-primary-container px-4 py-2 flex items-center justify-between;
+    @apply px-4 py-2 flex items-center justify-between;
+    background-color: var(--code-block-bg);
+    color: var(--code-block-label);
+  }
+
+  .code-block-lang,
+  .code-block-copy {
+    color: var(--code-block-label);
+  }
+
+  .code-block-copy:hover {
+    color: var(--color-on-surface);
+  }
+
+  html.dark .code-block-copy:hover {
+    color: #ffffff;
   }
 
   .placeholder-cover {
