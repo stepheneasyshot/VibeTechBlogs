@@ -18,6 +18,13 @@ export default defineConfig({
         light: 'github-light',
         dark: 'github-dark',
       },
+      langAlias: {
+        gradle: 'groovy',
+        Java: 'java',
+        kotlinvar: 'kotlin',
+        korlin: 'kotlin',
+        'kotlin@Module': 'kotlin',
+      },
       wrap: true,
     },
   },

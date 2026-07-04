@@ -121,7 +121,7 @@ WebSocket 协议支持加密通信，即 **WebSocket Secure (WSS)**。WSS 连接
 
 **OkHttp** 是 Square 公司开发的一个流行的 HTTP 和 WebSocket 客户端。它功能强大、易于使用，并且是 Android 开发中最推荐的网络库之一。
 
-```gradle
+```groovy
 dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.12.0' 
 }
