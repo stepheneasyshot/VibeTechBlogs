@@ -3,7 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import CoverImage from '../components/CoverImage.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import { site } from '../data/site';
-import { formatDate, getReadingTime, type TocHeading } from '../utils/posts';
+import { formatDate, getReadingTime, getCategoryUrl, type TocHeading } from '../utils/posts';
 
 interface Props {
   title: string;
@@ -27,13 +27,24 @@ const readTime = getReadingTime(body);
 >
   <div class="mt-24 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
     <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
+      <a
+        href="/"
+        data-post-back
+        class="inline-flex items-center gap-2 mb-stack-md font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors"
+      >
+        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+        返回
+      </a>
       <header class="mb-stack-lg">
         <div class="flex items-center gap-3 mb-stack-md flex-wrap">
           {
             categories.map((cat) => (
-              <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full">
+              <a
+                href={getCategoryUrl(cat)}
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full hover:opacity-80 transition-opacity"
+              >
                 {cat}
-              </span>
+              </a>
             ))
           }
           <span class="text-on-surface-variant font-label text-label-md">{readTime}</span>
@@ -73,9 +84,12 @@ const readTime = getReadingTime(body);
       <div class="mt-stack-xl pt-stack-md border-t border-outline-variant/30 flex flex-wrap gap-2">
         {
           categories.map((cat) => (
-            <span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label text-label-md text-on-surface-variant">
+            <a
+              href={getCategoryUrl(cat)}
+              class="px-4 py-1.5 bg-surface-container-high rounded-full font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim hover:bg-surface-container transition-colors"
+            >
               #{cat.toLowerCase()}
-            </span>
+            </a>
           ))
         }
       </div>
@@ -155,6 +169,20 @@ const readTime = getReadingTime(body);
 
   initCodeCopy();
   document.addEventListener('astro:page-load', initCodeCopy);
+
+  function initPostBack() {
+    document.querySelectorAll<HTMLAnchorElement>('[data-post-back]').forEach((link) => {
+      link.onclick = (event) => {
+        if (window.history.length > 1) {
+          event.preventDefault();
+          history.back();
+        }
+      };
+    });
+  }
+
+  initPostBack();
+  document.addEventListener('astro:page-load', initPostBack);
 </script>
 
 <script is:inline>
