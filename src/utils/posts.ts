@@ -34,11 +34,20 @@ export function getReadingTime(body: string): string {
   return `${minutes} 分钟阅读`;
 }
 
+export function getPostCategories(post: BlogEntry): string[] {
+  return post.data.category;
+}
+
+export function getPrimaryCategory(post: BlogEntry): string {
+  return post.data.category[0];
+}
+
 export function getCategories(posts: BlogEntry[]): { name: string; count: number }[] {
   const counts = new Map<string, number>();
   for (const post of posts) {
-    const cat = post.data.category;
-    counts.set(cat, (counts.get(cat) ?? 0) + 1);
+    for (const cat of getPostCategories(post)) {
+      counts.set(cat, (counts.get(cat) ?? 0) + 1);
+    }
   }
   return Array.from(counts.entries())
     .map(([name, count]) => ({ name, count }))
@@ -50,7 +59,7 @@ export function filterByCategory(
   category: string | null,
 ): BlogEntry[] {
   if (!category) return posts;
-  return posts.filter((p) => p.data.category === category);
+  return posts.filter((p) => getPostCategories(p).includes(category));
 }
 
 export function getCategoryUrl(category: string): string {

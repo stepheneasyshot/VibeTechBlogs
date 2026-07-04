@@ -3,7 +3,7 @@ title: "Compose Multiplatform开发记录之输入框问题"
 description: >
   本文介绍了CMP开发过程中，TextField可组合项对Enter按键监听不符合预期的问题
 pubDate: 2025-03-05
-category: "跨平台"
+category: ["跨平台", "Android"]
 featured: false
 draft: false
 image: "/images/blog/blogs_cmp_debugmanager_splash.png"

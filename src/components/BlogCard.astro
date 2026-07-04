@@ -1,13 +1,14 @@
 ---
 import CoverImage from './CoverImage.astro';
-import { formatDate, getPostUrl, getPostSlug, type BlogEntry } from '../utils/posts';
+import { formatDate, getPostUrl, getPostSlug, getPostCategories, type BlogEntry } from '../utils/posts';
 
 interface Props {
   post: BlogEntry;
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, category, image } = post.data;
+const { title, description, pubDate, image } = post.data;
+const categories = getPostCategories(post);
 const url = getPostUrl(post);
 const slug = getPostSlug(post);
 ---
@@ -21,7 +22,7 @@ const slug = getPostSlug(post);
       imgClass="group-hover:scale-[1.02] transition-transform duration-500"
     />
     <p class="font-label text-label-md text-secondary mb-2">
-      {category} · {formatDate(pubDate)}
+      {categories.join(' · ')} · {formatDate(pubDate)}
     </p>
     <h3
       class="font-headline text-headline-sm mb-3 group-hover:text-on-primary-container transition-colors font-semibold"

@@ -9,14 +9,14 @@ interface Props {
   title: string;
   description: string;
   pubDate: Date;
-  category: string;
+  categories: string[];
   body: string;
   headings: TocHeading[];
   slug: string;
   image?: string;
 }
 
-const { title, description, pubDate, category, body, headings, slug, image } = Astro.props;
+const { title, description, pubDate, categories, body, headings, slug, image } = Astro.props;
 const readTime = getReadingTime(body);
 ---
 
@@ -29,9 +29,13 @@ const readTime = getReadingTime(body);
     <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
       <header class="mb-stack-lg">
         <div class="flex items-center gap-3 mb-stack-md flex-wrap">
-          <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full">
-            {category}
-          </span>
+          {
+            categories.map((cat) => (
+              <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full">
+                {cat}
+              </span>
+            ))
+          }
           <span class="text-on-surface-variant font-label text-label-md">{readTime}</span>
         </div>
         <h1
@@ -67,9 +71,13 @@ const readTime = getReadingTime(body);
       </div>
 
       <div class="mt-stack-xl pt-stack-md border-t border-outline-variant/30 flex flex-wrap gap-2">
-        <span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label text-label-md text-on-surface-variant">
-          #{category.toLowerCase()}
-        </span>
+        {
+          categories.map((cat) => (
+            <span class="px-4 py-1.5 bg-surface-container-high rounded-full font-label text-label-md text-on-surface-variant">
+              #{cat.toLowerCase()}
+            </span>
+          ))
+        }
       </div>
     </article>
 

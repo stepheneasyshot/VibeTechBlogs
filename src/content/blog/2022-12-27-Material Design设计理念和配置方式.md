@@ -3,7 +3,7 @@ title: "Material Design设计理念和配置方式"
 description: >
   本文介绍了Google推出的UI设计系统——Material Design的设计理念和配置方式。
 pubDate: 2022-12-27
-category: "Android"
+category: ["Android", "跨平台", "网络"]
 featured: false
 draft: false
 image: "/images/blog/blogs_materialdesign3_cover.png"

@@ -3,7 +3,7 @@ title: "集成doubao-vision视觉api实现卡路里识别"
 description: >
   本文介绍了Android和IOS平台集成在线视觉AI的过程
 pubDate: 2025-08-09
-category: "AI"
+category: ["AI", "Android", "跨平台"]
 featured: false
 draft: false
 image: "/images/blog/blogs_ai_doubao_cover.png"

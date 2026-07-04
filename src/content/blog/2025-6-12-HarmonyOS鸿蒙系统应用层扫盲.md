@@ -3,7 +3,7 @@ title: "HarmonyOS鸿蒙系统应用层扫盲"
 description: >
   本文针对鸿蒙系统的基础特性，应用层开发所需基础知识，进行一个简单的调研，对比一下和其他平台的差异。
 pubDate: 2025-06-12
-category: "跨平台"
+category: ["跨平台", "Android"]
 featured: false
 draft: false
 image: "/images/blog/blogs_harmonyos_cover.png"

@@ -3,7 +3,7 @@ title: "Compose Multiplatform开发记录之文件选择器"
 description: >
   本文介绍了CMP开发过程中，对Desktop端文件和文件夹选取的控件的封装
 pubDate: 2025-03-05
-category: "跨平台"
+category: ["跨平台", "Android"]
 featured: false
 draft: false
 image: "/images/blog/blogs_cmp_debugmanager_splash.png"

@@ -3,7 +3,7 @@ title: "使用Reqable抓包Https请求记录"
 description: >
   本文记录了使用Reqable抓包Https请求的过程。
 pubDate: 2023-12-30
-category: "网络"
+category: ["网络", "Android"]
 featured: false
 draft: false
 image: "/images/blog/blogs_reqable_site_cover.png"

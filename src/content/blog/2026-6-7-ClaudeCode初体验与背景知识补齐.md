@@ -3,7 +3,7 @@ title: "ClaudeCode初体验与背景知识补齐"
 description: >
   本文旨在介绍初次使用ClaudeCode的记录，还有一些基础规则
 pubDate: 2026-06-07
-category: "AI"
+category: ["AI", "Android"]
 featured: false
 draft: false
 image: "/images/blog/blogs_cover_claudecode.png"

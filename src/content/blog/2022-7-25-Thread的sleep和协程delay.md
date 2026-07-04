@@ -3,7 +3,7 @@ title: "Thread.sleep和协程delay"
 description: >
   本文介绍了Thread.sleep()和协程delay的区别，以及在哪些场景下使用。
 pubDate: 2022-07-25
-category: "Android"
+category: ["Android", "C++"]
 featured: false
 draft: false
 image: "/images/blog/blogs_jvm_thread_cover.png"

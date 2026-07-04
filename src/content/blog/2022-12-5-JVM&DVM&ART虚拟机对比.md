@@ -3,7 +3,7 @@ title: "JVM&DVM&ART虚拟机对比"
 description: >
   本文介绍了JVM虚拟机，Dalvik虚拟机还有ART虚拟机三者之间不同特点的对比
 pubDate: 2022-12-05
-category: "Android"
+category: ["Android", "跨平台"]
 featured: false
 draft: false
 image: "/images/blog/blogs_cover_android_vitual_machine.png"

@@ -3,7 +3,7 @@ title: "Compose Desktop进行JNI开发"
 description: >
   本文介绍了使用Compose Multiplatform开发时，如何使用JNI接口
 pubDate: 2025-06-17
-category: "跨平台"
+category: ["跨平台", "Android"]
 featured: false
 draft: false
 image: "/images/blog/blogs_compose_cover.png"

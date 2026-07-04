@@ -7,7 +7,9 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
-    category: z.string(),
+    category: z
+      .union([z.string(), z.array(z.string()).min(1)])
+      .transform((value) => (typeof value === 'string' ? [value] : value)),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
     image: z.string().optional(),

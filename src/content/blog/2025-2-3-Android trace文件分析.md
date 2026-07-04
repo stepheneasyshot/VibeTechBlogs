@@ -3,7 +3,7 @@ title: "Android trace文件分析"
 description: >
   本文介绍了在分析Android性能问题过程中，常用的trace文件的分析方法。
 pubDate: 2025-02-03
-category: "Android"
+category: ["Android", "网络"]
 featured: false
 draft: false
 image: "/images/blog/blogs_trace_cover.png"
