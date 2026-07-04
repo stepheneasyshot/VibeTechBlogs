@@ -17,7 +17,8 @@ const slug = getPostSlug(post);
     <CoverImage
       src={image}
       alt={title}
-      class="mb-4 aspect-[4/3] rounded-xl border border-outline-variant group-hover:scale-[1.02] transition-transform duration-500"
+      class="mb-4 w-full rounded-xl border border-outline-variant"
+      imgClass="group-hover:scale-[1.02] transition-transform duration-500"
     />
     <p class="font-label text-label-md text-secondary mb-2">
       {category} · {formatDate(pubDate)}

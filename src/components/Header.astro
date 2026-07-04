@@ -17,16 +17,20 @@ function isActive(href: string) {
 }
 ---
 
-<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant/30 glass-header">
-  {showProgress && (
-    <div id="progress-bar" class="absolute bottom-0 left-0 h-0.5 bg-tertiary-fixed-dim transition-[width] duration-100 ease-out" style="width: 0%"></div>
-  )}
+<header class="fixed top-0 w-full z-50 bg-background border-b border-outline-variant" transition:persist="site-header" transition:animate="none">
+  <div
+    id="progress-bar"
+    class:list={[
+      'absolute bottom-0 left-0 h-0.5 bg-tertiary-fixed-dim transition-[width] duration-100 ease-out',
+      { hidden: !showProgress },
+    ]}
+    style="width: 0%"
+  ></div>
   <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-16">
     <div class="flex items-center gap-8">
       <a
         href="/"
-        class="font-headline text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight"
-        transition:name="site-logo"
+        class="font-headline text-headline-md font-bold text-tertiary-fixed-dim tracking-tight"
       >
         {site.name}
       </a>
@@ -34,11 +38,12 @@ function isActive(href: string) {
         {site.nav.map((item) => (
           <a
             href={item.href}
+            data-nav-link={item.href}
             class={cn(
               'font-headline text-[16px] pb-1 transition-colors duration-200 cursor-pointer active:opacity-70',
               isActive(item.href)
-                ? 'text-primary dark:text-inverse-primary border-b-2 border-tertiary-fixed-dim'
-                : 'text-on-surface-variant hover:text-primary dark:hover:text-inverse-primary',
+                ? 'text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim'
+                : 'text-on-surface-variant hover:text-tertiary-fixed-dim',
             )}
           >
             {item.label}
@@ -54,13 +59,33 @@ function isActive(href: string) {
 </header>
 
 <script>
-  window.addEventListener('scroll', () => {
-    const nav = document.querySelector('header');
-    if (!nav) return;
-    if (window.scrollY > 20) {
-      nav.classList.add('shadow-sm');
-    } else {
-      nav.classList.remove('shadow-sm');
+  function isNavActive(href: string, path: string) {
+    if (href === '/') return path === '/';
+    return path.startsWith(href);
+  }
+
+  function updateHeader() {
+    const path = window.location.pathname;
+
+    document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((link) => {
+      const href = link.dataset.navLink;
+      if (!href) return;
+      const active = isNavActive(href, path);
+      link.classList.toggle('text-tertiary-fixed-dim', active);
+      link.classList.toggle('border-b-2', active);
+      link.classList.toggle('border-tertiary-fixed-dim', active);
+      link.classList.toggle('text-on-surface-variant', !active);
+    });
+
+    const bar = document.getElementById('progress-bar');
+    if (bar) {
+      const isPost = /^\/blog\/[^/]+\/?$/.test(path);
+      bar.classList.toggle('hidden', !isPost);
+      if (!isPost) bar.style.width = '0%';
     }
-  });
+  }
+
+  updateHeader();
+  document.addEventListener('astro:page-load', updateHeader);
 </script>
+

@@ -42,11 +42,21 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <ClientRouter />
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (stored === 'dark' || (!stored && prefersDark)) {
-          document.documentElement.classList.add('dark');
+        function isDarkTheme() {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'dark') return true;
+          if (stored === 'light') return false;
+          return true;
         }
+
+        function applyTheme(doc) {
+          const root = doc?.documentElement ?? document.documentElement;
+          root.classList.toggle('dark', isDarkTheme());
+        }
+
+        applyTheme();
+        document.addEventListener('astro:before-swap', (e) => applyTheme(e.newDocument));
+        document.addEventListener('astro:page-load', () => applyTheme());
       })();
     </script>
   </head>

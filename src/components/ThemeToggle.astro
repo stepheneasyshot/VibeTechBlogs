@@ -8,11 +8,17 @@
 </button>
 
 <script>
+  const THEME_TRANSITION_MS = 400;
+
   function setTheme(dark: boolean) {
-    document.documentElement.classList.toggle('dark', dark);
+    const root = document.documentElement;
+    root.classList.add('theme-transition');
+    void root.offsetWidth;
+    root.classList.toggle('dark', dark);
     localStorage.setItem('theme', dark ? 'dark' : 'light');
     const btn = document.getElementById('theme-toggle');
     if (btn) btn.textContent = dark ? 'dark_mode' : 'light_mode';
+    window.setTimeout(() => root.classList.remove('theme-transition'), THEME_TRANSITION_MS);
   }
 
   function initThemeToggle() {

@@ -69,13 +69,12 @@ const gridPosts = getNonFeaturedPosts(filteredPosts, featured);
                 featured && (
                   <article class="group">
                     <a href={getPostUrl(featured)} class="block cursor-pointer">
-                      <div class="relative overflow-hidden rounded-xl border border-outline-variant mb-6 bg-surface-container-lowest">
-                        <CoverImage
-                          src={featured.data.image}
-                          alt={featured.data.title}
-                          class="aspect-video w-full group-hover:scale-105 transition-transform duration-700"
-                        />
-                      </div>
+                      <CoverImage
+                        src={featured.data.image}
+                        alt={featured.data.title}
+                        class="mb-6 w-full rounded-xl border border-outline-variant bg-surface-container-lowest"
+                        imgClass="group-hover:scale-105 transition-transform duration-700"
+                      />
                       <div class="max-w-[720px]">
                         <div class="flex items-center gap-3 mb-3 flex-wrap">
                           <span class="font-label text-label-md text-tertiary-fixed-dim bg-primary-container px-2 py-0.5 rounded">

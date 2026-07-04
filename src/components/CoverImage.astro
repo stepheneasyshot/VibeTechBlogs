@@ -11,14 +11,14 @@ interface Props {
 const { src, alt, class: className, imgClass } = Astro.props;
 ---
 
-<div class={cn('overflow-hidden', className, !src && 'placeholder-cover')}>
+<div class={cn('relative w-full aspect-video overflow-hidden', className, !src && 'placeholder-cover')}>
   {
     src ? (
       <img
         src={src}
         alt={alt}
         loading="lazy"
-        class={cn('w-full h-full object-cover', imgClass)}
+        class={cn('absolute inset-0 block h-full w-full object-cover', imgClass)}
       />
     ) : null
   }
