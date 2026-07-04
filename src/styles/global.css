@@ -2,6 +2,14 @@
 @plugin "@tailwindcss/typography";
 @import "katex/dist/katex.min.css";
 
+@font-face {
+  font-family: "MiSans";
+  src: url("/fonts/MiSansVF.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-outline: #76777d;
   --color-surface-variant: #e0e3e5;
@@ -51,9 +59,9 @@
   --color-secondary: #545f73;
   --color-primary: #000000;
 
-  --font-headline: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Source Serif 4", ui-serif, Georgia, serif;
-  --font-label: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "MiSans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "MiSans", ui-sans-serif, system-ui, sans-serif;
+  --font-label: "MiSans", ui-sans-serif, system-ui, sans-serif;
   --font-code: "JetBrains Mono", ui-monospace, monospace;
 
   --spacing-gutter: 24px;

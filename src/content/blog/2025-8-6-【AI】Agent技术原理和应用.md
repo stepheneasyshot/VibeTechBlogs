@@ -1,0 +1,16 @@
+---
+title: "【AI】Agent技术原理和应用"
+description: >
+  本文介绍了 AI Agent 相关内容
+pubDate: 2025-08-06
+category: "AI"
+featured: false
+draft: false
+image: "/images/blog/blogs_ai_agent_cover.png"
+---
+# 【AI】Agent技术原理和应用
+原文：
+
+[万字长文解析AI Agent技术原理和应用](https://developer.huawei.com/consumer/cn/forum/topic/0202155833118560037)
+
+## 术语概念

@@ -8,13 +8,13 @@ export const site = {
   author: {
     name: 'Stephen',
     role: 'Android / AI 应用开发者',
-    bio: 'Android 应用层开发者，目前聚焦移动端 AI 应用。2018—2022 年本科就读于武汉理工大学自动化学院物联网工程专业，在校期间主要做嵌入式软件开发。2022 年 6 月至 2025 年 9 月在某国企新能源厂从事智能座舱 Android 应用开发，负责车控方向的 IVI 软件。2022 年 11 月至今在头部手机厂 AI 中心做移动端 AI 软件，负责个人记忆助理类应用与 AI 效率工具研发。',
+    bio: '我相信扎实的技术理解，是应对变化最可靠的底气。无论框架如何迭代、工具如何智能化，对系统设计、工程边界与代码质量的尊重，都不应被 shortcuts 替代——理解「为什么这样写」，永远比复制「能跑就行」更重要。\n\nAI 时代于我，不是被动等待被替代，而是主动重新定义自己的位置：把重复劳动交给模型，把判断力留给架构、体验与可靠性；让 Agent 成为协作伙伴，而非绕过思考的捷径。从车载 IVI 到移动端 AI 应用，我在做的，是把能力沉淀为可交付的产品，并在快速演进中保持学习的节奏。',
     avatar: '/images/avatar/avatar_512.png',
     sidebarBio: 'Android 应用层开发，目前在做移动端 AI 与效率工具。',
   },
   hero: {
     eyebrow: 'Android 应用层 · 智能座舱 · 移动端 AI',
-    title: '以应用层视角，联接座舱系统与 AI 原生移动体验',
+    title: '以应用层视角，联接Agent系统与 AI 原生移动体验',
     description:
       '聚焦 Android 应用层与移动端 AI，曾参与智能座舱车控 IVI 系统研发，现探索 AI 原生个人记忆与效率应用。本站汇集跨车载与消费级场景的工程实践、架构洞察，以及对智能化交互演进的前瞻思考。',
   },
@@ -60,8 +60,14 @@ export const site = {
   ],
   categoryIcons: {
     AI: 'neurology',
-    Android: 'phone_android',
-    Frontend: 'article',
+    Android: 'android',
+    跨平台: 'devices',
+    网络: 'lan',
+    通用开发: 'terminal',
+    算法: 'functions',
+    'C++': 'developer_board',
+    Python: 'code_blocks',
+    Frontend: 'web',
     Backend: 'dns',
     'System Design': 'architecture',
     default: 'article',

@@ -9,6 +9,7 @@ import {
   getCategories,
   getFeaturedPost,
   getNonFeaturedPosts,
+  HOME_GRID_POST_LIMIT,
   formatDate,
   getPostUrl,
   getPostSlug,
@@ -19,6 +20,8 @@ const allPosts = await getPublishedPosts();
 const categories = getCategories(allPosts);
 const featured = getFeaturedPost(allPosts);
 const gridPosts = getNonFeaturedPosts(allPosts, featured);
+const previewPosts = gridPosts.slice(0, HOME_GRID_POST_LIMIT);
+const hasMorePosts = gridPosts.length > HOME_GRID_POST_LIMIT;
 ---
 
 <BaseLayout title={site.title} description={site.description}>
@@ -80,14 +83,28 @@ const gridPosts = getNonFeaturedPosts(allPosts, featured);
             )
           }
 
-          {featured && gridPosts.length > 0 && <div class="h-px bg-outline-variant/30" />}
+          {featured && previewPosts.length > 0 && <div class="h-px bg-outline-variant/30" />}
 
           {
-            gridPosts.length > 0 && (
+            previewPosts.length > 0 && (
               <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-                {gridPosts.map((post) => (
+                {previewPosts.map((post) => (
                   <BlogCard post={post} />
                 ))}
+              </div>
+            )
+          }
+
+          {
+            hasMorePosts && (
+              <div class="flex justify-center pt-4">
+                <a
+                  href="/blog/"
+                  class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-outline-variant font-label text-label-md text-on-surface hover:bg-surface-container-high hover:border-tertiary-fixed-dim/40 transition-colors"
+                >
+                  查看全部
+                  <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </a>
               </div>
             )
           }

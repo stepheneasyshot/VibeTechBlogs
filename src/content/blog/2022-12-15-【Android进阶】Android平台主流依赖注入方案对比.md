@@ -1,0 +1,396 @@
+---
+title: "【Android进阶】Android平台主流依赖注入方案对比"
+description: >
+  本文介绍了Android 平台的主流依赖注入方案对比，主要涉及Dagger，Hilt，Koin三种
+pubDate: 2022-12-15
+category: "Android"
+featured: false
+draft: false
+image: "/images/blog/blogs_di_cover.png"
+---
+# 【Android进阶】Android平台主流依赖注入方案对比
+当初学者熟悉软件在该平台上的运行机制，开始大量写代码之后，在软件项目的架构设计上应该符合 `SOLID` 原则。
+
+SOLID 是 **Robert C. Martin（“Uncle Bob”）** 提出的一组五个基本原则的首字母缩写，旨在帮助开发者设计更易于理解、维护和扩展的软件系统：
+
+```
+Single Responsibility Principle (单一职责原则)
+
+Open/Closed Principle (开闭原则)
+
+Liskov Substitution Principle (里氏替换原则)
+
+Interface Segregation Principle (接口隔离原则)
+
+Dependency Inversion Principle (依赖反转原则)
+```
+
+其中的依赖反转原则是指：
+
+> 高层模块不应该依赖低层模块，两者都应该依赖其抽象。抽象不应该依赖细节，细节应该依赖抽象。
+
+简单来说，就是我们在设计系统时，不应该让高层组件直接依赖于低层组件的具体实现，而是应该让它们都依赖于抽象（例如接口或抽象类）。
+
+## 什么是依赖？
+在软件开发中，“依赖”指的是一个对象需要另一个对象来完成其功能。比如，一个 `Car` 对象可能需要一个 `Engine` 对象才能启动和运行。这时，我们可以说 `Car` **依赖** `Engine`。
+
+传统的做法是，`Car` 对象在自己的内部创建或查找 `Engine` 对象：
+
+```java
+class Car {
+    private Engine engine;
+
+    public Car() {
+        this.engine = new Engine(); // Car 自己创建了 Engine 对象
+    }
+
+    public void start() {
+        engine.ignite();
+        System.out.println("Car started!");
+    }
+}
+```
+
+这种也叫直接依赖，其问题在于：
+* 紧耦合： 如果低层模块的实现细节发生变化，高层模块也可能需要修改。
+* 测试困难： 在测试高层模块时，你不得不依赖真实的低层模块，这使得单元测试变得复杂且效率低下。你无法轻易地替换一个模拟的数据访问层。
+* 可扩展性差： 增加新的低层实现会影响到所有依赖它的高层模块。
+
+## 什么是依赖注入？
+依赖注入的核心思想是：**一个对象不应该自己创建或查找它所依赖的对象，而是应该由外部（通常是一个“注入器”或“容器”）提供这些依赖。**  依赖反转是我们的设计目标，依赖注入就是实现的路径。
+
+在 `Car` 和 `Engine` 的例子中，如果使用依赖注入，`Car` 就不再负责创建 `Engine`，而是等待外部把 `Engine` “注入”进来。结合Kotlin的构造函数写法， `Car` 类可以写成下面这种简洁的形式：
+
+```kotlin
+class Car(val engine: Engine) {
+    public void start() {
+        engine.ignite();
+        System.out.println("Car started!");
+    }
+}
+```
+
+这种设计方案有哪些好处呢？
+
+首先最明显的就是 **解耦** ，对象不再需要关心它所依赖对象的创建细节，它们只需要知道如何使用这些依赖。这使得代码更灵活，更容易修改和扩展。
+
+其次是 **可测试性** 和 **可维护性** 提高了。更有利于单元测试，同时当外部的依赖发生变化时，只需要修改创建和提供依赖的部分，而不需要修改所有依赖该对象的代码。
+
+还可以 **提高代码复用性** ，独立的对象可以更容易地在不同的场景和组件中重用。
+
+在 Android 端的依赖注入设计理念，整体的发展方向是从最初的手动管理到功能强大的自动化框架。
+
+在早期的 Android 开发中，并没有成熟的 DI 框架。通常采用直接创建依赖示例的方式，后面又出现了由策略模式驱动的服务定位器的形式来提供依赖。
+
+* **手动实例化** 这是最直接的方式，在一个类中直接 `new` 出它所需要的依赖。多了之后导致代码紧耦合，难以测试和维护，特别是当依赖链很深时，修改一个地方可能需要改动很多地方。
+* **服务定位器** 这个模式会引入一个中央注册表（或单例）来存储和提供依赖。类需要依赖时，就向这个注册表“请求”对应的实例。
+    * **优点：** 相对于手动实例化，服务定位器提供了一定程度的解耦，因为消费者不再直接创建依赖。
+    * **问题：** 仍然存在隐藏依赖。你不知道一个类需要哪些依赖，除非查看其实现。难以追踪对象生命周期，并且测试时替换模拟对象不够优雅。它更像是“查找依赖”而不是“注入依赖”。
+
+## Dagger 1：初次尝试编译时注入
+在 2012 年左右，Square 公司推出了 **Dagger**。这是 Android 平台第一个真正意义上的依赖注入框架，并且它采用了**编译时**代码生成的方式。
+
+没有运行时的反射开销，带来了性能优势。它使用了 **注解处理器** 在编译阶段生成注入代码。
+
+但是 Dagger 的配置和使用相对复杂，尤其是对于大型项目而言，编写和维护大量的模块 (Module) 和组件 (Component) **样板代码** 成为一个挑战。
+## Dagger 2：性能与可扩展性的飞跃
+2015 年，Google 接手 Dagger 项目并发布了全新的 **Dagger 2**。Dagger 2 是对 Dagger 1 的彻底重写，它秉承了 Dagger 1 的 **编译时生成** 的特性，但在设计理念和实现上有了重大改进。
+
+Dagger 2 在编译时生成代码，这些代码负责实例化对象并提供它们的依赖。这意味着在运行时没有反射开销，性能非常高。它通过注解处理器来分析你的代码，生成一个 **依赖图** ，然后根据这个图生成相应的 Java 代码。它生成的是直接的 Java 代码，模拟了你在手写工厂类和提供器时的行为，从而在性能上达到了极致。
+
+运行 Dagger 2 示例需要添加 Dagger 依赖并配置注解处理器。在 Android 项目中，通常在 `build.gradle` 文件中配置。比如使用Kotlin的话，需要在 `build.gradle` 中配置 `kapt` 插件：
+
+```gradle
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt' // 配置 Kotlin 注解处理器插件
+}
+```
+
+Dagger 2 在使用时需要定义模块和组件。
+
+1.  **定义依赖接口和实现：**
+    ```java
+    // repository/UserRepository.java
+    interface UserRepository {
+        void saveUser(String username);
+    }
+
+    // repository/DatabaseUserRepository.java
+    class DatabaseUserRepository implements UserRepository {
+        @Override
+        public void saveUser(String username) {
+            System.out.println("Saving user " + username + " to database.");
+        }
+    }
+    ```
+2.  **定义提供依赖的 Module：**
+    ```java
+    import dagger.Module;
+    import dagger.Provides;
+    import javax.inject.Singleton; // Dagger 2 提供的作用域注解
+
+    // di/AppModule.java
+    @Module
+    public class AppModule {
+        @Provides // 提供 UserRepository 实例
+        @Singleton // 将 UserRepository 定义为单例
+        UserRepository provideUserRepository() {
+            return new DatabaseUserRepository();
+        }
+    }
+    ```
+3.  **定义注入器 Component：**
+    ```java
+    import dagger.Component;
+    import javax.inject.Singleton;
+
+    // di/AppComponent.java
+    @Singleton // AppComponent 也是单例作用域
+    @Component(modules = AppModule.class) // 关联 AppModule
+    public interface AppComponent {
+        // 定义注入方法，MyPresenter 可以通过这个方法被注入依赖
+        void inject(MyPresenterWithDagger presenter);
+    }
+    ```
+4.  **在需要注入的类中使用 `@Inject`：**
+    ```java
+    import javax.inject.Inject;
+
+    // presenter/MyPresenterWithDagger.java
+    class MyPresenterWithDagger {
+        @Inject // 声明需要注入 UserRepository
+        UserRepository userRepository;
+
+        public MyPresenterWithDagger() {
+            // Dagger 2 会在调用 inject(this) 后自动填充 userRepository
+        }
+
+        public void registerUser(String username) {
+            userRepository.saveUser(username);
+            System.out.println("User " + username + " registered.");
+        }
+    }
+    ```
+5.  **在 Application 或 Main 方法中初始化和使用：**
+    ```java
+    // main/MainDagger2.java
+    public class MainDagger2 {
+        public static void main(String[] args) {
+            // ✨ 构建 Dagger 组件，这个 DaggerAppComponent 是 Dagger 2 编译时生成的
+            AppComponent component = DaggerAppComponent.builder().build();
+
+            MyPresenterWithDagger presenter = new MyPresenterWithDagger();
+            // ✨ 执行注入操作，Dagger 会找到 @Inject 标注的字段并填充依赖
+            component.inject(presenter);
+
+            presenter.registerUser("Alice");
+        }
+    }
+    ```
+
+Dagger 2 具有如下优点：
+
+* **极高性能：** 纯粹的编译时生成代码，运行时无反射开销，性能极佳。
+* **类型安全：** 编译时即可发现依赖错误，将运行时崩溃降到最低。 
+* **强大的模块化能力：** 提供了 `@Module`、`@Provides`、`@Component`、`@Subcomponent`、`@Scope` 等丰富的注解，可以精细地控制依赖的提供和生命周期。
+
+Dagger 2 推出之后，很快成为 Android 平台最主流、最强大的 DI 框架。
+
+它解决了大规模项目中的依赖管理难题，但也继承了其复杂性，仍然需要开发者投入大量时间学习和配置。
+## Hilt：Google 官方简化 Dagger
+2020 年，Google 推出了 **Hilt**，这是构建在 **Dagger 2 之上**的 Android 官方推荐的依赖注入库。Hilt 的主要目标是**简化 Dagger 在 Android 应用中的使用**。大量减少项目中为了实现依赖注入而创建的重复的样板代码。
+
+值得一提的是，在Google官方开源的旨在展示最新Android技术的开源项目—— `NowInAndroid` 中，就使用了Hilt来实现依赖注入。
+
+Hilt 的核心思想是通过提供一套 **标准化的 Android 组件绑定** （例如 `@AndroidEntryPoint`、`@ApplicationContext`、`@ActivityContext` 等），以及预定义的作用域，极大地 **减少了 Dagger 所需的样板代码** 和手动配置。
+
+Hilt 基于注解实现，针对每个需要被注入的属性，Hilt 都会基于 KAPT/KSP 在编译期间查找它的注入源头，并生成一对一的注入方法。
+
+1.  **添加依赖和插件：** 
+
+    ```gradle
+    // project/build.gradle
+    buildscript {
+        dependencies {
+            classpath 'com.google.dagger:hilt-android-gradle-plugin:2.51.1' // 检查最新版本
+        }
+    }
+
+    // app/build.gradle
+    plugins {
+        id 'kotlin-kapt' // 或 id 'androidx.navigation.safeargs.kotlin' 如果使用 kotlin
+        id 'com.google.dagger.hilt.android'
+    }
+
+    dependencies {
+        implementation 'com.google.dagger:hilt-android:2.51.1'
+        kapt 'com.google.dagger:hilt-compiler:2.51.1'
+        // ... 其他依赖
+    }
+    ```
+
+2.  **在 Application 类上添加 `@HiltAndroidApp`：**
+
+    ```kotlin
+    import android.app.Application
+    import dagger.hilt.android.HiltAndroidApp
+
+    // di/MyApplication.kt
+    @HiltAndroidApp // Hilt 的入口点，触发代码生成
+    class MyApplication : Application() {
+        // 通常不需要在这里写额外的代码，Hilt 会自动管理组件
+    }
+    ```
+
+3.  **定义依赖接口和实现 (与 Dagger 类似)：**
+
+    ```kotlin
+    // repository/UserRepository.kt
+    interface UserRepository {
+        fun saveUser(username: String)
+    }
+
+    // repository/DatabaseUserRepository.kt
+    // Hilt 可以在构造函数上直接使用 @Inject 来告知如何创建实例
+    import javax.inject.Inject
+    import javax.inject.Singleton
+
+    @Singleton // Hilt 也支持 Dagger 的作用域注解
+    class DatabaseUserRepository @Inject constructor() : UserRepository { // 🚀 构造函数注入的标志
+        override fun saveUser(username: String) {
+            println("Saving user $username to database.")
+        }
+    }
+    ```
+
+    **注意：** 如果 `DatabaseUserRepository` 的构造函数没有参数，或者其参数都可以被 Hilt 自动提供，那么可以直接使用 `@Inject constructor()`。对于第三方库或接口，仍然需要使用 `@Module` 和 `@Provides`。
+
+4.  **定义 Hilt 模块（针对接口或外部类）：**
+
+    ```kotlin
+    import dagger.Binds
+    import dagger.Module
+    import dagger.hilt.InstallIn
+    import dagger.hilt.components.SingletonComponent
+    import javax.inject.Singleton
+
+    // di/AppModule.kt
+    @Module
+    @InstallIn(SingletonComponent::class) // 🚀 指定模块安装到哪个 Hilt 组件（例如 Application 级别）
+    abstract class AppModule { // 使用 abstract class 可以更高效地绑定接口
+        @Binds // 🚀 绑定接口到具体实现
+        @Singleton
+        abstract fun bindUserRepository(impl: DatabaseUserRepository): UserRepository
+    }
+    ```
+
+5.  **在 Android 组件上使用 `@AndroidEntryPoint` 和 `@Inject`：**
+
+    ```kotlin
+    import androidx.appcompat.app.AppCompatActivity
+    import android.os.Bundle
+    import dagger.hilt.android.AndroidEntryPoint
+    import javax.inject.Inject
+
+    // activity/MainActivity.kt
+    @AndroidEntryPoint // 🚀 标记这是一个 Hilt 入口点，Hilt 会为它生成组件并注入依赖
+    class MainActivity : AppCompatActivity() {
+
+        @Inject // 🚀 自动注入 UserRepository 实例
+        lateinit var userRepository: UserRepository
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+
+            userRepository.saveUser("Charlie")
+            println("User Charlie saved from MainActivity.")
+        }
+    }
+    ```
+
+Hilt具有如下优点：
+
+* **集成度高：** 与 Android 框架组件（Activity, Fragment, ViewModel, Service 等）无缝集成，自动生成 Dagger 组件。
+* **易用性：** 显著降低了 Dagger 的学习曲线和使用门槛。
+* **Google 官方支持：** 作为官方推荐的 DI 解决方案，Hilt 在未来的发展和维护上更有保障。
+* **保留 Dagger 优势：** 依然是编译时注入，拥有 Dagger 的高性能和类型安全。
+
+Hilt 迅速成为 Android DI 的“新宠”，尤其适合新项目和希望简化 Dagger 配置的现有项目。在 `nowinandroid` 中使用，也代表了它是当前官方认为的 Android 依赖注入的最佳实践。
+## Koin：运行时注入的轻量级选择
+随着 Kotlin 在 Android 领域的崛起，又出现了一些纯 Kotlin 编写的 DI 框架。其中，**Koin** 在 2017 年左右脱颖而出。
+
+Koin 采取了与 Dagger 完全不同的策略，它是一个**运行时**依赖注入框架，不使用注解处理器，而是利用 Kotlin 的 DSL（领域特定语言）来声明依赖。Koin 在运行时通过 Kotlin 的 DSL 解析依赖关系，不依赖反射或注解处理器，避免了 Dagger 的编译时代码生成复杂性，启动速度更快。
+
+Koin 除了使用上轻量化，还具有以下优点：它的配置简单，学习曲线平缓，几乎没有样板代码。与 Kotlin 语言特性无缝集成，代码简洁。由于没有注解处理，编译速度通常比 Dagger 更快。
+
+同时，Koin 由于运行时生成的特点，如果**有些依赖配置出错，只有在运行时才可以发现**。
+
+Koin 采用 Kotlin DSL，不需要注解处理器。
+
+**步骤：**
+
+1.  **定义依赖接口和实现 (与 Dagger 类似)：**
+    ```kotlin
+    // repository/UserRepository.kt
+    interface UserRepository {
+        fun saveUser(username: String)
+    }
+
+    // repository/DatabaseUserRepository.kt
+    class DatabaseUserRepository : UserRepository {
+        override fun saveUser(username: String) {
+            println("Saving user $username to database.")
+        }
+    }
+    ```
+2.  **定义 Koin 模块：**
+    ```kotlin
+    import org.koin.dsl.module
+
+    // di/appModule.kt
+    val appModule = module {
+        // single 表示单例，get() 会自动解析并提供所需的依赖
+        single<UserRepository> { DatabaseUserRepository() }
+    }
+    ```
+3.  **定义需要依赖的类：**
+    ```kotlin
+    import org.koin.core.component.KoinComponent
+    import org.koin.core.component.inject
+
+    // presenter/MyPresenterWithKoin.kt
+    class MyPresenterWithKoin : KoinComponent { // 实现 KoinComponent 接口
+        // 🚀 通过 inject() 委托属性来获取依赖
+        private val userRepository: UserRepository by inject()
+
+        fun registerUser(username: String) {
+            userRepository.saveUser(username)
+            println("User $username registered.")
+        }
+    }
+    ```
+4.  **在 Application 或 Main 方法中启动 Koin：**
+    ```kotlin
+    import org.koin.core.context.startKoin
+    import org.koin.core.context.stopKoin
+
+    // main/MainKoin.kt
+    fun main() {
+        // ✨ 启动 Koin 上下文，并加载模块
+        startKoin {
+            modules(appModule)
+        }
+
+        val presenter = MyPresenterWithKoin()
+        presenter.registerUser("Bob")
+
+        stopKoin() // 清理 Koin 上下文
+    }
+    ```
+
+Koin 的核心优势在于 ​​简洁性​​ 和 ​​Kotlin 原生支持​​，通过 DSL 和运行时解析降低了 DI 的学习成本，适合追求开发效率的项目。但对于超大型应用或对性能极度敏感的场景，可能需要权衡其运行时解析的开销。如果你正在使用 Kotlin 开发 Android 或后端服务，Koin 是一个值得尝试的轻量级 DI 方案。
+
+现如今，`Kotlin Multiplatform` 跨平台的迅速发展，`Koin` 也推出了其跨平台版本，在 **Android，IOS，Desktop和 web 端** 的Kotlin跨平台项目里，都可以助力开发者实现依赖注入，支持功能的快速开发。

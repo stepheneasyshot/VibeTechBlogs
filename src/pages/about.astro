@@ -21,9 +21,13 @@ import { site } from '../data/site';
         <h1 class="font-headline text-headline-lg mb-4 text-primary font-bold">
           你好，我是 {site.author.name}。
         </h1>
-        <p class="font-body text-body-lg text-on-surface-variant leading-relaxed">
-          {site.author.bio}
-        </p>
+        <div class="font-body text-body-lg text-on-surface-variant leading-relaxed space-y-4">
+          {
+            site.author.bio.split('\n\n').map((paragraph) => (
+              <p>{paragraph}</p>
+            ))
+          }
+        </div>
         <div class="flex flex-wrap gap-2 mt-6">
           {
             site.skills.map((skill) => (

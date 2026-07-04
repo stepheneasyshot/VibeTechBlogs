@@ -3,6 +3,8 @@ import readingTime from 'reading-time';
 
 export type BlogEntry = CollectionEntry<'blog'>;
 
+export const HOME_GRID_POST_LIMIT = 10;
+
 export async function getPublishedPosts(): Promise<BlogEntry[]> {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.sort(

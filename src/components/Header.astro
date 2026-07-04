@@ -12,7 +12,14 @@ interface Props {
 const { currentPath, showProgress = false } = Astro.props;
 
 function isActive(href: string) {
-  if (href === '/') return currentPath === '/' || currentPath.startsWith('/category/');
+  if (href === '/') {
+    return (
+      currentPath === '/'
+      || currentPath.startsWith('/category/')
+      || currentPath === '/blog/'
+      || currentPath === '/blog'
+    );
+  }
   return currentPath.startsWith(href);
 }
 ---
@@ -60,7 +67,14 @@ function isActive(href: string) {
 
 <script>
   function isNavActive(href: string, path: string) {
-    if (href === '/') return path === '/' || path.startsWith('/category/');
+    if (href === '/') {
+      return (
+        path === '/'
+        || path.startsWith('/category/')
+        || path === '/blog/'
+        || path === '/blog'
+      );
+    }
     return path.startsWith(href);
   }
 

@@ -3,7 +3,7 @@ title: "VibeCoding最佳姿势"
 description: "本文旨在给跨领域或者不懂编程的人，推荐一种Vibe Coding的方案"
 pubDate: 2026-07-01
 category: "AI"
-featured: true
+featured: false
 draft: false
 image: "/images/blog/blogs_vibe_coding.png"
 ---

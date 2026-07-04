@@ -6,9 +6,10 @@ import { getCategoryUrl } from '../utils/posts';
 interface Props {
   categories: { name: string; count: number }[];
   activeCategory: string | null;
+  allHref?: string;
 }
 
-const { categories, activeCategory } = Astro.props;
+const { categories, activeCategory, allHref = '/' } = Astro.props;
 
 function getIcon(name: string) {
   return site.categoryIcons[name] ?? site.categoryIcons.default;
@@ -28,7 +29,7 @@ function linkClass(active: boolean) {
   <div class="sticky top-24">
     <h3 class="font-label text-label-md text-on-surface-variant uppercase mb-4 tracking-tighter">分类</h3>
     <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0">
-      <a href="/" class={linkClass(!activeCategory)}>
+      <a href={allHref} class={linkClass(!activeCategory)}>
         <span class="material-symbols-outlined text-[20px]">apps</span>
         <span>全部</span>
       </a>
@@ -56,13 +57,7 @@ function linkClass(active: boolean) {
           <p class="font-label text-[12px] text-on-surface-variant">{site.author.role}</p>
         </div>
       </div>
-      <p class="font-body text-[14px] text-on-surface-variant mb-4">{site.author.sidebarBio}</p>
-      <button
-        type="button"
-        class="w-full py-2 bg-primary text-on-primary rounded font-label text-label-md hover:opacity-90 transition-opacity cursor-pointer"
-      >
-        订阅更新
-      </button>
+      <p class="font-body text-[14px] text-on-surface-variant">{site.author.sidebarBio}</p>
     </div>
   </div>
 </aside>
