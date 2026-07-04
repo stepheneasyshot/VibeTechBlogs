@@ -1,15 +1,15 @@
 ---
 import { site } from '../data/site';
 import ThemeToggle from './ThemeToggle.astro';
-import Search from './Search.astro';
+import CommandPalette from './CommandPalette.astro';
+import ReadingProgress from './ReadingProgress.astro';
 import { cn } from '../utils/cn';
 
 interface Props {
   currentPath: string;
-  showProgress?: boolean;
 }
 
-const { currentPath, showProgress = false } = Astro.props;
+const { currentPath } = Astro.props;
 
 function isActive(href: string) {
   if (href === '/') {
@@ -25,14 +25,7 @@ function isActive(href: string) {
 ---
 
 <header class="fixed top-0 w-full z-50 bg-background border-b border-outline-variant" transition:persist="site-header" transition:animate="none">
-  <div
-    id="progress-bar"
-    class:list={[
-      'absolute bottom-0 left-0 h-0.5 bg-tertiary-fixed-dim transition-[width] duration-100 ease-out',
-      { hidden: !showProgress },
-    ]}
-    style="width: 0%"
-  ></div>
+  <ReadingProgress />
   <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-16">
     <div class="flex items-center gap-8">
       <a
@@ -59,7 +52,7 @@ function isActive(href: string) {
       </div>
     </div>
     <div class="flex items-center gap-4">
-      <Search />
+      <CommandPalette />
       <ThemeToggle />
     </div>
   </nav>
@@ -90,16 +83,8 @@ function isActive(href: string) {
       link.classList.toggle('border-tertiary-fixed-dim', active);
       link.classList.toggle('text-on-surface-variant', !active);
     });
-
-    const bar = document.getElementById('progress-bar');
-    if (bar) {
-      const isPost = /^\/blog\/[^/]+\/?$/.test(path);
-      bar.classList.toggle('hidden', !isPost);
-      if (!isPost) bar.style.width = '0%';
-    }
   }
 
   updateHeader();
   document.addEventListener('astro:page-load', updateHeader);
 </script>
-

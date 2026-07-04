@@ -62,8 +62,27 @@ export function filterByCategory(
   return posts.filter((p) => getPostCategories(p).includes(category));
 }
 
+/** URL slug overrides for categories with problematic characters in paths */
+const CATEGORY_SLUG_OVERRIDES: Record<string, string> = {
+  'C++': 'cpp',
+};
+
+const SLUG_TO_CATEGORY = Object.fromEntries(
+  Object.entries(CATEGORY_SLUG_OVERRIDES).map(([name, slug]) => [slug, name]),
+);
+
+/** URL-safe slug for static category routes */
+export function getCategorySlug(category: string): string {
+  return CATEGORY_SLUG_OVERRIDES[category] ?? category;
+}
+
+/** Resolve route slug back to frontmatter category name */
+export function getCategoryFromSlug(slug: string): string {
+  return SLUG_TO_CATEGORY[slug] ?? slug;
+}
+
 export function getCategoryUrl(category: string): string {
-  return `/category/${encodeURIComponent(category)}`;
+  return `/category/${getCategorySlug(category)}`;
 }
 
 export function getFeaturedPost(posts: BlogEntry[]): BlogEntry | undefined {

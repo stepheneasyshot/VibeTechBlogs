@@ -8,13 +8,11 @@ import { site } from '../data/site';
 interface Props {
   title?: string;
   description?: string;
-  showProgress?: boolean;
 }
 
 const {
   title = site.title,
   description = site.description,
-  showProgress = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -92,7 +90,7 @@ const pageTransition = {
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <Header showProgress={showProgress} currentPath={Astro.url.pathname} />
+    <Header currentPath={Astro.url.pathname} />
     <main class="flex-1" transition:name="main-content" transition:animate={pageTransition}>
       <slot />
     </main>

@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategoryNav from '../../components/CategoryNav.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { site } from '../../data/site';
 import {
   getPublishedPosts,
   getCategories,
   filterByCategory,
+  getCategorySlug,
 } from '../../utils/posts';
 
 export async function getStaticPaths() {
@@ -13,7 +15,7 @@ export async function getStaticPaths() {
   const categories = getCategories(posts);
 
   return categories.map(({ name }) => ({
-    params: { name },
+    params: { name: getCategorySlug(name) },
     props: { categoryName: name },
   }));
 }
@@ -24,6 +26,7 @@ interface Props {
 
 const { categoryName } = Astro.props;
 const allPosts = await getPublishedPosts();
+const categories = getCategories(allPosts);
 const posts = filterByCategory(allPosts, categoryName);
 const categoryIcon = site.categoryIcons[categoryName] ?? site.categoryIcons.default;
 ---
@@ -33,38 +36,42 @@ const categoryIcon = site.categoryIcons[categoryName] ?? site.categoryIcons.defa
   description={`${site.name} 中与「${categoryName}」相关的文章。`}
 >
   <div class="pt-32 pb-stack-xl max-w-[1200px] mx-auto px-gutter" data-pagefind-ignore="all">
-    <a
-      href="/"
-      class="inline-flex items-center gap-2 mb-stack-lg font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors"
-    >
-      <span class="material-symbols-outlined text-[20px]">arrow_back</span>
-      返回主页
-    </a>
+    <div class="flex flex-col lg:flex-row gap-12">
+      <CategoryNav categories={categories} activeCategory={categoryName} />
 
-    <section class="max-w-[960px]">
-      <header class="mb-stack-lg">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="material-symbols-outlined text-[28px] text-tertiary-fixed-dim">{categoryIcon}</span>
-          <h1 class="font-headline text-headline-md font-bold">{categoryName}</h1>
-        </div>
-        <p class="font-label text-label-md text-on-surface-variant">
-          共 {posts.length} 篇文章
-        </p>
-      </header>
+      <section class="flex-grow min-w-0">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 mb-stack-lg font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors"
+        >
+          <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+          返回主页
+        </a>
 
-      {
-        posts.length === 0 ? (
-          <p class="font-body text-body-md text-on-surface-variant py-12 text-center">
-            该分类下暂无文章。
-          </p>
-        ) : (
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-            {posts.map((post) => (
-              <BlogCard post={post} />
-            ))}
+        <header class="mb-stack-lg stagger-item" style="--stagger-i: 0">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="material-symbols-outlined text-[28px] text-tertiary-fixed-dim">{categoryIcon}</span>
+            <h1 class="font-headline text-headline-md font-bold">{categoryName}</h1>
           </div>
-        )
-      }
-    </section>
+          <p class="font-label text-label-md text-on-surface-variant">
+            共 {posts.length} 篇文章
+          </p>
+        </header>
+
+        {
+          posts.length === 0 ? (
+            <p class="font-body text-body-md text-on-surface-variant py-12 text-center">
+              该分类下暂无文章。
+            </p>
+          ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+              {posts.map((post, index) => (
+                <BlogCard post={post} staggerIndex={index + 1} />
+              ))}
+            </div>
+          )
+        }
+      </section>
+    </div>
   </div>
 </BaseLayout>

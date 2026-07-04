@@ -28,13 +28,22 @@ const hasMorePosts = gridPosts.length > HOME_GRID_POST_LIMIT;
   <div class="pt-32 pb-stack-xl max-w-[1200px] mx-auto px-gutter" data-pagefind-ignore="all">
     <section class="mb-stack-xl">
       <div class="max-w-content-width">
-        <p class="font-label text-label-md text-on-primary-container mb-2 tracking-widest uppercase">
+        <p
+          class="font-label text-label-md text-on-primary-container mb-2 tracking-widest uppercase stagger-item"
+          style="--stagger-i: 0"
+        >
           {site.hero.eyebrow}
         </p>
-        <h1 class="font-headline text-headline-lg mb-stack-md leading-tight font-bold">
+        <h1
+          class="font-headline text-headline-lg mb-stack-md leading-tight font-bold stagger-item"
+          style="--stagger-i: 1"
+        >
           {site.hero.title}
         </h1>
-        <p class="font-body text-body-lg text-on-surface-variant max-w-[600px]">
+        <p
+          class="font-body text-body-lg text-on-surface-variant max-w-[600px] stagger-item"
+          style="--stagger-i: 2"
+        >
           {site.hero.description}
         </p>
       </div>
@@ -47,13 +56,14 @@ const hasMorePosts = gridPosts.length > HOME_GRID_POST_LIMIT;
         <div class="flex flex-col gap-12">
           {
             featured && (
-              <article class="group">
+              <article class="group stagger-item" style="--stagger-i: 3" transition:name={`post-${getPostSlug(featured)}`}>
                 <a href={getPostUrl(featured)} class="block cursor-pointer">
                   <CoverImage
                     src={featured.data.image}
                     alt={featured.data.title}
                     class="mb-6 w-full rounded-xl border border-outline-variant bg-surface-container-lowest"
                     imgClass="group-hover:scale-105 transition-transform duration-700"
+                    transitionName={`cover-${getPostSlug(featured)}`}
                   />
                   <div class="max-w-[720px]">
                     <div class="flex items-center gap-3 mb-3 flex-wrap">
@@ -88,8 +98,8 @@ const hasMorePosts = gridPosts.length > HOME_GRID_POST_LIMIT;
           {
             previewPosts.length > 0 && (
               <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-                {previewPosts.map((post) => (
-                  <BlogCard post={post} />
+                {previewPosts.map((post, index) => (
+                  <BlogCard post={post} staggerIndex={index + 4} />
                 ))}
               </div>
             )

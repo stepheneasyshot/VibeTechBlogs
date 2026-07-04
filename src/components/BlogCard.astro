@@ -4,22 +4,28 @@ import { formatDate, getPostUrl, getPostSlug, getPostCategories, type BlogEntry 
 
 interface Props {
   post: BlogEntry;
+  staggerIndex?: number;
 }
 
-const { post } = Astro.props;
+const { post, staggerIndex } = Astro.props;
 const { title, description, pubDate, image } = post.data;
 const categories = getPostCategories(post);
 const url = getPostUrl(post);
 const slug = getPostSlug(post);
 ---
 
-<article class="group cursor-pointer">
+<article
+  class="group cursor-pointer stagger-item"
+  style={staggerIndex !== undefined ? `--stagger-i: ${staggerIndex}` : undefined}
+  transition:name={`post-${slug}`}
+>
   <a href={url} class="block">
     <CoverImage
       src={image}
       alt={title}
       class="mb-4 w-full rounded-xl border border-outline-variant"
       imgClass="group-hover:scale-[1.02] transition-transform duration-500"
+      transitionName={`cover-${slug}`}
     />
     <p class="font-label text-label-md text-secondary mb-2">
       {categories.join(' · ')} · {formatDate(pubDate)}

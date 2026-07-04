@@ -21,9 +21,10 @@ const tocItems = headings.filter((h) => h.depth <= 3);
             <li style={heading.depth === 3 ? 'padding-left: 1rem' : undefined}>
               <a
                 href={`#${heading.slug}`}
-                class="font-label text-label-md text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2"
+                data-toc-link={heading.slug}
+                class="toc-link font-label text-label-md text-on-surface-variant hover:text-primary transition-all duration-200 flex items-center gap-2 border-l-2 border-transparent pl-3 -ml-[2px]"
               >
-                <span class="w-1 h-1 bg-tertiary-fixed-dim rounded-full shrink-0" />
+                <span class="toc-link-dot w-1 h-1 bg-tertiary-fixed-dim rounded-full shrink-0 opacity-40 transition-all duration-200" />
                 {heading.text}
               </a>
             </li>
@@ -48,6 +49,70 @@ const tocItems = headings.filter((h) => h.depth <= 3);
 }
 
 <script>
+  let tocObserver: IntersectionObserver | undefined;
+  let tocScrollHandler: (() => void) | undefined;
+
+  function setActiveTocLink(activeId: string) {
+    document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]').forEach((link) => {
+      link.classList.toggle('toc-link-active', link.dataset.tocLink === activeId);
+    });
+  }
+
+  function initTocSpy() {
+    tocObserver?.disconnect();
+    tocObserver = undefined;
+    if (tocScrollHandler) {
+      window.removeEventListener('scroll', tocScrollHandler);
+      tocScrollHandler = undefined;
+    }
+
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+    if (!tocLinks.length) return;
+
+    const headings = Array.from(tocLinks)
+      .map((link) => document.getElementById(link.dataset.tocLink ?? ''))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (!headings.length) return;
+
+    const visibleIds = new Set<string>();
+    setActiveTocLink(headings[0].id);
+
+    const syncActive = () => {
+      const nearBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 48;
+
+      if (nearBottom) {
+        setActiveTocLink(headings[headings.length - 1].id);
+        return;
+      }
+
+      const activeId = headings.map((h) => h.id).filter((id) => visibleIds.has(id)).at(-1);
+      if (activeId) setActiveTocLink(activeId);
+    };
+
+    tocObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            visibleIds.add(entry.target.id);
+          } else {
+            visibleIds.delete(entry.target.id);
+          }
+        });
+        syncActive();
+      },
+      {
+        rootMargin: '-80px 0px -55% 0px',
+        threshold: 0,
+      },
+    );
+
+    headings.forEach((heading) => tocObserver!.observe(heading));
+    tocScrollHandler = syncActive;
+    window.addEventListener('scroll', tocScrollHandler, { passive: true });
+  }
+
   function initShare() {
     const btn = document.getElementById('share-btn');
     if (!btn) return;
@@ -59,6 +124,19 @@ const tocItems = headings.filter((h) => h.depth <= 3);
       }
     };
   }
-  initShare();
-  document.addEventListener('astro:page-load', initShare);
+
+  function init() {
+    initTocSpy();
+    initShare();
+  }
+
+  init();
+  document.addEventListener('astro:page-load', init);
+  document.addEventListener('astro:before-swap', () => {
+    tocObserver?.disconnect();
+    if (tocScrollHandler) {
+      window.removeEventListener('scroll', tocScrollHandler);
+      tocScrollHandler = undefined;
+    }
+  });
 </script>

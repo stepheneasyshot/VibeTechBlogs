@@ -6,12 +6,16 @@ interface Props {
   alt: string;
   class?: string;
   imgClass?: string;
+  transitionName?: string;
 }
 
-const { src, alt, class: className, imgClass } = Astro.props;
+const { src, alt, class: className, imgClass, transitionName } = Astro.props;
 ---
 
-<div class={cn('relative w-full aspect-video overflow-hidden', className, !src && 'placeholder-cover')}>
+<div
+  class={cn('relative w-full aspect-video overflow-hidden', className, !src && 'placeholder-cover')}
+  transition:name={transitionName}
+>
   {
     src ? (
       <img

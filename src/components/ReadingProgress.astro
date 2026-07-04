@@ -1,0 +1,111 @@
+<div
+  id="progress-bar"
+  class="reading-progress-bar absolute bottom-0 left-0 h-0.5 hidden"
+  style="width: 0%"
+  aria-hidden="true"
+></div>
+
+<button
+  type="button"
+  id="back-to-top"
+  class="back-to-top fixed bottom-8 right-8 z-40 flex items-center justify-center w-11 h-11 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant shadow-lg cursor-pointer"
+  aria-label="回到顶部"
+  hidden
+>
+  <span class="material-symbols-outlined text-[22px]">keyboard_arrow_up</span>
+</button>
+
+<script is:inline>
+  (function () {
+    var currentProgress = 0;
+    var targetProgress = 0;
+    var rafId = 0;
+    var reducedMotion = false;
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function getScrollProgress() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      return height > 0 ? (scrollTop / height) * 100 : 0;
+    }
+
+    function updateBackToTop(progress) {
+      var btn = document.getElementById('back-to-top');
+      if (!btn) return;
+      var show = progress >= 80;
+      btn.hidden = !show;
+      btn.classList.toggle('back-to-top-visible', show);
+    }
+
+    function tick() {
+      var bar = document.getElementById('progress-bar');
+      if (!bar || bar.classList.contains('hidden')) {
+        rafId = 0;
+        return;
+      }
+
+      var ease = reducedMotion ? 1 : 0.18;
+      currentProgress = lerp(currentProgress, targetProgress, ease);
+      bar.style.width = currentProgress + '%';
+      updateBackToTop(currentProgress);
+
+      if (Math.abs(currentProgress - targetProgress) > 0.05) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        currentProgress = targetProgress;
+        bar.style.width = currentProgress + '%';
+        updateBackToTop(currentProgress);
+        rafId = 0;
+      }
+    }
+
+    function onScroll() {
+      var bar = document.getElementById('progress-bar');
+      if (!bar || bar.classList.contains('hidden')) return;
+
+      targetProgress = getScrollProgress();
+      if (!rafId) rafId = requestAnimationFrame(tick);
+    }
+
+    function initReadingProgress() {
+      reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var path = window.location.pathname;
+      var isPost = /^\/blog\/[^/]+\/?$/.test(path);
+      var bar = document.getElementById('progress-bar');
+      var btn = document.getElementById('back-to-top');
+
+      if (bar) {
+        bar.classList.toggle('hidden', !isPost);
+        if (!isPost) {
+          bar.style.width = '0%';
+          currentProgress = 0;
+          targetProgress = 0;
+        } else {
+          targetProgress = getScrollProgress();
+          currentProgress = reducedMotion ? targetProgress : 0;
+          bar.style.width = currentProgress + '%';
+          updateBackToTop(currentProgress);
+        }
+      }
+
+      if (btn && !isPost) {
+        btn.hidden = true;
+        btn.classList.remove('back-to-top-visible');
+      }
+
+      if (btn && !btn.dataset.bound) {
+        btn.dataset.bound = '1';
+        btn.onclick = function () {
+          window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+        };
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    initReadingProgress();
+    document.addEventListener('astro:page-load', initReadingProgress);
+  })();
+</script>

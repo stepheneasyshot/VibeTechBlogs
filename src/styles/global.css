@@ -183,7 +183,135 @@
     }
   }
 
+  @keyframes stagger-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .stagger-item {
+    animation: stagger-fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(80ms + var(--stagger-i, 0) * 60ms);
+  }
+
+  .toc-link-active {
+    color: var(--color-on-surface);
+    font-weight: 600;
+    border-left-color: var(--color-tertiary-fixed-dim);
+  }
+
+  .toc-link-active .toc-link-dot {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+
+  .reading-progress-bar {
+    background: linear-gradient(
+      90deg,
+      var(--color-primary) 0%,
+      var(--color-tertiary-fixed-dim) 100%
+    );
+    box-shadow: 0 0 8px color-mix(in srgb, var(--color-tertiary-fixed-dim) 40%, transparent);
+  }
+
+  .command-palette:not(.hidden) .command-backdrop {
+    animation: command-backdrop-in 0.2s ease-out both;
+  }
+
+  .command-panel-open {
+    animation: command-panel-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .command-panel-closed {
+    animation: command-panel-out 0.18s ease-in both;
+  }
+
+  .command-item {
+    animation: command-item-in 0.2s ease-out both;
+    animation-delay: calc(var(--command-i, 0) * 30ms);
+  }
+
+  .back-to-top {
+    opacity: 0;
+    transform: translateY(12px) scale(0.92);
+    pointer-events: none;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .back-to-top-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .back-to-top:hover {
+    border-color: var(--color-tertiary-fixed-dim);
+    color: var(--color-tertiary-fixed-dim);
+  }
+
+  @keyframes command-backdrop-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes command-panel-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes command-panel-out {
+    from {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.98) translateY(-4px);
+    }
+  }
+
+  @keyframes command-item-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .stagger-item {
+      animation: none;
+    }
+
+    .command-palette:not(.hidden) .command-backdrop,
+    .command-panel-open,
+    .command-panel-closed,
+    .command-item {
+      animation: none;
+    }
+
+    .back-to-top {
+      transition: none;
+    }
+
     ::view-transition-old(main-content),
     ::view-transition-new(main-content),
     ::view-transition-group(main-content) {

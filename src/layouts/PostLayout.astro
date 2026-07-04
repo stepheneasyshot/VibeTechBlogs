@@ -23,7 +23,6 @@ const readTime = getReadingTime(body);
 <BaseLayout
   title={`${title} | ${site.name}`}
   description={description}
-  showProgress={true}
 >
   <div class="mt-24 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
     <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
@@ -75,6 +74,7 @@ const readTime = getReadingTime(body);
         src={image}
         alt={title}
         class="mb-stack-xl rounded-xl border border-outline-variant/20 shadow-sm"
+        transitionName={`cover-${slug}`}
       />
 
       <div class="prose-blog">
@@ -183,14 +183,4 @@ const readTime = getReadingTime(body);
 
   initPostBack();
   document.addEventListener('astro:page-load', initPostBack);
-</script>
-
-<script is:inline>
-  window.onscroll = function () {
-    const bar = document.getElementById('progress-bar');
-    if (!bar) return;
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    bar.style.width = height > 0 ? (winScroll / height) * 100 + '%' : '0%';
-  };
 </script>
