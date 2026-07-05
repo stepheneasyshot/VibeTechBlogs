@@ -32,8 +32,15 @@ function countClass(active: boolean) {
 }
 ---
 
-<aside id="category-nav" class="w-full lg:w-64 flex-shrink-0">
-  <div>
+<aside
+  id="category-nav"
+  class="w-full lg:w-64 flex-shrink-0"
+  data-sidebar-spacer
+>
+  <div
+    id="category-nav-inner"
+    class="category-nav-inner lg:fixed lg:top-0 lg:bottom-6 lg:overflow-y-auto lg:pr-2 lg:pt-20 lg:pb-10 toc-scroll"
+  >
     <h3 class="font-label text-label-md text-on-surface-variant uppercase mb-4 tracking-tighter">分类</h3>
     <nav class="flex lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0">
       <a
@@ -59,23 +66,83 @@ function countClass(active: boolean) {
         </a>
       ))}
     </nav>
-
-    <div class="mt-12 hidden lg:block p-6 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm">
-      <div class="flex items-center gap-4 mb-4">
-        <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-high">
-          <img
-            class="w-full h-full object-cover"
-            src={site.author.avatar}
-            alt={site.author.name}
-            loading="lazy"
-          />
-        </div>
-        <div>
-          <p class="font-headline text-[16px] font-semibold">{site.author.name}</p>
-          <p class="font-label text-[12px] text-on-surface-variant">{site.author.role}</p>
-        </div>
-      </div>
-      <p class="font-body text-[14px] text-on-surface-variant">{site.author.sidebarBio}</p>
-    </div>
   </div>
 </aside>
+
+<style>
+  /* 桌面端固定定位的内层容器，宽度由 JS 同步为占位 aside 的实际宽度 */
+  @media (min-width: 1024px) {
+    .category-nav-inner {
+      width: 16rem;
+    }
+  }
+</style>
+
+<script>
+  // 侧栏滚动隔离方案：
+  // - 占位 aside 保留在 flex 流中（w-64），负责给右侧文章列表让出空间
+  // - 内层 div 在桌面端 position:fixed，脱离页面滚动，不随页面联动
+  // - 通过 JS 同步内层的 left/width 到占位 aside 的视口位置，保证布局对齐
+  // - wheel 事件锁：在侧栏上滚动触底/触顶时吸收事件，不穿透到页面
+  function setupCategoryNav() {
+    const aside = document.getElementById('category-nav');
+    const inner = document.getElementById('category-nav-inner');
+    if (!aside || !inner) return;
+
+    function syncPosition() {
+      if (!window.matchMedia('(min-width: 1024px)').matches) {
+        inner.style.left = '';
+        inner.style.width = '';
+        inner.style.bottom = '';
+        return;
+      }
+      const rect = aside.getBoundingClientRect();
+      inner.style.left = `${rect.left}px`;
+      inner.style.width = `${rect.width}px`;
+
+      // 让侧栏底部永远停在 footer 之上，避免与 footer 形成上下层叠压
+      // 默认留 24px 底部间距；footer 进入视口时，bottom 抬高到 footer 顶部
+      const footer = document.querySelector('footer, [data-site-footer], #site-footer');
+      let bottomOffset = 24;
+      if (footer) {
+        const footerTop = footer.getBoundingClientRect().top;
+        const available = window.innerHeight - footerTop;
+        if (available > bottomOffset) bottomOffset = available;
+      }
+      inner.style.bottom = `${bottomOffset}px`;
+    }
+
+    syncPosition();
+    window.addEventListener('resize', syncPosition);
+    window.addEventListener('scroll', syncPosition, { passive: true });
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(syncPosition);
+      ro.observe(aside);
+    }
+
+    if (inner.dataset.scrollLockBound === '1') return;
+    inner.dataset.scrollLockBound = '1';
+
+    inner.addEventListener(
+      'wheel',
+      (e) => {
+        if (!window.matchMedia('(min-width: 1024px)').matches) return;
+        const canScroll = inner.scrollHeight - inner.clientHeight > 1;
+        if (!canScroll) {
+          e.preventDefault();
+          return;
+        }
+        const atTop = inner.scrollTop <= 0;
+        const atBottom =
+          inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 1;
+        if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
+          e.preventDefault();
+        }
+      },
+      { passive: false },
+    );
+  }
+
+  setupCategoryNav();
+  document.addEventListener('astro:page-load', setupCategoryNav);
+</script>

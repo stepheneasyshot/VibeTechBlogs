@@ -30,13 +30,13 @@ const readTime = getReadingTime(body);
   <a
     href="/"
     data-post-back
-    class="post-back-fab fixed top-20 left-8 z-40 flex items-center justify-center gap-2 h-11 px-4 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant shadow-lg cursor-pointer transition-colors"
+    class="post-back-fab lg:hidden fixed top-20 left-4 z-40 flex items-center justify-center gap-2 h-11 px-4 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant shadow-lg cursor-pointer transition-colors"
     aria-label="返回上一级"
   >
     <span class="material-symbols-outlined text-[20px]">arrow_back</span>
     <span class="font-label text-label-md">返回</span>
   </a>
-  <div class="mt-32 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
+  <div class="mt-20 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
     <TableOfContents headings={headings} />
     <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
       <header class="mb-stack-lg">
@@ -54,7 +54,7 @@ const readTime = getReadingTime(body);
           <span class="text-on-surface-variant font-label text-label-md">{readTime}</span>
         </div>
         <h1
-          class="font-headline text-[32px] md:text-[48px] leading-tight font-bold text-on-surface mb-stack-md"
+          class="font-headline text-[24px] md:text-[30px] leading-tight font-bold text-on-surface mb-stack-md"
           transition:name={`title-${slug}`}
         >
           {title}
@@ -67,7 +67,7 @@ const readTime = getReadingTime(body);
             loading="lazy"
           />
           <div>
-            <div class="font-headline text-[18px] leading-tight font-semibold">{site.author.name}</div>
+            <div class="font-headline text-[16px] leading-tight font-semibold">{site.author.name}</div>
             <div class="font-label text-label-md text-on-surface-variant">
               {site.author.role} · 发布于 {formatDate(pubDate)}
             </div>

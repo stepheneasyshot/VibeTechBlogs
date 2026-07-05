@@ -1,7 +1,6 @@
 ---
 title: "从 Jekyll 到 Astro：个人技术博客的迁移实录"
-description: >
-  把在 GitHub Pages 上跑了很久的 Jekyll 博客迁移到 Astro 5 + Tailwind 4，重新搭建设计系统、移植 145 篇文章，并规划自托管 CI 流程的完整记录。
+description: "Jekyll 博客迁移至 Astro 5 的完整记录。"
 pubDate: 2026-07-05
 category: ["Web", "工程实践"]
 featured: true
