@@ -1,7 +1,7 @@
 ---
 title: "LeakCanary工具的原理解析"
 description: >
-  本文介绍了性能测试和性能优化的方法论和实例
+  LeakCanary内存泄漏检测原理
 pubDate: 2025-01-01
 category: "Android"
 featured: false

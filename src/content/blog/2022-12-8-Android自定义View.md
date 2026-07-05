@@ -1,7 +1,7 @@
 ---
 title: "Android自定义View"
 description: >
-  本文介绍了 View 框架下，自定义复杂View的一些路线
+  View框架下自定义复杂控件路线
 pubDate: 2022-12-08
 category: "Android"
 featured: false

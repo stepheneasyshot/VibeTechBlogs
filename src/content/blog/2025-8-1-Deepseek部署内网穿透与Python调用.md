@@ -1,7 +1,7 @@
 ---
 title: "Deepseek部署内网穿透与Python调用"
 description: >
-  本文记录了使用Ollama拉取deepseek，使用docker运行包含网页的本地容器进行交互，并使用内网穿透工具进行公网的访问，最后验证了使用Python调用deepseek能力的可行性。
+  Ollama部署DeepSeek与内网穿透
 pubDate: 2025-08-01
 category: ["AI", "跨平台", "Python"]
 featured: false

@@ -1,7 +1,7 @@
 ---
 title: "WebSocket通信基础"
 description: >
-  本文介绍了WebSocket协议相关内容，背景知识和协议规范
+  WebSocket全双工实时通信
 pubDate: 2023-12-28
 category: "网络"
 featured: false

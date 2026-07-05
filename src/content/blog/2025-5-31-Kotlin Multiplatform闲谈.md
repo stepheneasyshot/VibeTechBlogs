@@ -1,7 +1,7 @@
 ---
 title: "Kotlin Multiplatform闲谈"
 description: >
-  本文介绍了Kotlin Multiplatform框架过去现在和未来的一些讨论主题。
+  KMP跨端方案现状、讨论与未来展望
 pubDate: 2025-05-31
 category: ["跨平台", "Android"]
 featured: false

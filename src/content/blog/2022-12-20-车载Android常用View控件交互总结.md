@@ -1,7 +1,7 @@
 ---
 title: "车载Android常用View控件交互总结"
 description: >
-  本文介绍了车载Android里的常用的View控件交互总结
+  车机VIU架构与常用View交互
 pubDate: 2022-12-20
 category: "Android"
 featured: false

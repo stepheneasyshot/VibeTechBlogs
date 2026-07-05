@@ -1,7 +1,7 @@
 ---
 title: "使用AYA项目Server重构DebugManager工具的应用管理"
 description: >
-  本文记录了跨平台Android设备调试工具DebugManager，在使用AYA项目重构应用管理功能的流程与分析
+  借鉴AYA重构应用管理与图标获取
 pubDate: 2025-06-01
 category: ["跨平台", "Android"]
 featured: false

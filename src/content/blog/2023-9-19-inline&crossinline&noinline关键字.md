@@ -1,7 +1,7 @@
 ---
 title: "inline&crossinline&noinline关键字"
 description: >
-  本文介绍了Compose的重组流程，主要是最小重组范围的界定和优化
+  inline、crossinline与noinline
 pubDate: 2023-09-19
 category: "Android"
 featured: false

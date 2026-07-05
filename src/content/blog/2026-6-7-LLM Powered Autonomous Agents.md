@@ -1,7 +1,7 @@
 ---
 title: "LLM Powered Autonomous Agents"
 description: >
-  本文转载自OpenAI 的应用研究主管 Lilian Weng 的github博客文章
+  Lilian Weng：LLM自主Agent架构
 pubDate: 2026-06-07
 category: "AI"
 featured: false

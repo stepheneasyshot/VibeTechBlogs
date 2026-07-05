@@ -1,7 +1,7 @@
 ---
 title: "Android JNI开发"
 description: >
-  介绍了JNI开发的一般流程，以及基础性的知识储备。
+  Android JNI开发流程与基础储备
 pubDate: 2022-12-21
 category: ["Android", "网络", "C++"]
 featured: false

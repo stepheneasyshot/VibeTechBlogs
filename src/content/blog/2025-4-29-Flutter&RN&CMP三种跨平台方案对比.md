@@ -1,7 +1,7 @@
 ---
 title: "Flutter & RN & CMP三种跨平台方案对比"
 description: >
-  本文介绍了三种比较热门的跨平台技术的横向对比，涉及性能，易用性，开发成本等方面
+  Flutter、RN与CMP横向对比
 pubDate: 2025-04-29
 category: ["跨平台", "Android"]
 featured: false

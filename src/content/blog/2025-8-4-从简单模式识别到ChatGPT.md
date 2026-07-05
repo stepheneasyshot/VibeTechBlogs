@@ -1,7 +1,7 @@
 ---
 title: "从简单模式识别到ChatGPT"
 description: >
-  本文介绍了AI领域的不同范围的分层概念，以及现在强大的LLM是如何进化而来的
+  从模式识别到ChatGPT的演进
 pubDate: 2025-08-04
 category: "AI"
 featured: false

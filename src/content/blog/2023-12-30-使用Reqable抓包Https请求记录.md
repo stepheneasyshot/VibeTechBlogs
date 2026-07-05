@@ -1,7 +1,7 @@
 ---
 title: "使用Reqable抓包Https请求记录"
 description: >
-  本文记录了使用Reqable抓包Https请求的过程。
+  Reqable抓包排查流式API卡顿
 pubDate: 2023-12-30
 category: ["网络", "Android"]
 featured: false

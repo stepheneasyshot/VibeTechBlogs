@@ -1,7 +1,7 @@
 ---
 title: "ClaudeCode初体验与背景知识补齐"
 description: >
-  本文旨在介绍初次使用ClaudeCode的记录，还有一些基础规则
+  Claude Code初体验与Agent设计
 pubDate: 2026-06-07
 category: ["AI", "Android"]
 featured: false

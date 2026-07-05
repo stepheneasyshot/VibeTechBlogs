@@ -1,7 +1,7 @@
 ---
 title: "Intrinsic Measurement"
 description: >
-  本文介绍了Jetpack Compose的固有特性测量解决嵌套卡顿的问题的原理
+  Compose固有测量解决嵌套卡顿
 pubDate: 2024-12-11
 category: "Android"
 featured: false

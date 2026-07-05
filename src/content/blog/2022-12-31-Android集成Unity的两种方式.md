@@ -1,7 +1,7 @@
 ---
 title: "Android集成Unity的两种方式"
 description: >
-  本文介绍了Android平台两种Unity交互的通信架构和集成方式
+  Android与Unity两种集成通信方案
 pubDate: 2022-12-31
 category: ["Android", "跨平台"]
 featured: false

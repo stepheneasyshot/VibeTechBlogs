@@ -1,7 +1,7 @@
 ---
 title: "Compose编译到显示的流程解析"
 description: >
-  本文介绍了Compose声明式框架从可组合项方法的编写到最终屏显的流程解析
+  Compose从编译到屏幕渲染流程
 pubDate: 2024-11-29
 category: ["Android", "跨平台"]
 featured: false

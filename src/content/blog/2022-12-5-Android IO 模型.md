@@ -1,7 +1,7 @@
 ---
 title: "Android I/O 模型"
 description: >
-  本文介绍了Android，Linux，Java相结合的一些IO模型和底层原理
+  Android/Linux/Java IO模型对比
 pubDate: 2022-12-05
 category: "Android"
 featured: false

@@ -1,7 +1,7 @@
 ---
 title: "使用Compose Multiplatform开发跨平台的Android调试工具"
 description: >
-  使用Compose Multiplatform开发了一款跨平台的电脑端Android设备调试工具。本文简单介绍了开发背景，功能点，特殊问题解决等信息。
+  CMP跨平台Android调试工具DebugManager
 pubDate: 2025-05-26
 category: ["跨平台", "Android"]
 featured: false

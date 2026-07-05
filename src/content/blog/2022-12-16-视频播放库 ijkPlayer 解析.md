@@ -1,7 +1,7 @@
 ---
 title: "视频播放库 ijkPlayer 解析"
 description: >
-  本文介绍了Android平台的视频播放原理，以及热门三方库ijkPlayer的相关内容
+  Android视频播放原理与ijkPlayer
 pubDate: 2022-12-16
 category: "Android"
 featured: false

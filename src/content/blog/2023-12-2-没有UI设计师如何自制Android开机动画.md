@@ -1,7 +1,7 @@
 ---
 title: "没有UI设计师如何自制Android开机动画"
 description: >
-  本文介绍了在AOSP项目自定义时，没有UI设计师，开发设计自己的开机动画的一种方法流程
+  无设计师自制AOSP开机动画方案
 pubDate: 2023-12-02
 category: "Android"
 featured: false

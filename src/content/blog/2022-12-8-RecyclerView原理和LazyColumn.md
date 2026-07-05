@@ -1,7 +1,7 @@
 ---
 title: "RecyclerView原理和LazyColumn"
 description: >
-  本文介绍了RecyclerView的优化原理，和Compose中的LazyColumn组件的实现原理。
+  RecyclerView优化与LazyColumn原理
 pubDate: 2022-12-08
 category: "Android"
 featured: false

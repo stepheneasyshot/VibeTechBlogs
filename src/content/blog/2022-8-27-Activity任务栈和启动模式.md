@@ -1,7 +1,7 @@
 ---
 title: "Activity任务栈和启动模式"
 description: >
-  本文为Activity任务栈和四种启动模式的介绍
+  Activity任务栈与四种启动模式详解
 pubDate: 2022-08-27
 category: "Android"
 featured: false

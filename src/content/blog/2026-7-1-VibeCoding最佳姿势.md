@@ -1,7 +1,7 @@
 ---
 title: "VibeCoding最佳姿势"
 description: >
-  本文旨在给跨领域或者不懂编程的人，推荐一种Vibe Coding的方案
+  Vibe Coding氛围感编程入门指南
 pubDate: 2026-07-01
 category: ["AI", "Android", "Python"]
 featured: false

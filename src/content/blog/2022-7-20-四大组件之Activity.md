@@ -1,7 +1,7 @@
 ---
 title: "四大组件之Activity"
 description: >
-  本文介绍了四大组件之Activity的相关内容。
+  Activity创建、生命周期与通信
 pubDate: 2022-07-20
 category: "Android"
 featured: false

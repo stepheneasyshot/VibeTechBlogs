@@ -1,7 +1,7 @@
 ---
 title: "四大组件之BroadcastReceiver"
 description: >
-  本文介绍了四大组件之BroadcastReceiver的相关内容。
+  BroadcastReceiver注册与收发
 pubDate: 2022-08-22
 category: "Android"
 featured: false

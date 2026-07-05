@@ -1,7 +1,7 @@
 ---
 title: "Android平台Kotlin开发的一些知识点（初级到深入）"
 description: >
-  本文罗列了Android平台Kotlin开发的一些知识点（初级到深入）
+  Android Kotlin开发知识点从入门到进阶
 pubDate: 2022-12-11
 category: "Android"
 featured: false

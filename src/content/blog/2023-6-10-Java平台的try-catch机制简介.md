@@ -1,7 +1,7 @@
 ---
 title: "Java平台的try-catch机制简介"
 description: >
-  本文介绍了JVM平台上的try-catch机制实现方式及使用中的注意事项
+  JVM异常机制与try-catch原理
 pubDate: 2023-06-10
 category: ["通用开发", "Android"]
 featured: false

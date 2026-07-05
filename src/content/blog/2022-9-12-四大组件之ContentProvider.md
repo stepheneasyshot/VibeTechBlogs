@@ -1,7 +1,7 @@
 ---
 title: "四大组件之ContentProvider"
 description: >
-  本文介绍了四大组件之ContentProvider的相关内容。
+  ContentProvider跨应用数据共享
 pubDate: 2022-09-12
 category: "Android"
 featured: false

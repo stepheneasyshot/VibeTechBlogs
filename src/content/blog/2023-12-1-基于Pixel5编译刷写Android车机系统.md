@@ -1,7 +1,7 @@
 ---
 title: "基于Pixel5编译刷写Android车机系统"
 description: >
-  本文介绍了使用Pixel5手机作为车载Android开发设备，从源码拉取，到系统编译，刷写的全流程记录。并且当时处于WSL子系统环境，并非全功能Ubuntu系统。
+  Pixel5编译刷写车机Android全流程
 pubDate: 2023-12-01
 category: "Android"
 featured: false

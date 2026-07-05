@@ -1,7 +1,7 @@
 ---
 title: "remember关键字"
 description: >
-  本文介绍了Compose中的remember关键字，用法及简要原理
+  Compose remember状态缓存
 pubDate: 2024-12-03
 category: "Android"
 featured: false

@@ -1,7 +1,7 @@
 ---
 title: "导航组件navigation使用"
 description: >
-  本文介绍了Jetpack Compose里页面跳转的navigation组件的使用
+  Compose Navigation页面跳转
 pubDate: 2024-12-16
 category: "Android"
 featured: false

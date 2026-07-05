@@ -1,7 +1,7 @@
 ---
 title: "Gradle&AGP&SDK&JDK版本对应总结"
 description: >
-  本文介绍了Gradle版本，Gradle插件版本，SDK版本，JDK版本的对应关系
+  Gradle、AGP、SDK与JDK版本对照
 pubDate: 2022-08-08
 category: ["Android", "网络"]
 featured: false

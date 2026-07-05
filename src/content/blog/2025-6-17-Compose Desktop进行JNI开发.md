@@ -1,7 +1,7 @@
 ---
 title: "Compose Desktop进行JNI开发"
 description: >
-  本文介绍了使用Compose Multiplatform开发时，如何使用JNI接口
+  CMP桌面端JNI native开发
 pubDate: 2025-06-17
 category: ["跨平台", "Android"]
 featured: false

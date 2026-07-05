@@ -1,7 +1,7 @@
 ---
 title: "Jetpack Compose的MVI架构设计"
 description: >
-  本文抽离自内部的一次课题分享，普及Android平台新的声明式开发框架。
+  Compose声明式UI与MVI架构
 pubDate: 2024-11-24
 category: "Android"
 featured: false

@@ -1,7 +1,7 @@
 ---
 title: "ClaudeCode机制规则记录"
 description: >
-  本文旨在介绍使用ClaudeCode时的一些规则类的背景知识的记录，还有提效指南，在日常使用中常用常新
+  Claude Code规则机制与提效指南
 pubDate: 2026-06-16
 category: "AI"
 featured: false

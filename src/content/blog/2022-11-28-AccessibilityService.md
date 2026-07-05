@@ -1,7 +1,7 @@
 ---
 title: "AccessibilityService 无障碍服务使用"
 description: >
-  本文介绍了AccessibilityService的使用方法
+  AccessibilityService无障碍服务实战
 pubDate: 2022-11-28
 category: "Android"
 featured: false

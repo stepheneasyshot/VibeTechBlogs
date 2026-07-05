@@ -1,7 +1,7 @@
 ---
 title: "Harness Engineering工程化方法总结"
 description: >
-  本文旨在介绍Harness Engineering的概念演化由来
+  Harness Engineering智能体工程化
 pubDate: 2026-06-30
 category: ["AI", "Android"]
 featured: false

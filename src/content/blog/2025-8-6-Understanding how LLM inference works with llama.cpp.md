@@ -1,7 +1,7 @@
 ---
 title: "Understanding how LLM inference works with llama.cpp"
 description: >
-  本文是llama.cpp项目的介绍，主要介绍了llama.cpp项目的运行流程和数据结构概念。
+  llama.cpp推理流程与数据结构
 pubDate: 2025-08-06
 category: ["AI", "Android"]
 featured: false
