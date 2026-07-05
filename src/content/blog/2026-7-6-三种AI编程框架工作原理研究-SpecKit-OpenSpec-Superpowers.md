@@ -1,6 +1,6 @@
 ---
 title: "三种 AI 编程框架工作原理研究：Spec Kit / OpenSpec / Superpowers"
-description: "从 Spec-Driven Development 到方法论即代码，拆解 GitHub Spec Kit、OpenSpec、Superpowers 三种 AI 编程框架的设计哲学与工作流。"
+description: "拆解三种 AI 编程框架的设计哲学与工作流。"
 pubDate: 2026-07-06
 category: ["AI", "工程实践"]
 featured: false

@@ -92,6 +92,12 @@ Material Symbols Outlined 已通过 Google Fonts 引入，图标名见 `site.cat
 
 只需新增 `src/content/blog/xxx.md` + 可选 `public/images/blog/` 封面，**无需改路由**。
 
+**frontmatter `description` 规则**：10–30 字（中文计字数，英文单词按 1 字计），用于列表摘要与 SEO。简练概括文章主题即可，不要罗列具体名词/工具名（标题已包含），不要写成完整句外的长串。示例：
+
+- ✅ `拆解三种 AI 编程框架的设计哲学与工作流。`
+- ✅ `Android 智能座舱车控 IVI 的架构实践与反思。`
+- ❌ `从 Spec-Driven Development 到方法论即代码，拆解 GitHub Spec Kit、OpenSpec、Superpowers 三种 AI 编程框架的设计哲学与工作流。`（过长、重复标题已点名工具）
+
 ### 新页面
 
 1. 在 `src/pages/` 添加 `.astro`
