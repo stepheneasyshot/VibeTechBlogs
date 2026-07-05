@@ -25,7 +25,6 @@ export const site = {
   ],
   social: {
     github: 'https://github.com/stepheneasyshot',
-    linkedin: '#',
     juejin: 'https://juejin.cn/user/1227473764497976',
   },
   skills: [

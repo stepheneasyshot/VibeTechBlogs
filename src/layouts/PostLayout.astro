@@ -27,18 +27,18 @@ const readTime = getReadingTime(body);
   pageKind="post"
   pageTransition={postTransition}
 >
-  <a
-    href="/"
-    data-post-back
-    class="post-back-fab lg:hidden fixed top-20 left-4 z-40 flex items-center justify-center gap-2 h-11 px-4 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant shadow-lg cursor-pointer transition-colors"
-    aria-label="返回上一级"
-  >
-    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
-    <span class="font-label text-label-md">返回</span>
-  </a>
   <div class="mt-20 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
     <TableOfContents headings={headings} />
     <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
+      <a
+        href="/"
+        data-post-back
+        class="lg:hidden inline-flex items-center gap-1 mb-4 font-label text-label-md text-on-surface-variant hover:text-primary transition-colors"
+        aria-label="返回上一级"
+      >
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span>返回</span>
+      </a>
       <header class="mb-stack-lg">
         <div class="flex items-center gap-3 mb-stack-md flex-wrap">
           {
@@ -147,20 +147,20 @@ const readTime = getReadingTime(body);
       header.className = 'code-block-header';
 
       const label = document.createElement('span');
-      label.className = 'code-block-lang text-label-md font-code text-[11px] uppercase tracking-widest';
+      label.className = 'code-block-lang text-[12px] font-code';
       label.textContent = getLanguageLabel(pre);
 
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'code-block-copy flex items-center gap-2 transition-colors cursor-pointer';
-      btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">content_copy</span><span class="text-label-md text-[12px]">复制</span>';
+      btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">content_copy</span><span class="text-[12px]">复制</span>';
 
       btn.addEventListener('click', async () => {
         const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
         await navigator.clipboard.writeText(code);
-        btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span><span class="text-label-md text-[12px]">已复制</span>';
+        btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span><span class="text-[12px]">已复制</span>';
         setTimeout(() => {
-          btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">content_copy</span><span class="text-label-md text-[12px]">复制</span>';
+          btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">content_copy</span><span class="text-[12px]">复制</span>';
         }, 2000);
       });
 

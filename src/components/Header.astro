@@ -38,16 +38,16 @@ function isActive(href: string) {
       >
         {site.name}
       </a>
-      <div class="flex gap-3 md:gap-5 items-center">
+      <div class="flex gap-3 md:gap-5 items-stretch">
         {site.nav.map((item) => (
           <a
             href={item.href}
             data-nav-link={item.href}
             class={cn(
-              'font-headline text-[13px] md:text-[14px] pb-1 transition-colors duration-200 cursor-pointer active:opacity-70 whitespace-nowrap',
+              'font-headline text-[13px] md:text-[14px] flex items-center border-b-2 -mb-px transition-colors duration-200 cursor-pointer active:opacity-70 whitespace-nowrap',
               isActive(item.href)
-                ? 'text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim'
-                : 'text-on-surface-variant hover:text-tertiary-fixed-dim',
+                ? 'text-tertiary-fixed-dim border-tertiary-fixed-dim'
+                : 'text-on-surface-variant border-transparent hover:text-tertiary-fixed-dim',
             )}
           >
             {item.label}
@@ -78,16 +78,16 @@ function isActive(href: string) {
     return path.startsWith(href);
   }
 
-  function updateHeader() {
-    const path = window.location.pathname;
+  function updateHeader(pathArg?: string) {
+    const path = pathArg ?? window.location.pathname;
 
     document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((link) => {
       const href = link.dataset.navLink;
       if (!href) return;
       const active = isNavActive(href, path);
       link.classList.toggle('text-tertiary-fixed-dim', active);
-      link.classList.toggle('border-b-2', active);
       link.classList.toggle('border-tertiary-fixed-dim', active);
+      link.classList.toggle('border-transparent', !active);
       link.classList.toggle('text-on-surface-variant', !active);
       // 当前 tab 已激活时，阻止再次点击触发导航（避免刷新闪烁）
       if (active) {
@@ -112,5 +112,9 @@ function isActive(href: string) {
 
   updateHeader();
   document.addEventListener('click', handleNavClick, true);
-  document.addEventListener('astro:page-load', updateHeader);
+  // 在 DOM 交换前就把 active tab 切到目标页，使 persisted header 的过渡快照与最终状态一致，避免下划线跳动
+  document.addEventListener('astro:before-swap', (event) => {
+    updateHeader(event.newDocument.location.pathname);
+  });
+  document.addEventListener('astro:page-load', () => updateHeader());
 </script>

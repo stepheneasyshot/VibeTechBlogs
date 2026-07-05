@@ -5,7 +5,6 @@ import { site } from '../data/site';
 import { friendLinks, recommendedReading } from '../data/links';
 import {
   getPublishedPosts,
-  getPostSlug,
   getPostUrl,
   formatDate,
 } from '../utils/posts';
@@ -14,14 +13,69 @@ import { listTransition } from '../utils/pageTransitions';
 const CAROUSEL_POST_LIMIT = 5;
 
 const allPosts = await getPublishedPosts();
-const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
+const featuredPosts = allPosts.filter((p) => p.data.featured);
+const restPosts = allPosts.filter((p) => !p.data.featured);
+const carouselPosts = [...featuredPosts, ...restPosts].slice(0, CAROUSEL_POST_LIMIT);
+
+// Recommended reading: random gradient palette with hue-distance guard so
+// adjacent cards don't share a similar color family. Same two-radial-spot +
+// 135° linear-gradient structure as the tech-resource cards.
+const readingGradientPalette: { hue: number; g: string }[] = [
+  { hue: 140, g: 'radial-gradient(circle at 18% 22%, rgba(52, 168, 83, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(15, 130, 73, 0.72), transparent 55%), linear-gradient(135deg, #34A053, #0F8C46)' },
+  { hue: 175, g: 'radial-gradient(circle at 18% 22%, rgba(20, 165, 140, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(15, 103, 103, 0.72), transparent 55%), linear-gradient(135deg, #14A895, #0F6E66)' },
+  { hue: 195, g: 'radial-gradient(circle at 18% 22%, rgba(6, 170, 195, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(14, 105, 130, 0.72), transparent 55%), linear-gradient(135deg, #06A8C3, #0E6E82)' },
+  { hue: 215, g: 'radial-gradient(circle at 18% 22%, rgba(74, 133, 224, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(30, 91, 176, 0.72), transparent 55%), linear-gradient(135deg, #4A85E0, #1E5BB0)' },
+  { hue: 235, g: 'radial-gradient(circle at 18% 22%, rgba(92, 107, 192, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(40, 53, 147, 0.72), transparent 55%), linear-gradient(135deg, #5C6BC0, #283593)' },
+  { hue: 260, g: 'radial-gradient(circle at 18% 22%, rgba(122, 86, 232, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(69, 39, 160, 0.72), transparent 55%), linear-gradient(135deg, #7A56E8, #4527A0)' },
+  { hue: 290, g: 'radial-gradient(circle at 18% 22%, rgba(171, 71, 188, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(106, 27, 154, 0.72), transparent 55%), linear-gradient(135deg, #AB47BC, #6A1B9A)' },
+  { hue: 320, g: 'radial-gradient(circle at 18% 22%, rgba(192, 80, 160, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(123, 31, 110, 0.72), transparent 55%), linear-gradient(135deg, #C050A0, #7B1F6E)' },
+  { hue: 345, g: 'radial-gradient(circle at 18% 22%, rgba(226, 68, 98, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(173, 20, 87, 0.72), transparent 55%), linear-gradient(135deg, #E24462, #AD1457)' },
+  { hue: 10, g: 'radial-gradient(circle at 18% 22%, rgba(225, 90, 90, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(176, 28, 28, 0.72), transparent 55%), linear-gradient(135deg, #E15A5A, #B71C1C)' },
+  { hue: 30, g: 'radial-gradient(circle at 18% 22%, rgba(232, 146, 32, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(204, 81, 0, 0.72), transparent 55%), linear-gradient(135deg, #E89220, #CC5100)' },
+  { hue: 50, g: 'radial-gradient(circle at 18% 22%, rgba(236, 198, 42, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(199, 126, 0, 0.72), transparent 55%), linear-gradient(135deg, #ECC62A, #C77E00)' },
+  { hue: 70, g: 'radial-gradient(circle at 18% 22%, rgba(168, 184, 42, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(107, 122, 14, 0.72), transparent 55%), linear-gradient(135deg, #A8B82A, #6B7A0E)' },
+  { hue: 210, g: 'radial-gradient(circle at 18% 22%, rgba(79, 94, 224, 0.72), transparent 55%), radial-gradient(circle at 82% 78%, rgba(42, 51, 64, 0.72), transparent 55%), linear-gradient(135deg, #4F5EE0, #2A3340)' },
+];
+
+function hueDistance(a: number, b: number): number {
+  const d = Math.abs(a - b) % 360;
+  return Math.min(d, 360 - d);
+}
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickReadingGradients(count: number): string[] {
+  for (let attempt = 0; attempt < 80; attempt++) {
+    const shuffled = shuffleArray(readingGradientPalette).slice(0, count);
+    let ok = true;
+    for (let i = 1; i < shuffled.length; i++) {
+      if (hueDistance(shuffled[i].hue, shuffled[i - 1].hue) < 60) {
+        ok = false;
+        break;
+      }
+    }
+    if (ok) return shuffled.map((p) => p.g);
+  }
+  return shuffleArray(readingGradientPalette)
+    .slice(0, count)
+    .map((p) => p.g);
+}
+
+const readingGradients = pickReadingGradients(recommendedReading.length);
 ---
 
 <BaseLayout title={site.title} description={site.description} pageKind="list" pageTransition={listTransition}>
   <div class="pt-20 pb-stack-xl max-w-[1200px] mx-auto px-gutter" data-pagefind-ignore="all">
     <!-- Hero / Manifesto + Carousel -->
-    <section class="mb-stack-xl">
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(380px,560px)] gap-12 lg:gap-14 items-start">
+    <section class="mb-stack-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(320px,440px)] gap-12 lg:gap-14 items-start">
         <!-- Manifesto -->
         <div class="max-w-content-width">
           <p
@@ -46,7 +100,7 @@ const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
           <div class="flex flex-wrap gap-3 mt-stack-md stagger-item" style="--stagger-i: 3">
             <a
               href="/blog/"
-              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-tertiary-fixed-dim text-on-tertiary-fixed font-label text-label-md hover:bg-tertiary-fixed transition-colors"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-tertiary-fixed-dim text-on-tertiary-fixed font-label text-label-md hover:bg-tertiary-fixed transition-colors"
             >
               阅读博客
               <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -66,13 +120,11 @@ const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
               <div class="home-carousel__viewport relative aspect-video rounded-2xl border border-outline-variant bg-surface-container-lowest overflow-hidden">
                 <div class="home-carousel__track absolute inset-0">
                   {carouselPosts.map((post, index) => {
-                    const slug = getPostSlug(post);
                     return (
                       <article
                         class="home-carousel__slide absolute inset-0"
                         data-slide={index}
                         style={`--slide-i: ${index}`}
-                        transition:name={`post-${slug}`}
                       >
                         <a href={getPostUrl(post)} class="group block h-full">
                           <CoverImage
@@ -80,20 +132,18 @@ const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
                             alt={post.data.title}
                             class="absolute inset-0 h-full w-full rounded-none border-0"
                             imgClass="group-hover:scale-105 transition-transform duration-700"
-                            transitionName={`cover-${slug}`}
                           />
                           <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                          <div class="absolute inset-x-0 bottom-0 p-7 text-white">
-                            <p class="font-label text-label-md text-white/70 mb-3 tracking-wider">
+                          <div class="absolute inset-x-0 bottom-0 p-5 text-white">
+                            <p class="font-label text-label-md text-white/70 mb-2 tracking-wider">
                               {formatDate(post.data.pubDate)}
                             </p>
                             <h2
-                              class="font-headline text-[1rem] leading-snug font-semibold mb-3 line-clamp-2"
-                              transition:name={`title-${slug}`}
+                              class="font-headline text-[0.95rem] leading-snug font-semibold mb-2 line-clamp-2"
                             >
                               {post.data.title}
                             </h2>
-                            <p class="font-body text-[13px] text-white/75 line-clamp-2">
+                            <p class="font-body text-[12px] text-white/75 line-clamp-2">
                               {post.data.description}
                             </p>
                           </div>
@@ -151,16 +201,27 @@ const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="relative overflow-hidden border border-outline-variant rounded-xl hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 block"
+              class="relative overflow-hidden border border-outline-variant rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 block"
             >
-              <div class="absolute inset-0" style={`background-image: ${link.gradient};`} />
-              <div class="absolute inset-0 backdrop-blur-md backdrop-saturate-150 bg-surface-container-lowest/60 dark:bg-surface-container-lowest/55" />
+              {link.gradient && (
+                <div
+                  class="absolute inset-0"
+                  style={`background-image: ${link.gradient};`}
+                  aria-hidden="true"
+                />
+              )}
+              {link.gradient && (
+                <div
+                  class="absolute inset-0 backdrop-blur-md backdrop-saturate-150 bg-surface-container-lowest/60 dark:bg-surface-container-lowest/55"
+                  aria-hidden="true"
+                />
+              )}
               <div class="relative p-5 flex flex-col h-full">
                 <div class="flex items-start justify-between mb-3">
-                  <div class="w-10 h-10 rounded-full bg-secondary-container/80 backdrop-blur-sm flex items-center justify-center text-on-secondary-container">
+                  <div class="w-10 h-10 rounded-full bg-secondary-container/80 flex items-center justify-center text-on-secondary-container">
                     <span class="material-symbols-outlined text-[20px]">{link.icon}</span>
                   </div>
-                  <span class="text-on-surface group-hover:translate-x-1 transition-transform">
+                  <span class="text-on-surface-variant group-hover:translate-x-1 group-hover:text-tertiary-fixed-dim transition-all">
                     <span class="material-symbols-outlined text-[20px]">arrow_outward</span>
                   </span>
                 </div>
@@ -180,21 +241,28 @@ const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
         {
-          recommendedReading.map((item) => (
+          recommendedReading.map((item, i) => (
             <a
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="relative overflow-hidden border border-outline-variant rounded-lg hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 block"
+              class="relative overflow-hidden border border-outline-variant rounded-lg bg-surface-container-lowest shadow-sm hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 block"
             >
-              <div class="absolute inset-0" style={`background-image: ${item.gradient};`} />
-              <div class="absolute inset-0 backdrop-blur-md backdrop-saturate-150 bg-surface-container-lowest/60 dark:bg-surface-container-lowest/55" />
+              <div
+                class="absolute inset-0"
+                style={`background-image: ${readingGradients[i]};`}
+                aria-hidden="true"
+              />
+              <div
+                class="absolute inset-0 backdrop-blur-md backdrop-saturate-150 bg-surface-container-lowest/60 dark:bg-surface-container-lowest/55"
+                aria-hidden="true"
+              />
               <div class="relative p-3 flex flex-col h-full min-h-[96px]">
                 <div class="flex items-center justify-between mb-1.5">
-                  <div class="w-7 h-7 rounded-full bg-secondary-container/80 backdrop-blur-sm flex items-center justify-center text-on-secondary-container">
+                  <div class="w-7 h-7 rounded-full bg-secondary-container/80 flex items-center justify-center text-on-secondary-container">
                     <span class="material-symbols-outlined text-[16px]">{item.icon}</span>
                   </div>
-                  <span class="text-on-surface group-hover:translate-x-1 transition-transform">
+                  <span class="text-on-surface-variant group-hover:translate-x-1 group-hover:text-tertiary-fixed-dim transition-all">
                     <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
                   </span>
                 </div>

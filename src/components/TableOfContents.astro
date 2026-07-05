@@ -32,9 +32,8 @@ const tocItems = headings.filter((h) => h.depth <= 3);
               <a
                 href={`#${heading.slug}`}
                 data-toc-link={heading.slug}
-                class="toc-link font-label text-label-md text-on-surface-variant hover:text-primary transition-all duration-200 flex items-center gap-2 border-l-2 border-transparent pl-3 -ml-[2px]"
+                class="toc-link font-label text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200 flex items-center border-l-2 border-transparent pl-3 -ml-[2px]"
               >
-                <span class="toc-link-dot w-1 h-1 bg-tertiary-fixed-dim rounded-full shrink-0 opacity-40 transition-all duration-200" />
                 {heading.text}
               </a>
             </li>
