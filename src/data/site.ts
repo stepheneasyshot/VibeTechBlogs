@@ -24,9 +24,9 @@ export const site = {
     { href: '/about', label: '关于' },
   ],
   social: {
-    github: '#',
+    github: 'https://github.com/stepheneasyshot',
     linkedin: '#',
-    twitter: '#',
+    juejin: 'https://juejin.cn/user/1227473764497976',
   },
   skills: [
     'Android / Kotlin',
