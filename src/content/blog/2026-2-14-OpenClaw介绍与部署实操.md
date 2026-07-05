@@ -6,7 +6,7 @@ pubDate: 2026-02-14
 category: "AI"
 featured: false
 draft: false
-image: "/images/blog/blog_openclaw_cover.png"
+image: "/images/blog/blog_openclaw_cover.webp"
 ---
 # OpenClaw介绍与部署实操
 **2026年2月14日 湖北**

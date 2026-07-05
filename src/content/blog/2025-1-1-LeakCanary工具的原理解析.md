@@ -6,7 +6,7 @@ pubDate: 2025-01-01
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_performance.png"
+image: "/images/blog/blogs_performance.webp"
 ---
 # LeakCanary工具的原理解析
 LeakCanary 是 Square 公司开源的一款用于检测 Android 应用中 内存泄漏（Memory Leak） 的自动化工具。它能够在应用运行时自动检测内存泄漏，尤其是像 **Activity、Fragment** 等组件的泄漏，并在发现泄漏时通过通知提醒开发者，同时提供详细的泄漏引用链信息，帮助开发者快速定位问题。

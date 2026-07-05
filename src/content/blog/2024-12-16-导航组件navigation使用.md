@@ -6,7 +6,7 @@ pubDate: 2024-12-16
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_compose_cover.png"
+image: "/images/blog/blogs_compose_cover.webp"
 ---
 # 导航组件navigation使用
 Compose导航组件是Jetpack Compose中的一个重要组件，用于管理应用程序中的页面导航流程。它提供了一种简单而灵活的方式来管理不同的屏幕和页面之间的导航。

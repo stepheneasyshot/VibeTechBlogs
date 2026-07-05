@@ -6,14 +6,14 @@ pubDate: 2026-06-07
 category: "AI"
 featured: false
 draft: false
-image: "/images/blog/blogs_ai_agent_cover.png"
+image: "/images/blog/blogs_ai_agent_cover.webp"
 ---
 # LLM Powered Autonomous Agents
 OpenAI 的应用研究主管 Lilian Weng 撰写了一篇博客，认为 AI Agent 可能会成为新时代的开端。她提出了 Agent=LLM + 规划技能 + 记忆 + 工具使用的基础架构，其中 LLM 扮演了 Agent 的 “大脑”，在这个系统中提供推理、规划等能力。
 
 结构图：
 
-![](/images/blog/blogs_lilian_agent_blog.png)
+![](/images/blog/blogs_lilian_agent_blog.webp)
 
 *  **文章标题：LLM 驱动的自主智能体 (LLM Powered Autonomous Agents)**
 *   **原作者：** Lilian Weng

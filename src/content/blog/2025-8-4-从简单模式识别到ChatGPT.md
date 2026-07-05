@@ -6,7 +6,7 @@ pubDate: 2025-08-04
 category: "AI"
 featured: false
 draft: false
-image: "/images/blog/blogs_ai_history_cover.png"
+image: "/images/blog/blogs_ai_history_cover.webp"
 ---
 # 从简单模式识别到ChatGPT
 手动翻译自：
@@ -29,7 +29,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 ### AI领域分层概念
 人工智能领域通常被形象地分为多个层次：
 
-![](/images/blog/blogs_ai_layers.png)
+![](/images/blog/blogs_ai_layers.webp)
 
 * **人工智能（AI）** 是一个非常宽泛的术语，但一般涉及智能机器。
 * **机器学习（ML）** 是人工智能的一个子领域，专门研究数据中的模式识别。可以想象，一旦你识别出一种模式，你就可以将这种模式应用于新的观察。这就是该理念的精髓所在，不过我们稍后会讲到这一点。
@@ -55,7 +55,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 
 此外，正如你所想象的，距离这条线越远，我们就越能确定预测的正确性。因此，我们通常也可以根据与这条线的距离来判断我们对预测的正确性的信心程度。例如，对于我们新的低能量、低节奏的歌曲，我们可能有 98% 的把握认为这是一首 R&B 歌曲，而只有 2% 的可能性认为它实际上是雷鬼音乐。
 
-![](/images/blog/blogs_ai_music_regreation.png)
+![](/images/blog/blogs_ai_music_regreation.webp)
 
 但当然，现实往往比这更复杂。
 
@@ -71,7 +71,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 #### **图片内容识别**
 现在我们来讨论一个略有不同的问题，但我们会尝试运用之前的思维模型。在新问题中，我们输入一张图片，例如这张包里有一只可爱的猫的图片（因为有猫的例子总是最好的）。
 
-![](/images/blog/blogs_ai_image_judge.png)
+![](/images/blog/blogs_ai_image_judge.webp)
 
 至于结果，假设这次我们**有三种可能的标签：老虎、猫和狐狸**。如果你需要一些动机来完成这项任务，假设我们想要保护一群羊，如果看到老虎就发出警报，但如果看到猫或狐狸就不发出警报。
 
@@ -87,7 +87,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 #### **句子情感感知**
 让我们考虑另一种极其复杂的输入输出关系——**句子与其情感之间的关系**。我们所说的情感通常是指句子所传达的情感，可以是积极的，也可以是消极的。
 
-![](/images/blog/blogs_ai_sentence_judge.png)
+![](/images/blog/blogs_ai_sentence_judge.webp)
 
 让我们再次形式化地描述问题设置：这里的**输入是一系列单词**，也就是一个句子，情绪是我们的结果变量。和之前一样，这是一个分类任务，这次的**输出目标有两个可能的标签，即正面或负面**。
 
@@ -135,7 +135,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 
 > 给定一个词序列，例如输入一个一个句子或段落，输出下一个可能的词是什么？
 
-![](/images/blog/blogs_ai_text_prediction.png)
+![](/images/blog/blogs_ai_text_prediction.webp)
 
 换句话说，我们只是想学习如何随时预测下一个词。此前，我们已经学习了如何将一个句子转换陈数字输入，并判断其情绪。事实上，这个任务与我们之前看到的情绪分类并无二致。
 
@@ -147,7 +147,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 
 我们知道了任务，现在我们**需要数据来训练神经网络**。实际上，为我们的“下一个单词预测”任务创建大量数据并不难：互联网、书籍、研究论文等等都拥有丰富的文本。我们可以轻松地从所有这些文本中创建一个庞大的数据集。**我们甚至不需要标记数据，因为下一个单词本身就是标签，这就是为什么它也被称为自监督学习。**
 
-![](/images/blog/blogs_ai_text_prediction_train.png)
+![](/images/blog/blogs_ai_text_prediction_train.webp)
 
 上图展示了这个过程。一个序列可以转换成多个序列进行训练。我们有很多这样的序列。重要的是，我们对许多短序列和长序列（有些序列长达数千个单词）都进行了同样的操作，以便在每个上下文中都能学习到下一个单词应该是什么。
 
@@ -155,7 +155,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 
 如果我们拥有足够大的神经网络和足够的数据，LLM 就能非常擅长预测下一个单词。它会完美吗？当然不会，因为一个序列后面通常有多个单词。但它会擅长选择一个在句法和语义上都合适的单词。
 
-![](/images/blog/blogs_ai_text_prediction_result.png)
+![](/images/blog/blogs_ai_text_prediction_result.webp)
 
 现在我们的神经网络可以根据一段文本来预测下一个单词了，我们可以将扩展后的文本再次反馈给LLM，预测另一个单词，以此类推。
 
@@ -165,7 +165,7 @@ ChatGPT，或许是最著名的LLM，由于**自然语言**本身就是一种非
 
 说到 ChatGPT，你现在可能会问，为什么它不叫 ChatLLM。事实证明，语言建模（Language Models）并非故事的终点——事实上，它只是一个开始。那么，ChatGPT 中的 GPT 到底代表什么呢？
 ### GPT
-![](/images/blog/blogs_ai_gpt_meaning.png)
+![](/images/blog/blogs_ai_gpt_meaning.webp)
 
 实际上，我们刚刚了解了 **`G`** 的含义，即 **“generative(生成式)”** ——这意味着它是以语言生成为目的进行训练的，这一点我们之前已经讨论过了。那么 P 和 T 呢？
 
@@ -177,7 +177,7 @@ Transformer架构的的主要优势是什么呢？ **那么Transformer架构之�
 
 原因是，像 ChatGPT 这样的大型语言模型实际上是**分阶段训练**的。
 
-![](/images/blog/blogs_ai_llm_training_phases.png)
+![](/images/blog/blogs_ai_llm_training_phases.webp)
 
 > （1）预训练，（2）指令微调，（3）人工反馈强化（RLHF）。
 
@@ -249,7 +249,7 @@ LLM 可能会出现**幻觉**，但可以通过提供额外的背景信息来缓
 
 你可能会惊讶，我们现在居然可以一起尝试解决这个问题。我们拥有所需的知识，能够找到一个至少能在一定程度上提供帮助、并且目前已被广泛应用的解决方案。
 
-![](/images/blog/blogs_ai_bing_chat_example.png)
+![](/images/blog/blogs_ai_bing_chat_example.webp)
 
 Bing 聊天是基于搜索的 LLM 工作流程的一个示例。
 
@@ -279,7 +279,7 @@ Bing 聊天是基于搜索的 LLM 工作流程的一个示例。
 
 在本文的最后一部分，我们将讨论一些新兴的能力，并向您展示一些如何使用它们来解决问题的技巧。
 ### 零样本和少量样本学习
-![](/images/blog/blogs_ai_zero_shot_prompt.png)
+![](/images/blog/blogs_ai_zero_shot_prompt.webp)
 
 LLM 可以以零样本方式解决全新的任务。正如其名称所示，LLM 正在兴起一种普遍存在的能力：它可以执行训练中从未遇到过的全新任务，这被称为零样本（zero-shot）。它所需要的只是一些关于如何解决任务的指令。
 
@@ -304,7 +304,7 @@ LLM 可以以零样本方式解决全新的任务。正如其名称所示，LLM 
 
 大模型就像人类一样，可以从示例或演示中提取有用的信息。**如果有人要求你执行一项全新的任务，你可能会要求提供一些示例或演示来说明如何执行该任务。大模型（LLM）也一样。**
 
-![](/images/blog/blogs_ai_frew_shot_prompt.png)
+![](/images/blog/blogs_ai_frew_shot_prompt.webp)
 
 举个例子，假设你想要一个模型将不同的货币金额转换为通用格式。你可以详细描述你的目标，或者只给出一个简短的说明和一些示例演示。上图展示了一个示例任务。
 
@@ -316,7 +316,7 @@ LLM 可以以零样本方式解决全新的任务。正如其名称所示，LLM 
 ### 长思维链
 思路链为大模型 (LLM) 提供了工作记忆，这可以大大提高他们的表现，特别是在更复杂的任务上。这也让人联想到人类智能，当任务更加复杂，需要多步推理才能解决时，推理思路链尤其有用。
 
-![](/images/blog/blogs_ai_chain_of_thought.png)
+![](/images/blog/blogs_ai_chain_of_thought.webp)
 
 假设我问你
 

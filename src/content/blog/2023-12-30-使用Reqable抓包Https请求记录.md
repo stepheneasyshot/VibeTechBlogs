@@ -6,7 +6,7 @@ pubDate: 2023-12-30
 category: ["网络", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_reqable_site_cover.png"
+image: "/images/blog/blogs_reqable_site_cover.webp"
 ---
 # 使用Reqable抓包Https请求记录
 在集成DeepSeek的Chat对话API时，我遇到了一个典型的用户体验问题：**启用流式输出（streaming response）后，服务器返回的数据过于密集且速度快**，导致前端页面渲染出现卡顿，文字滚动不连贯，严重影响交互流畅度。
@@ -126,13 +126,13 @@ dependencies {
 
 点击启动按钮后，在列表中可以看到所有的网络请求的情况。
 
-![](/images/blog/blogs_reqable_all_packages.png)
+![](/images/blog/blogs_reqable_all_packages.webp)
 
 对于Deepseek的调试，我将服务器地址这里的 `https://api.deepseek.cn` 添加到Reqable的筛选中。
 
 在AI助手页面内，输入对应的功能，触发网络请求之后，即可看到服务器返回的情况。
 
-![](/images/blog/blogs_reqable_stream_chat.png)
+![](/images/blog/blogs_reqable_stream_chat.webp)
 
 根据原始数据可以看出，服务器返回的类型确实是一个流式的数据 `text/event-stream` 。选中某一条目标请求，展开详情面板。从响应头中可以看到关键信息：
 

@@ -6,7 +6,7 @@ pubDate: 2023-12-02
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_bootanimation.png"
+image: "/images/blog/blogs_bootanimation.webp"
 ---
 # 没有UI设计师如何自制Android开机动画
 ## 背景
@@ -30,7 +30,7 @@ zip包里面的文件格式一般比较固定：
 
 像我的就是下面这个结构：
 
-<img src="/images/blog/blogs_bootanimation_files.png" alt="bootanimation" width="220" height="160" />
+<img src="/images/blog/blogs_bootanimation_files.webp" alt="bootanimation" width="220" height="160" />
 
 #### disc.txt
 这个文件里的内容格式也比较简单：

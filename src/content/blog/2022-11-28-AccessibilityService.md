@@ -6,7 +6,7 @@ pubDate: 2022-11-28
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_android_access_service_cover.png"
+image: "/images/blog/blogs_android_access_service_cover.webp"
 ---
 # AccessibilityService 无障碍服务使用
 **AccessibilityService** 是 Android 系统提供的一种特殊类型的服务，它允许应用程序监听系统和应用中的各种事件，并与用户界面（UI）进行交互。
@@ -215,7 +215,7 @@ fun AccessibilityService.startSwipeGesture(
 
 由于 `AccessibilityService` 拥有极高的权限，他可以做的事情和用户手动操作的权限是相同的。用户必须在 **设置 - 辅助功能** 中找到定义的服务祝福，并手动确认启用你的服务。在代码中，可以引导用户跳转到相应的设置页面进行授权。
 
-![](/images/blog/blogs_access_service_skip_ads_demo.png)
+![](/images/blog/blogs_access_service_skip_ads_demo.webp)
 
 ## 其他典型应用场景
 Android辅助服务主要用于以下场景：

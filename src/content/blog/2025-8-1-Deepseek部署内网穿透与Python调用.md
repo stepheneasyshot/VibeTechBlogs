@@ -6,7 +6,7 @@ pubDate: 2025-08-01
 category: ["AI", "跨平台", "Python"]
 featured: false
 draft: false
-image: "/images/blog/blogs_deepseek_cover.png"
+image: "/images/blog/blogs_deepseek_cover.webp"
 ---
 # Deepseek部署内网穿透与Python调用
 ## Ollama简介
@@ -269,11 +269,11 @@ docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-
 
 启动成功后，也可以通过Docker Desktop来进行管理：
 
-![blogs_ollama_deepseek_docker](/images/blog/blogs_ollama_deepseek_docker.png)
+![blogs_ollama_deepseek_docker](/images/blog/blogs_ollama_deepseek_docker.webp)
 
 打开浏览器，转到 ```http://localhost:3000/``` ，进行聊天测试。初次进入需要设置 **管理员账户** ，在后台就可以对模型的访问进行一系列的设置。
 
-![blogs_deepseek_openweb_ui](/images/blog/blogs_deepseek_openweb_ui.png)
+![blogs_deepseek_openweb_ui](/images/blog/blogs_deepseek_openweb_ui.webp)
 
 ## 内网穿透出去
 如果想在公司内部小范围使用，或者不在电脑边，想使用手机访问deepseek，可以使用内网穿透工具，这里推荐使用 ```cpolar``` 。
@@ -290,7 +290,7 @@ http://localhost:9200
 
 使用自己刚刚注册的账号登录之后，在cpolar左侧导航栏中，点击 ```隧道管理``` ，然后点击 ```添加隧道``` ，选择 ```HTTP``` 协议，本地地址设置为 **OpenWebUI** 的 **3000** 端口
 
-![blogs_cpolar_add_tunnel](/images/blog/blogs_cpolar_add_tunnel.png)
+![blogs_cpolar_add_tunnel](/images/blog/blogs_cpolar_add_tunnel.webp)
 
 配置完成之后，点击 ```创建``` ，等待cpolar分配一个域名。
 
@@ -303,19 +303,19 @@ http://localhost:9200
 
 探索之后发现，可以先使用oi的管理员账户登录，然后在设置里面找到，开启允许新用户注册：
 
-![](/images/blog/blogs_ollama_deepseek_io_manager2.png)
+![](/images/blog/blogs_ollama_deepseek_io_manager2.webp)
 
 或者直接在管理员后台，像下面这样点加号手动创建几个新账号来使用：
 
-![](/images/blog/blogs_ollama_deepseek_io_manager.png)
+![](/images/blog/blogs_ollama_deepseek_io_manager.webp)
 
 最后将对应模型的可见性设置为public公开，让非管理员用户也可以使用：
 
-![](/images/blog/blogs_ollama_deepseek_io_manager3.png)
+![](/images/blog/blogs_ollama_deepseek_io_manager3.webp)
 
 配置完成测试，使用普通账号登录之后，可以正常使用模型了，就像下面这样：
 
-![](/images/blog/blogs_ollama_deepseek_user.png)
+![](/images/blog/blogs_ollama_deepseek_user.webp)
 
 ## 使用Python调用Deepseek的能力
 对于程序开发来说，如果只是在用户层面使用UI交互，那局限性太大了，能不能使用AI的能力，来优化一些程序运行结果呢？

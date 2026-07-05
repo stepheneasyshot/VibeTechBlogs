@@ -6,7 +6,7 @@ pubDate: 2025-06-01
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cmp_new_cover.png"
+image: "/images/blog/blogs_cmp_new_cover.webp"
 ---
 # 使用AYA项目Server重构DebugManager工具的应用管理
 这个工具绝大部分功能都是基于 `adb` 命令来实现的，在ProcessBuilder中执行命令，获取输出流，对输出的内容进行解析，在结构化地展示到界面。
@@ -34,7 +34,7 @@ image: "/images/blog/blogs_cmp_new_cover.png"
 /data/data/com.stephen.appinfoservice/icons/*.png
 ```
 
-![](/images/blog/blogs_cmp_appmanage_1.png)
+![](/images/blog/blogs_cmp_appmanage_1.webp)
 
 ### 二、手机阶段
 在面对更普遍的手机端的应用管理功能时，我发现了没有系统签名的应用，是不可以直接使用 `am startservice` 命令来拉起服务的。而且不同手机平台还有权限上面的区别，比如类原生的系统上（Pixel平台，LineageOS），是不用动态申请就可以获取安装的应用信息，但是在国产OS上，有更严格的管理，需要处理读取应用列表权限。
@@ -47,11 +47,11 @@ AYA也是一个基于adb命令来显示Android设备信息，进行调试的项�
 
 它是使用比较火的Electron框架，`TypeScript` 语言编写的。看到他们有类似的应用管理页面，可以显示APP图标，我想他们肯定也是在Android设备上有一个服务端的。看看他们服务端的实现方式，并将其改写成适配 `DebugManager` 项目的数据传输方案。
 
-![](/images/blog/blogs_aya_screenshots.png)
+![](/images/blog/blogs_aya_screenshots.webp)
 
 AYA的服务端不是承载于一个普通的Android应用进程上，而是类似于一个DEAMON守护进程。
 
-![](/images/blog/blogs_aya_server_code.png)
+![](/images/blog/blogs_aya_server_code.webp)
 
 ### 代码运行分析
 这是一个 Android 应用，但它并不是一个常规的 APK，而是一个在 Android 设备上通过 `dex` 文件直接运行的程序。这种方式通常用于需要更高权限或者直接访问系统服务的工具类应用，类似于 adb shell 上的一个服务。
@@ -205,11 +205,11 @@ DebugManager内部，通过 `adb shell pm list packages` 命令，获取到所�
 ## 界面升级
 此前的交互也进行了同步升级，再有限的窗口内展示更多的信息，全局缩小了字号和模块之前的padding，将列表类型改为了图标矩阵，使用 `LazyVerticalGrid` 组件来承接应用图标展示。
 
-![](/images/blog/blogs_debugmanager_app_info.png)
+![](/images/blog/blogs_debugmanager_app_info.webp)
 
 详细信息弹窗：
 
-![](/images/blog/blogs_debugmanager_app_info_gallery.png)
+![](/images/blog/blogs_debugmanager_app_info_gallery.webp)
 
 同时为了缩小重组范围，使用应用的packageName作为key，来标识每一个item，还可以以此来实现每一个item的移动动效，比图标的体验更丝滑。
 
@@ -262,6 +262,3 @@ Modifier.animateItem(
     placementSpec = tween(300)
 )
 ```
-
-![](/images/blog/blogs_debugmanager_app_info_animate.gif)
-

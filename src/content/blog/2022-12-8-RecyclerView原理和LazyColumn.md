@@ -6,7 +6,7 @@ pubDate: 2022-12-08
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_recyclerview_cover.png"
+image: "/images/blog/blogs_recyclerview_cover.webp"
 ---
 # RecyclerView原理和LazyColumn
 ## RecyclerView的优化点

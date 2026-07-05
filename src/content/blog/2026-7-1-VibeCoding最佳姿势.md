@@ -6,7 +6,7 @@ pubDate: 2026-07-01
 category: ["AI", "Android", "Python"]
 featured: false
 draft: false
-image: "/images/blog/blogs_vibe_coding.png"
+image: "/images/blog/blogs_vibe_coding.webp"
 ---
 # VibeCoding最佳姿势
 作为一名每天和代码打交道的 Android 工程师，我见证了 AI 如何彻底改变编程。现在，一个最前沿的词汇正风靡开发者圈子——**Vibe Coding（氛围感编程/情绪流编程）**。

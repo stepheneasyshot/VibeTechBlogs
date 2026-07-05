@@ -6,7 +6,7 @@ pubDate: 2022-12-05
 category: ["Android", "跨平台"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cover_android_vitual_machine.png"
+image: "/images/blog/blogs_cover_android_vitual_machine.webp"
 ---
 # JVM&DVM&ART虚拟机对比
 去年通读了深入理解Java虚拟机，对JVM的一系列特性有了系统的了解，然而作为Android开发，却还没有对Android平台特有的两代虚拟机做更为细致的学习，属实有点说不过去。在车机Android系统app的开发中，几乎涉及不到apk的动态安装卸载，一般是参与系统集成编译完就发布镜像，烧写后一直运行。所以对此专题，了解甚少。
@@ -56,7 +56,7 @@ class文件转换成dex文件的过程称为"dexing"，主要通过以下步骤�
 
 二者格式对比如下：
 
-![](/images/blog/blogs_dalvik_class2dex.png)
+![](/images/blog/blogs_dalvik_class2dex.webp)
 
 ### JVM和Dalvik运行流程
 #### JVM基于栈操作
@@ -111,12 +111,12 @@ int foo(int a, int b) {
 
 计算流程如下图：
 
-![](/images/blog/blogs_dalvik_calculate.png)
+![](/images/blog/blogs_dalvik_calculate.webp)
 
 ### 内存对比
 一个JVM进程所处的Java虚拟机的内存可以用下面这张热门图片概括：
 
-<img src="/images/blog/blogs_jvm_ram_simple.png" alt="jvm_ram" width="500" height="280" loading="lazy" />
+<img src="/images/blog/blogs_jvm_ram_simple.webp" alt="jvm_ram" width="500" height="280" loading="lazy" />
 
 Dalvik虚拟机的内存模型略有不同。
 
@@ -135,7 +135,7 @@ Zygote Heap 堆内存中, 有一部分区域的内存是只读的, 如系统相�
 
 **DVM特点内存模型图**
 
-![](/images/blog/blogs_dvm_mem_model.png)
+![](/images/blog/blogs_dvm_mem_model.webp)
 
 > Card Table：用于 DVM Concurrtent GC，当第一次进行垃圾标记后，记录垃圾信息。
 Heap Bitmap：分为两个，Live Bitmap 用来记录上次 GC 存活的对象，Mark Bitmap 用来记录这次 GC 存活的对象。
@@ -357,7 +357,7 @@ AOT，即Ahead of Time，即 **提前编译** 。当APK **在安装的时候** �
 
 下图描述了Dalvik虚拟机与（Android 5.0上的）ART虚拟机在安装APK时的区别:
 
-![](/images/blog/blogs_art_vs_dalvik.png)
+![](/images/blog/blogs_art_vs_dalvik.webp)
 
 从这幅图中我们看到：
 

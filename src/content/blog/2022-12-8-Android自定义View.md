@@ -6,7 +6,7 @@ pubDate: 2022-12-08
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_android_common_cover.png"
+image: "/images/blog/blogs_android_common_cover.webp"
 ---
 # Android自定义View
 在 Android 开发过程中，我们经常使用官方提供的 TextView、Button 和 RecyclerView 来构建界面。但当面临复杂、个性化或高性能的 UI 需求时，这些标准组件往往力不从心。这时，自定义 View 就显得很必要了。
@@ -64,7 +64,7 @@ class MainCardView @JvmOverloads constructor(
 
 效果截图：
 
-<img src="/images/blog/blogs_custom_view_card.png" width="200" height="400" loading="lazy" />
+<img src="/images/blog/blogs_custom_view_card.webp" width="200" height="400" loading="lazy" />
 
 ## 直接继承自View
 ### 基础绘制类和方法
@@ -346,7 +346,7 @@ public class GradientTextView extends View {
 
 效果截图：
 
-![](/images/blog/blogs_custom_view_gradient_text.png)
+![](/images/blog/blogs_custom_view_gradient_text.webp)
 
 可以看到代码中是创建了创建了一个从红色 (Color.RED) 到蓝色 (Color.BLUE) 的水平线性渐变，然后应用到paint画笔上：
 
@@ -542,7 +542,7 @@ class ClockView @JvmOverloads constructor(
 
 运行截图：
 
-![](/images/blog/blogs_custom_view_clock.png)
+![](/images/blog/blogs_custom_view_clock.webp)
 
 ### 交互式
 这类也是需要处理动态刷新的自定义View，更进一步还结合了触摸事件的处理，即需要根据 `ACTION_MOVE` 事件或者封装的 `GestureDetector` 手势回调里，判断方向和距离，对内部的组件进行特定的移动，缩放等处理逻辑。
@@ -810,7 +810,7 @@ public class TemperaturePickerView extends View {
 
 运行截图：
 
-<img src="/images/blog/blogs_custom_view_temp_list.png" width="200" height="400" loading="lazy" />
+<img src="/images/blog/blogs_custom_view_temp_list.webp" width="200" height="400" loading="lazy" />
 
 在这个例子中，使用的 `gestureDetector` 来处理DOWN和MOVE事件，onTouchevent的事件先交由 `gestureDetector` 来处理，其内部计算具体的手势，是普通的滑动，还是快速的fling，由 `computeScroll` 回调来驱动滑动 `Scroller` 计算滑动距离。
 

@@ -6,7 +6,7 @@ pubDate: 2022-08-08
 category: ["Android", "网络"]
 featured: false
 draft: false
-image: "/images/blog/blogs_gradle_cover.png"
+image: "/images/blog/blogs_gradle_cover.webp"
 ---
 # Gradle&AGP&SDK&JDK版本对应总结
 来自腾讯元宝AI的总结，检查无大问题后创建文章。

@@ -6,13 +6,13 @@ pubDate: 2022-12-20
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_aaos_cover.png"
+image: "/images/blog/blogs_aaos_cover.webp"
 ---
 # 车载Android常用View控件交互总结
 ## 模块名词解释
 ### 一种常见架构
 
-![blogs_view_car_net](/images/blog/blogs_view_car_net.png)
+![blogs_view_car_net](/images/blog/blogs_view_car_net.webp)
 
 ### VIU
 汽车电子系统中的一个重要组成部分，它是一种称为“车辆信息单元”的设备，也被称为“车辆智能单元”，是车辆智能化的核心部件之一。VIU是英文Vehicle Information Unit的缩写，其主要功能是收集车辆的各种信息并进行处理。
@@ -67,7 +67,7 @@ TDA4凭借着出色的运算能力、有竞争性的价格，赢得了越来越�
 ### Switch开关类
 开关一般用于各个设置项，比如氛围灯，智驾功能，蓝牙，网络开关等。
 
-![blogs_view_switch](/images/blog/blogs_view_switch.png)
+![blogs_view_switch](/images/blog/blogs_view_switch.webp)
 
 Switch有切换时下发指令和显示开关状态的需求。
 
@@ -78,7 +78,7 @@ Switch有切换时下发指令和显示开关状态的需求。
 
 变种类switch，严格来说是Button，具有非此即彼，互斥状态的控件。比如可能设计成一个高亮色块，通过不同颜色图标来表示开关此时的状态，往往还需要更改开关的文字描述，例：
 
-![blogs_view_button](/images/blog/blogs_view_button.png)
+![blogs_view_button](/images/blog/blogs_view_button.webp)
 
 #### 下游执行快
 若座舱域的下游控制器可以做到快速切换，只是信号链路传输慢，可以在用户每次点击开关后，都直接往下发设置信号。单次点击一般没有问题，主要分析快速多次点击这种容易出问题的场景。 **快速点击期间都移除掉信号监听removeCallbacks，也不进行状态的主动获取刷新** 。
@@ -123,7 +123,7 @@ switch.setOnCheckedChangeListener { buttonView, isChecked ->
 ### RadioGroup 类控件
 这类控件组，往往是同一个功能，走同一个信号接口，有两个以上的待选项，可以选取不同参数的功能。比如 驾驶模式 选择的控件。
 
-![blogs_view_radiogroup](/images/blog/blogs_view_radiogroup.png)
+![blogs_view_radiogroup](/images/blog/blogs_view_radiogroup.webp)
 
 这类控件的处理方式和上述 switch 开关类控件类似。
 
@@ -219,7 +219,7 @@ mCushionTouch.setOnTouchListener((view, motionEvent) -> {
 ### 滑动条SeekBar类
 这一类控件常被用来作为 **进度条** 展示，也具有 **手动调节** 的功能。
 
-![blogs_view_seekbar](/images/blog/blogs_view_seekbar.png)
+![blogs_view_seekbar](/images/blog/blogs_view_seekbar.webp)
 
 一般是亮度，音量，充放电电量等具有一定调节范围的设置项。它有三个回调方法，分别是onProgressChanged，onStartTrackingTouch，onStopTrackingTouch，代表调节时，按下时，抬起时。
 
@@ -253,7 +253,7 @@ signalSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 ### 有步长的Seekbar体验优化
 比如设置某个信号，底层只能接受像5，15，25等5的倍数的信号值。而将seekbar的步长设置为5，在滑动时会有明显的卡顿感。
 
-![blogs_view_seekbar_step](/images/blog/blogs_view_seekbar_step.png)
+![blogs_view_seekbar_step](/images/blog/blogs_view_seekbar_step.webp)
 
 所以为了丝滑调节，可以设置默认步长1，采用整除回乘的算法来将区间数据处理成需要的数据，比如32整除5为6，再乘5就是30。
 

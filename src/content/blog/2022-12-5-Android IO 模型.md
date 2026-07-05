@@ -6,7 +6,7 @@ pubDate: 2022-12-05
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_android_common_cover.png"
+image: "/images/blog/blogs_android_common_cover.webp"
 ---
 # Android I/O 模型
 ## Java的I/O模型
@@ -146,7 +146,7 @@ suspend fun saveLargeFile(data: ByteArray, fileName: String) {
 
 常常有下列的对象（C语言中的结构体）构成:
 
-![blogs_linux_vfs](/images/blog/blogs_linux_vfs.jpeg)
+![blogs_linux_vfs](/images/blog/blogs_linux_vfs.webp)
 
 * **超级块** (Superblock)： 每个文件系统都有一个超级块，它包含了文件系统的元数据，如文件系统类型、块大小、总块数等。
 * **索引节点** (Inode)： 每个文件或目录都有一个索引节点，它包含了文件的元数据，如文件大小、权限、创建时间等。
@@ -305,4 +305,4 @@ Linux 下面有两大基本设备类型：
 
 到Cell这一层，再往下就是MOS管了，通过电压控制电子是否进入存储单元。
 
-<img src="/images/blog/blogs_io_all.jpeg" alt="blogs_io_all.jpeg" width="300" height="540" loading="lazy" />
+<img src="/images/blog/blogs_io_all.webp" alt="blogs_io_all.jpeg" width="300" height="540" loading="lazy" />

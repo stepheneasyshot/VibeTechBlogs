@@ -6,7 +6,7 @@ pubDate: 2024-12-11
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_compose_cover.png"
+image: "/images/blog/blogs_compose_cover.webp"
 ---
 # Intrinsic Measurement
 Compose 有一项规则，**子项只能测量一次，测量两次就会引发运行时异常**
@@ -81,7 +81,7 @@ fun IntrinsicTest() {
 }
 ```
 
-<img src="/images/blog/blogs_compose_intrin_demo0_1.png" alt="demo0" width="300" height="700" loading="lazy" />
+<img src="/images/blog/blogs_compose_intrin_demo0_1.webp" alt="demo0" width="300" height="700" loading="lazy" />
 
 这里和上面的View的例子是一样的，父组合项的size是wrap的，子组合项的size是对齐上一级的。
 
@@ -107,7 +107,7 @@ fun IntrinsicTest() {
 结果：
 
 
-<img src="/images/blog/blogs_compose_intrin_demo0_2.png" alt="demo0" width="300" height="700" loading="lazy" />
+<img src="/images/blog/blogs_compose_intrin_demo0_2.webp" alt="demo0" width="300" height="700" loading="lazy" />
 
 我将外部Column的高度参数设置为 ```IntrinsicSize.Min``` 就可以达到要求。
 
@@ -124,7 +124,7 @@ height(IntrinsicSize.Min) 可将其子项的高度强行调整为最小固有高
 
 要实现下面这个效果，两个文字中间画一条分割线：
 
-<img src="/images/blog/blogs_compose_intrinc_demo1.png" alt="blogs_compose_intrinc_demo1" width="300" height="50" loading="lazy" />
+<img src="/images/blog/blogs_compose_intrinc_demo1.webp" alt="blogs_compose_intrinc_demo1" width="300" height="50" loading="lazy" />
 
 我们该怎么做？我们可以将两个 Text 放在同一 Row，并在其中最大程度地扩展，另外在中间放置一个 Divider。我们需要将 Divider 的高度设置为与最高的 Text 相同，粗细设置为 width = 1.dp。
 
@@ -158,7 +158,7 @@ fun TwoTexts(modifier: Modifier = Modifier, text1: String, text2: String) {
 
 预览时，我们发现 Divider 会扩展到整个屏幕，这并不是我们想要的效果：
 
-<img src="/images/blog/blogs_compose_two_text_max.png" alt="blogs_compose_two_text_max" width="300" height="100" loading="lazy" />
+<img src="/images/blog/blogs_compose_two_text_max.webp" alt="blogs_compose_two_text_max" width="300" height="100" loading="lazy" />
 
 两个文本元素并排显示，中间用分隔线隔开，但分隔线向下延伸到文本底部下方
 
@@ -211,7 +211,7 @@ fun TwoTextsPreview() {
 ### 举例2 兄弟组合项对齐数据
 需求是在屏幕上显示左右两个栏目，两边的内容不一定一样多，但是背景色块需要一样高。
 
-![blogs_compose_intrinc_demo2](/images/blog/blogs_compose_intrin_demo2_0.jpg)
+![blogs_compose_intrinc_demo2](/images/blog/blogs_compose_intrin_demo2_0.webp)
 
 我们使用row来分栏，然后在每个column里填数据，不主动设置高度。
 
@@ -241,7 +241,7 @@ fun IntrinsicTest() {
 
 结果：
 
-<img src="/images/blog/blogs_compose_intrin_demo2_1.png" alt="blogs_compose_intrinc_demo21" width="300" height="700" loading="lazy" />
+<img src="/images/blog/blogs_compose_intrin_demo2_1.webp" alt="blogs_compose_intrinc_demo21" width="300" height="700" loading="lazy" />
 
 我们发现两个Column的高度是不一致的。
 
@@ -278,6 +278,6 @@ fun IntrinsicTest() {
 
 结果：
 
-<img src="/images/blog/blogs_compose_intrin_demo2_2.png" alt="blogs_compose_intrinc_demo22" width="300" height="700" loading="lazy" />
+<img src="/images/blog/blogs_compose_intrin_demo2_2.webp" alt="blogs_compose_intrinc_demo22" width="300" height="700" loading="lazy" />
 
 可以看到两个column的高度是一样的了。

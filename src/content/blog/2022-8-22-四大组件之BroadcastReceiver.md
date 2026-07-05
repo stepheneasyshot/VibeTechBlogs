@@ -6,7 +6,7 @@ pubDate: 2022-08-22
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_broadsact_cover.png"
+image: "/images/blog/blogs_broadsact_cover.webp"
 ---
 # 四大组件之BroadcastReceiver
 ## 什么是BroadcastReceiver

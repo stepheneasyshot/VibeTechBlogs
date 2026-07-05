@@ -6,7 +6,7 @@ pubDate: 2025-05-31
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_kmp_cover.png"
+image: "/images/blog/blogs_kmp_cover.webp"
 ---
 # Kotlin Multiplatform闲谈
 论题来自于 **霍丙乾(Benny Huo)** 在B站上的答网友问。基于其描述，详细扩展开来。

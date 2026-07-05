@@ -6,7 +6,7 @@ pubDate: 2022-09-12
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_content_provider_cover.png"
+image: "/images/blog/blogs_content_provider_cover.webp"
 ---
 # 四大组件之ContentProvider
 

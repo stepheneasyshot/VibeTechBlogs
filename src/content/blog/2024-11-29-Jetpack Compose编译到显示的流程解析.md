@@ -6,7 +6,7 @@ pubDate: 2024-11-29
 category: ["Android", "跨平台"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cmp_new_cover.png"
+image: "/images/blog/blogs_cmp_new_cover.webp"
 ---
 # Compose编译到显示的流程解析
 Jetpack Compose 是 Google 推出的用于构建原生 Android UI 的现代声明式框架，它简化了 Android 应用的 UI 开发过程。

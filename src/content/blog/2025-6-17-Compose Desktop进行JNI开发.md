@@ -6,7 +6,7 @@ pubDate: 2025-06-17
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_compose_cover.png"
+image: "/images/blog/blogs_compose_cover.webp"
 ---
 # Compose Desktop进行JNI开发
 在 Kotlin Multiplatform (KMP) 项目中，要在桌面端（通常指 JVM 桌面应用，如 macOS, Windows, Linux）进行 JNI (Java Native Interface) 开发，核心思路是利用 KMP 的 `expect`/`actual` 机制，为桌面 JVM 平台提供 JNI 的实际实现。

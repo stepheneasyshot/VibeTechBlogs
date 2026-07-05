@@ -6,7 +6,7 @@ pubDate: 2022-07-20
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_activity_cover.png"
+image: "/images/blog/blogs_activity_cover.webp"
 ---
 # 四大组件之Activity
 

@@ -6,7 +6,7 @@ pubDate: 2024-11-24
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_compose.png"
+image: "/images/blog/blogs_compose.webp"
 ---
 # Jetpack Compose的MVI架构设计
 课题分享，对不熟悉 `Compose` 及其架构设计的老师，介绍一下 `Compose` 这个声明式UI框架，还有其官方推荐的MVI架构最佳实践。
@@ -25,7 +25,7 @@ image: "/images/blog/blogs_compose.png"
 
 目前在较新版本的Android Studio里新建项目，默认排第一位的就是Compose的UI框架的项目。
 
-![](/images/blog/blogs_as_new_project.png)
+![](/images/blog/blogs_as_new_project.webp)
 
 下面是一个例子，在屏幕中央显示一个文本，并且可以直接在Android Studio的右侧预览实机画面：
 
@@ -46,7 +46,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 实时预览：
 
-![](/images/blog/blogs_as_compose_preview.png)
+![](/images/blog/blogs_as_compose_preview.webp)
 
 ### 同View的写法差别
 在View命令式UI架构中，对视图的创建，更新等都是设置一条条的命令来进行，每个View都是维护自己的一个状态，并且对外暴露get和set接口来供外接交互。
@@ -112,12 +112,12 @@ Compose可以完美地使用Kotlin语音来编写，布局中可以无缝使用�
 
 使用Compose的列表预览效果如下：
 
-![](/images/blog/blogs_compose_repeat_text.png)
+![](/images/blog/blogs_compose_repeat_text.webp)
 
 ## 视图结构
 ### View视图结构
 
-<img src="/images/blog/blogs_view_window_frame.png" width="300" height="400" loading="lazy" />
+<img src="/images/blog/blogs_view_window_frame.webp" width="300" height="400" loading="lazy" />
 
 经典框架不做多余赘述。
 
@@ -126,7 +126,7 @@ Composable可组合项在Android平台的实现，是利用 `ViewGroup` 来显�
 
 通过打印堆栈可以看出，在页面布局的创建阶段，使用到了AndroidComposeView这个类。
 
-![](/images/blog/blogs_compose_window_frame.png)
+![](/images/blog/blogs_compose_window_frame.webp)
 
 ComposeView其实就是一个ViewGroup，它继承自AbstractComposeView，负责对Android平台的Activity的窗口进行适配。取而代之的是AndroidComposeView这个ViewGroup，Composable可组合项的内容就在这里面来渲染显示。
 
@@ -216,7 +216,7 @@ fun ComposeDemo() {
 
 双击后的变化：
 
-![](/images/blog/blogs_compose_pointerinput.png)
+![](/images/blog/blogs_compose_pointerinput.webp)
 
 #### 手势判断的简化
 在View架构里想要监听手势，比如要自定义一个View，重写其onTouchEvent，对MOVE事件里的滑动方向进行计算后判断，或者将touch事件传递给GestureDetector对象。
@@ -364,7 +364,7 @@ Model：表示应用程序的数据和状态。它是应用程序的核心，负
 View：表示应用程序的用户界面。它负责将Model中的数据呈现给用户，并接收用户的输入。
 Intent：表示用户的操作或事件。它是View和Model之间的桥梁，负责将用户的操作转换为Model可以理解的格式。
 
-![](/images/blog/blogs_mvi_arch.png)
+![](/images/blog/blogs_mvi_arch.webp)
 
 核心思想是保证唯一可信的单向数据流来更新UI，用户事件自上而下，数据自下而上。
 
@@ -480,7 +480,7 @@ fun ImageTest(loading: Boolean, imageUrl: String?, error: String?) {
 ```
 
 运行效果：
-<img src="/images/blog/blogs_compose_toturial_cat_pic.png" width="400" height="800" loading="lazy" />
+<img src="/images/blog/blogs_compose_toturial_cat_pic.webp" width="400" height="800" loading="lazy" />
 
 可以看到各项数据被成功取到并展示，进一步设计界面还可以根据loading, imageUrl, error的不同状态，展示不同的界面。比如loading时加入加载态蒙层，失败后加入toast提示。
 

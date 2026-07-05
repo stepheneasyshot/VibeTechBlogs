@@ -6,7 +6,7 @@ pubDate: 2025-03-05
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cmp_debugmanager_splash.png"
+image: "/images/blog/blogs_cmp_debugmanager_splash.webp"
 ---
 # Compose Multiplatform开发记录之文件选择器
 刚刚写完一篇TextField输入框按键监听的文章，趁热打铁，记录一下我简单封装桌面端的的文件选择器组件。依然是来自于跨平台Android设备调试软件DebugManager里的功能。这里相关的是apk文件的选取安装，电脑文件的推送，日志文件的选取自动分析等。

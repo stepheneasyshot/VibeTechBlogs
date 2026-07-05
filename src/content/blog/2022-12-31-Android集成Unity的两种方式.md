@@ -6,7 +6,7 @@ pubDate: 2022-12-31
 category: ["Android", "跨平台"]
 featured: false
 draft: false
-image: "/images/blog/blogs_unity.png"
+image: "/images/blog/blogs_unity.webp"
 ---
 # Android集成Unity的两种方式
 ## ​Android平台常见动效

@@ -6,7 +6,7 @@ pubDate: 2025-08-06
 category: ["AI", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_ai_llamacpp_cover.png"
+image: "/images/blog/blogs_ai_llamacpp_cover.webp"
 ---
 # Understanding how LLM inference works with llama.cpp
 本文从原理上讲解了llama.cpp项目是如何运行LLM模型的，原文链接：
@@ -100,7 +100,7 @@ The first few fields are straightforward:
 
 `nb` is a bit more sophisticated. It contains the stride: the number of bytes between consequetive elements in each dimension. In the first dimension this will be the size of the primitive element. In the second dimension it will be the row size times the size of an element, and so on. For example, for a 4x3x2 tensor:
 
-![](/images/blog/blogs_ai_fp32_data.png)
+![](/images/blog/blogs_ai_fp32_data.webp)
 
 > An example tensor of 32-bit floating points with dimensions {4,3,2} and strides {4,16,48}.
 
@@ -188,7 +188,7 @@ static struct ggml_cgraph * llm_build_llama(/* ... */) {
 
 The code is a series of tensor operations and builds a computation graph that is identical to the one described in the original Transformer paper:
 
-![](/images/blog/blogs_ai_origin_transformer_paper_kqv.png)
+![](/images/blog/blogs_ai_origin_transformer_paper_kqv.webp)
 
 In order to actually compute the result tensor (here it’s KQV) the following steps are taken:
 
@@ -203,7 +203,7 @@ Many tensor operations like matrix addition and multiplication can be calculated
 Consider the self-attention omputation graph shown before. Assuming that K,Q,V are fixed tensors, the computation can be offloaded to the GPU:
 
 
-![](/images/blog/blogs_ai_gpu_offload.png)
+![](/images/blog/blogs_ai_gpu_offload.webp)
 
 The process begins by copying K,Q,V to the GPU memory. The CPU then drives the computation forward tensor-by-tensor, but the actual mathematical operation is offloaded to the GPU. When the last operation in the graph ends, the result tensor’s data is copied back from the GPU memory to the CPU memory.
 
@@ -284,7 +284,7 @@ An embedding is a fixed vector representation of each token that is more suitabl
 
 The model parameters include a token-embedding matrix that converts tokens into embeddings. Since our vocabulary size is `n_vocab=32000`, this is a `32000 x 4096` matrix with each row containing the embedding vector for one token:
 
-![](/images/blog/blogs_ai_token_embedding_metrix.png)
+![](/images/blog/blogs_ai_token_embedding_metrix.webp)
 
 > Each token has an associated embedding which was learned during training and is accessible as part of the token-embedding matrix.
 
@@ -310,7 +310,7 @@ The code first creates a new one-dimensional tensor of integers, called `inp_tok
 
 This operation, when later computed, pulls rows from the embeddings matrix as shown in the diagram above to create a new `n_tokens x n_embd` matrix containing only the embeddings for our tokens in their original order:
 
-![](/images/blog/blogs_ai_embedding_matrix.png)
+![](/images/blog/blogs_ai_embedding_matrix.webp)
 
 > The embedding process creates a fixed-size embedding vector for each of the original tokens. When stacked together they make up the embedding matrix of the prompt.
 
@@ -324,7 +324,7 @@ Self-attention is a mechanism that takes a sequence of tokens and produces a com
 
 The input to the self-attention mechanism is the `n_tokens x n_embd` embedding matrix, with each row, or vector, representing an indivisual token4. Each of these vectors is then transformed into three distinct vectors, called “key”, “query” and “value” vectors. The transformation is achieved by multiplying the embedding vector of each token with the fixed wk, wq and wv matrices, which are part of the model parameters:
 
-![](/images/blog/blogs_ai_query_and_value_vectors.png)
+![](/images/blog/blogs_ai_query_and_value_vectors.webp)
 
 > Multiplying the embedding vector of a token with the wk, wq and wv parameter matrices produces a "key", "query" and "value" vector for that token.
 
@@ -348,7 +348,7 @@ The next step of self-attention involves multiplying the matrix Q, which contain
 
 This process yield n_tokens^2 scores, one for each query-key pair, packed within a single matrix called KQ. This matrix is subsequently masked to remove the entries above the diagonal:
 
-![](/images/blog/blogs_ai_key_query_scores.png)
+![](/images/blog/blogs_ai_key_query_scores.webp)
 
 > A joint score S(i,j) is calculated for each query-key pair by multiplying Q with the transpose of K. The result shown here is for the first four tokens, along with the tokens represented by each score. The masking step ensures that only scores between a token and its preceding tokens are kept. An intermediate scaling operation has been omitted for simplicity.
 
@@ -356,7 +356,7 @@ The masking operation is a critical step. For each token it retains scores only 
 
 The last step of self-attention involves multiplying the masked scoring KQ_masked with the value vectors from before5. Such a matrix multiplication operation creates a weighted sum of the value vectors of all preceeding tokens, where the weights are the scores S(i,j). For example, for the fourth token ics it creates a weighted sum of the value vectors of Quant, um, ▁mechan and ics with the weights S(3,0) to S(3,3), which themselves were calculated from the query vector of ics and all preceeding key vectors.
 
-![](/images/blog/blogs_ai_key_query_value.png)
+![](/images/blog/blogs_ai_key_query_value.webp)
 
 > The KQV matrix contains weighted sums of the value vectors. For example, the highlighted last row is a weighted sum of the first four value vectors, with the weights being the highlighted scores.
 
@@ -370,7 +370,7 @@ Self-attention is one of the components in what are called the layers of the tra
 
 For completeness I included a diagram of a single Transformer layer in LLaMA-7B. Note that the exact architecture will most likely vary slightly in future models.
 
-![](/images/blog/blogs_ai_transformer_layer.png)
+![](/images/blog/blogs_ai_transformer_layer.webp)
 
 > Full computation graph of a Transformer layer in LLaMA-7B, containing self-attention and feed-foward mechanisms. The output of each layer serves as the input to the next. Large parameter matrices are used both in the self-attention stage and in the feed-forward stage. These constitute most of the 7 billion parameters of the model.
 
@@ -381,7 +381,7 @@ The final step of the Transformer involves the computation of logits. A logit is
 
 The logits are calculated by multiplying the output of the last Transformer layer with a fixed `n_embd x n_vocab` parameter matrix (also called output in llama.cpp). This operation results in a logit for each token in our vocabulary. For example, in LLaMA, it results in n_vocab=32000 logits:
 
-![](/images/blog/blogs_ai_logits.png)
+![](/images/blog/blogs_ai_logits.webp)
 
 > The final step of the Transformer computes the logits by multiplying the output of the last layer with a fixed parameter matrix (also called 'output'). Only the last row of the result, highlighted here, is of interest, and contains a logit for each possible next token in the vocabulary.
 
@@ -473,7 +473,7 @@ Temperature sampling is probabilistic, meaning that the same prompt might produc
 
 The temperature parameter in step 3 serves to either increase or decrease randomness. Lower temperature values suppress lower probability tokens, making it more likely that the same tokens will be chosen on re-evaluation. Therefore, lower temperature values decrease randomness. In contrast, higher temperature values tend to “flatten” the probability distribution, emphasizing lower probability tokens. This increases the likelihood that each re-evaluation will result in different tokens, increasing randomness.
 
-![](/images/blog/blogs_ai_temp_sampling.png)
+![](/images/blog/blogs_ai_temp_sampling.webp)
 
 > Normalized next-token probabilities for our example prompt. Lower temperatures suppress low-probability tokens, while higher temperatures emphasize them. temp=0 is essentially identical to greedy sampling.
 
@@ -491,7 +491,7 @@ The cache works as follows:
 * During the initial iteration, the key and value vectors are computed for all tokens, as previously described, and then saved into the kv cache.
 * In subsequent iterations, only the key and value vectors for the newest token need to be calculated. The cached k-v vectors, together with the k-v vectors for the new token, are concatenated together to form the K and V matrices. This saves recalculating the k-v vectors for all previous tokens, which can be significant.
 
-![](/images/blog/blogs_ai_kv_cache.png)
+![](/images/blog/blogs_ai_kv_cache.webp)
 
 > On subsequent iterations, the key vector of the latest token only is calculated. The rest are pulled from the cache, and together they form the K matrix. The newly-computed key vector is also saved to the cache. The same process is applied to the value vectors.
 
@@ -507,13 +507,13 @@ For the second layer and beyond, this principle is a bit less obvious but still 
 
 Therefore each row in KQV solely relies on previous tokens. This matrix, following a few additional row-based operations, serves as the input to the second layer. This implies that the second layer’s input will remain unchanged in future iterations, except for the addition of new rows. Inductively, the same logic extends to the rest of the layers.
 
-![](/images/blog/blogs_ai_kv_cache_dependencies.png)
+![](/images/blog/blogs_ai_kv_cache_dependencies.webp)
 
 > Another look at how the KQV matrix is calculated. The third row, highlighted, is determined based only on the third query vector and the first three key and value vectors, also highlighted. Subsequent tokens do not affect it. Therefore it will stay fixed in future iterations.
 ### Further optimizing subsequent iterations
 You might wonder why we don’t cache the query vectors as well, considering we cache the key and value vectors. The answer is that in fact, except for the query vector of the current token, query vectors for previous tokens are unnecessary in subsequent iterations. With the kv cache in place, we can actually feed the self-attention mechanism only with the latest token’s query vector. This query vector is multiplied with the cached K matrix to calculate the joint scores of the last token and all previous tokens. Then, it is multiplied with the cached V matrix to calculate only the latest row of the KQV matrix. In fact, across all layers, we now pass 1 x n_embd -sized vectors instead of the n_token x n_embd matrices calculated in the first iteration. To illustrate this, compare the following diagram, showing a later iteration, with the previous one:
 
-![](/images/blog/blogs_ai_kv_cache_subsequent.png)
+![](/images/blog/blogs_ai_kv_cache_subsequent.webp)
 
 > Self-attention in subsequent iterations. In this example, there were four tokens in the first iteration and a fifth token, '▁is', is added in the second iteration. The latest's token key, query and value vectors, together with the cached key and value vectors, are used to compute the last row of KQV, which is all that is needed for predicting the next token.
 

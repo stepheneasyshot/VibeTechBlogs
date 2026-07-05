@@ -6,7 +6,7 @@ pubDate: 2025-06-12
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_harmonyos_cover.png"
+image: "/images/blog/blogs_harmonyos_cover.webp"
 ---
 # HarmonyOS鸿蒙系统应用层扫盲
 ## JS & TS & ArkTS
@@ -144,7 +144,7 @@ iOS通过XNU混合内核（融合Mach微内核与BSD特性）实现系统级隔�
 这套架构主体分为应用、框架、引擎以及跨平台适配这几部分，应用层就是透出给开发者的语法，有好几种模式，下文详解。框架层实现了前端框架常见的组件化、MVVM 能力，能够响应式的更新 UI。下面是 JS 引擎，使用的是 QuickJS，应该也支持 V8。再向下是渲染引擎，包含了核心的渲染管线、动画、事件和各种布局绘制算法。
 最下面的 porting layer 是适配多平台的关键，定义了平台无关的 layer 数据结构，可以提交给不同的合成器(Compositor)合成渲染，从代码上看，也是支持 Flutter Engine 的。
 
-![](/images/blog/blogs_harmonyos_arch.png)
+![](/images/blog/blogs_harmonyos_arch.webp)
 
 首先鸿蒙应用是打包成 HAP (Harmony Ability Package) 格式分发的，和安卓 APK 一样都是压缩包，包结构大同小异。分发到端上之后，统一由鸿蒙(概念)的 API 承接，然后就分了不同的模式。在华为手机上推送的鸿蒙版本，可以无感兼容安卓应用，肯定是依赖了 AOSP 的。从Harmony4.0开始，​​官方正式宣布终止 APK 兼容模式​​，系统层移除对 Android 生态的依赖（如不再内置 ART 虚拟机）。仅支持运行 ​​纯鸿蒙应用（.hap 格式）​​ 或通过 ​​方舟编译器静态转译的 Android 应用​​（需重新打包为 .hap）。并且，在​OpenHarmony 3.2+（开源分支）​​从内核层面移除 Linux 兼容层，仅保留 ​​LiteOS-A 微内核​​，彻底无法运行 Android 应用。
 

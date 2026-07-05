@@ -6,7 +6,7 @@ pubDate: 2026-06-30
 category: ["AI", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cover_ai_engineeering.png"
+image: "/images/blog/blogs_cover_ai_engineeering.webp"
 ---
 # Harness Engineering工程化方法总结
 从22年的GPT，及之后生成式人工智能爆发至今，大语言模型的底层能力已经完成了一次次跨越式的蜕变。然而在产业落地、尤其是智能体开发的前沿演进中，越来越多的人发现：决定 AI 应用最终成败的，往往不仅是那个博古通今的“模型大脑”，更是围绕它搭建的系统工程。

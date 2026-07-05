@@ -6,7 +6,7 @@ pubDate: 2023-12-28
 category: "网络"
 featured: false
 draft: false
-image: "/images/blog/blogs_websocket_cover.png"
+image: "/images/blog/blogs_websocket_cover.webp"
 ---
 # WebSocket通信基础
 WebSocket 是一种在单个 TCP 连接上进行全双工通信的协议。它在 Web 应用中提供了一种持久连接，允许客户端和服务器之间进行**实时、双向**的数据传输，而**无需像传统的 HTTP 请求那样每次通信都建立新的连接**。这使得 WebSocket 非常适合需要低延迟和高吞吐量的应用，如在线游戏、实时聊天、协作工具、股票行情更新和物联网数据传输等。

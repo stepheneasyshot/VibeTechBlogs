@@ -6,7 +6,7 @@ pubDate: 2022-12-11
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_kotlin_cover.png"
+image: "/images/blog/blogs_kotlin_cover.webp"
 ---
 # Android平台Kotlin开发的一些知识点（初级到深入）
 Kotlin 已成为 Android 开发的首选语言，包括 Jetpack Compose 等现代 UI 框架。这份全面的面试题列表涵盖了 Kotlin 基础知识、使用 Kotlin 进行 Android 开发以及 Jetpack Compose，所有题目均按经验水平分类。

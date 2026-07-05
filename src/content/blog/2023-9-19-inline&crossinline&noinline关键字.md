@@ -6,7 +6,7 @@ pubDate: 2023-09-19
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_compose_cover.png"
+image: "/images/blog/blogs_compose_cover.webp"
 ---
 # inline&crossinline&noinline关键字
 

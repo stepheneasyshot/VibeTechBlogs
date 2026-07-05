@@ -6,7 +6,7 @@ pubDate: 2022-07-25
 category: ["Android", "C++"]
 featured: false
 draft: false
-image: "/images/blog/blogs_jvm_thread_cover.png"
+image: "/images/blog/blogs_jvm_thread_cover.webp"
 ---
 # Thread.sleep和协程delay
 ## Thread.sleep()

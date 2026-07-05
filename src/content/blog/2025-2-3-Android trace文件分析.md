@@ -6,7 +6,7 @@ pubDate: 2025-02-03
 category: ["Android", "网络"]
 featured: false
 draft: false
-image: "/images/blog/blogs_trace_cover.png"
+image: "/images/blog/blogs_trace_cover.webp"
 ---
 # Android trace文件分析
 **Android trace 文件**（也常被称为 **Systrace 文件**或 **Perfetto trace 文件**）是 Android 系统生成的一种包含详细性能事件数据的文件。它记录了设备在特定时间段内 **CPU、线程、进程、函数调用、Binder 通信、I/O 操作、SurfaceFlinger 帧渲染等** 各个层面的活动。
@@ -92,15 +92,15 @@ dev           ftrace        irq_matrix    msr          power           sock     
 
 我们还可以在新版的perfetto网站上直接采用图形化的方式去生成配置文件的代码：
 
-![](/images/blog/blogs_record_new_trace.png)
+![](/images/blog/blogs_record_new_trace.webp)
 
 CPU信息配置界面：
 
-![](/images/blog/blogs_record_new_trace_2.png)
+![](/images/blog/blogs_record_new_trace_2.webp)
 
 抓取GPU的配置页面：
 
-![](/images/blog/blogs_trace_gpu.png)
+![](/images/blog/blogs_trace_gpu.webp)
 
 选取要抓取的信息之后，到 `cmdline` tab那里复制下来：
 
@@ -196,7 +196,7 @@ Android Studio 中已经自带了一个 Profiler 性能分析工具，它集成�
 
 可以直接在 Android Studio 中点击 Run -> Profile 'your app'，然后选择 CPU Profiler 并开始录制。
 
-![](/images/blog/blogs_trace_android_studio.png)
+![](/images/blog/blogs_trace_android_studio.webp)
 
 ### Python 脚本抓取
 最后介绍下使用 `python` 脚本来抓取trace，这个也是 Google 官方推出的一种方案。在使用 `python` 脚本抓取到 `Trace` 后，会把 Trace 文件保存到本地，也会自动在浏览器通过 **Perfetto UI** 直接打开 Trace 文件，我们直接进行分析。
@@ -269,13 +269,13 @@ Perfetto在线网站比较智能了，有冷启动发生的话，在 `startup` �
 
 从iq到整个launching，就是应用的整体启动耗时。
 
-![](/images/blog/blogs_trace_startup_1.png)
+![](/images/blog/blogs_trace_startup_1.webp)
 
 如上图，应用 `com.stephen.commondemo` 的启动耗时就是 **760ms** 。
 ### 应用内部耗时分析
 确定整体的加载时长后，我们找到应用内部的 trace 切片，分析整个冷启动过程中各个阶段耗时分别是多少。
 
-![](/images/blog/blogs_trace_app_internel.png)
+![](/images/blog/blogs_trace_app_internel.webp)
 
 首先要看的第一个阶段，即为`bindApplication` 阶段，这是一个至关重要的环节。它发生在应用进程已经被系统创建之后，但在任何Activity的生命周期方法（如`onCreate`）被调用之前。
 

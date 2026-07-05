@@ -6,7 +6,7 @@ pubDate: 2025-05-26
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_compose.png"
+image: "/images/blog/blogs_compose.webp"
 ---
 
 # 使用Compose Multiplatform开发跨平台的Android调试工具
@@ -23,7 +23,7 @@ image: "/images/blog/blogs_compose.png"
 
 由于功能单一，几乎所有操作都是执行一些命令行，获取反馈结果，所以没有抽象的很厉害，数据层直接使用单例类，使用adb工具获取数据透传到StateHolder。StateHolder为界面的状态State管理层，在Composable方法初入时，触发StateHolder的数据获取逻辑，数据拿取到之后，更新State状态，通过界面收集监听的stateflow通知composable方法刷新UI。
 
-<img src="/images/blog/blogs_mvi.png" alt="Google_mvi" width="400" height="300" loading="lazy" />
+<img src="/images/blog/blogs_mvi.webp" alt="Google_mvi" width="400" height="300" loading="lazy" />
 
 即用户事件从上到下，数据状态从下到上，确保唯一可信数据流。
 ## gradle配置
@@ -114,7 +114,7 @@ https://www.butterpig.top/icopro/
 
 “假icon！！”
 
-<img src="/images/blog/blogs_cmp_wrong_ico_file.png" alt="blogs_cmp_wrong_ico_file" width="500" height="400" loading="lazy" />
+<img src="/images/blog/blogs_cmp_wrong_ico_file.webp" alt="blogs_cmp_wrong_ico_file" width="500" height="400" loading="lazy" />
 
 目前怀疑图标类型错误，导致安装包暴涨。会产生这个现象的原因，可能是CMP所使用的Windows打包器的一个bug或者说一个规则吧。
 
@@ -138,7 +138,7 @@ png_to_ico('C:\\Users\\stephen\\Desktop\\logo.png', 'output.ico')
 
 转换后的图标文件：
 
-<img src="/images/blog/blogs_cmp_right_ico_file.png" alt="blogs_cmp_right_ico_file" width="500" height="400" loading="lazy" />
+<img src="/images/blog/blogs_cmp_right_ico_file.webp" alt="blogs_cmp_right_ico_file" width="500" height="400" loading="lazy" />
 
 将这个 ico 文件配置到项目之后，打包的大小已经恢复正常的90余M。
 
@@ -354,7 +354,7 @@ NavHost(navController = navController, startDestination = "device_info") {
 
 每次启动应用，DebugManager 应用开屏页面，做的简单的延时跳转，timeout后自动进入主页面。
 
-![splash](/images/blog/blogs_debugmanager_splash_screen.png)
+![splash](/images/blog/blogs_debugmanager_splash_screen.webp)
 
 ## 功能划分
 下面简单介绍下各个页面的调试功能有哪些。
@@ -367,7 +367,7 @@ NavHost(navController = navController, startDestination = "device_info") {
 ### 设备信息展示
 一进入界面，首页当然是所连接设备的基本信息展示。
 
-<img src="/images/blog/blogs_cmp_deviceinfo.png" alt="device_info" width="600" height="300" loading="lazy" />
+<img src="/images/blog/blogs_cmp_deviceinfo.webp" alt="device_info" width="600" height="300" loading="lazy" />
 
 大致的实现思路如下，关于界面状态，先定义 `UiState` ：
 
@@ -501,7 +501,7 @@ val deviceStateStateFlow = _deviceState.asStateFlow()
 
 APP列表加入了全部包扫描和三方包扫描，对于公司定制的包，也添加到了单独的筛选规则，可以自由选择查看全量信息和精简信息。
 
-<img src="/images/blog/blogs_cmp_appmanage_1.png" alt="app_manage" width="600" height="300" loading="lazy" />
+<img src="/images/blog/blogs_cmp_appmanage_1.webp" alt="app_manage" width="600" height="300" loading="lazy" />
 
 最上面是安装功能，是使用adb install进行的操作，适合第三方app进行验证时，或者改bug进行非正式环境的验证时使用。下拉框展开后，可以选择覆盖安装，测试安装等，对应-r,-t等带参数的 install 操作。
 
@@ -514,14 +514,14 @@ APP列表加入了全部包扫描和三方包扫描，对于公司定制的包�
 
 **单个app的操作**
 
-<img src="/images/blog/blogs_cmp_appmanage_2.png" alt="app_manage" width="600" height="300" loading="lazy" />
+<img src="/images/blog/blogs_cmp_appmanage_2.webp" alt="app_manage" width="600" height="300" loading="lazy" />
 
 对于选中的单个app，提供了打开应用界面，卸载，提取apk，对于系统应用，还可以push替换apk等操作。我们的测试同事在做非全量的发版验证时非常有用，不用再使用一条条繁琐的命令来替换apk升级了。
 
 ### 文件管理器
 由于我在Android端也没有写过文件管理器应用，所以在这个页面，有些操作也是一拍脑袋想出来的，可能不算规范的解法。仍然是MVI架构，界面去监听StateHolder里面的UiState的Flow，切换目录时重新获取列表数据，update到界面来刷新UI。
 
-<img src="/images/blog/blogs_cmp_filemanage_1.png" alt="file_manage" width="600" height="300" loading="lazy" />
+<img src="/images/blog/blogs_cmp_filemanage_1.webp" alt="file_manage" width="600" height="300" loading="lazy" />
 
 最开始的展示列表我是直接执行了"ls /"将列表发送到界面，显示根目录，解析出其中的文件文件夹，继续往子目录的话就把路径拼接起来，比如进入sdcard，就执行"ls /sdcard"，继续深入则再次拼接。同时最上方设置了返回上级，回到根目录和priv-app快捷按钮。
 
@@ -548,7 +548,7 @@ android内的文件操作也是使用命令行的形式，cp mv rm等。
 还可以将文件pull到电脑端，将电脑端的文件推送到Android端等。
 
 ### 命令模式
-<img src="/images/blog/blogs_cmp_cmdexecute.png" alt="cmd" width="600" height="300" loading="lazy" />
+<img src="/images/blog/blogs_cmp_cmdexecute.webp" alt="cmd" width="600" height="300" loading="lazy" />
 
 这一页比较简单，大家看到的输入框也是Compose原生的TextField方法，还自带动画，性价比蛮高。
 
@@ -557,7 +557,7 @@ android内的文件操作也是使用命令行的形式，cp mv rm等。
 除了最基础的adb命令透传，配合系统厂商Android端的可执行二进制程序，可以模拟车载信号的回调操作。还有语音部门的通过广播来调试的路径，整合到了DebugManager里面，一键发送广播，模拟可见扫描的点击。
 
 ### 关于页
-<img src="/images/blog/blogs_cmp_about.png" alt="about" width="600" height="300" loading="lazy" />
+<img src="/images/blog/blogs_cmp_about.webp" alt="about" width="600" height="300" loading="lazy" />
 
 最后就是关于页了，显示软件版本，缓存文件目录等。通过PlatformAdapter工具类获取路径，执行打开界面即可。
 
@@ -662,18 +662,18 @@ Main.kt
 ### 运行截图记录
 #### 开屏动画
 
-![splash](/images/blog/blogs_dark_splash.png)
+![splash](/images/blog/blogs_dark_splash.webp)
 
-![splash](/images/blog/blogs_light_splash.png)
+![splash](/images/blog/blogs_light_splash.webp)
 
 #### 设备信息
 
-![device](/images/blog/blogs_dark_deviceinfo.png)
+![device](/images/blog/blogs_dark_deviceinfo.webp)
 
-![device](/images/blog/blogs_light_deviceinfo.png)
+![device](/images/blog/blogs_light_deviceinfo.webp)
 
 #### 关于页
 
-![about](/images/blog/blogs_dark_about.png)
+![about](/images/blog/blogs_dark_about.webp)
 
-![about](/images/blog/blogs_light_about.png)
+![about](/images/blog/blogs_light_about.webp)

@@ -6,7 +6,7 @@ pubDate: 2022-12-27
 category: ["Android", "跨平台", "网络"]
 featured: false
 draft: false
-image: "/images/blog/blogs_materialdesign3_cover.png"
+image: "/images/blog/blogs_materialdesign3_cover.webp"
 ---
 # Material Design设计理念和配置方式
 **Material Design（材料设计）** 是由 Google 在 2014 年推出的设计语言，旨在为多平台（包括移动端、Web、桌面端等）提供统一、直观且具有物理感的视觉与交互体验。它融合了现实世界的物理规律（如阴影、层次感）与数字交互的灵活性，强调“材料”作为设计的基本单元，通过清晰的视觉层次、响应式动画和一致的交互逻辑，提升用户对产品的认知效率与情感共鸣。

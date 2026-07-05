@@ -6,7 +6,7 @@ pubDate: 2023-06-10
 category: ["通用开发", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_jvm_cover.png"
+image: "/images/blog/blogs_jvm_cover.webp"
 ---
 # Java平台的try-catch机制简介
 每天都在使用try-catch，但是没有对其设计理念和工作机制做一个比较详细的了解，现稍微总结下。

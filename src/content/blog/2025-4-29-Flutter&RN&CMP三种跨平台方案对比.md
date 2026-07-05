@@ -6,7 +6,7 @@ pubDate: 2025-04-29
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cover_multiplatform.png"
+image: "/images/blog/blogs_cover_multiplatform.webp"
 ---
 # Flutter & RN & CMP三种跨平台方案对比
 ## 历史背景
@@ -59,7 +59,7 @@ Compose Multiplatform的开发流程相对简单，开发者只需要使用Kotli
 ### Flutter
 Flutter的框架图如下：
 
-![](/images/blog/blogs_flutter_framework.png)
+![](/images/blog/blogs_flutter_framework.webp)
 
 **FLutter Engine**
 这是一个纯 C++实现的 SDK，其中囊括了 Skia引擎、Dart运行时、文字排版引擎等。
@@ -89,14 +89,14 @@ Dart中类似线程的概念叫做Isolate，每个Isolate之间是无法共享�
 当一个Dart的方法开始执行时，他会一直执行直至达到这个方法的退出点。换句话说Dart的方法是不会被其他Dart代码打断的。
 当一个Dart应用开始的标志是它的main isolate执行了main方法。当main方法退出后，main isolate的线程就会去逐一处理消息队列中的消息。
 
-<img src="/images/blog/pic_flutter_eventqueue.png" width="500" height="180" loading="lazy" />
+<img src="/images/blog/pic_flutter_eventqueue.webp" width="500" height="180" loading="lazy" />
 
 有了消息队列，然后有了循环去读取消息队列中的消息，就可以有单线程去执行异步消息的能力。一般的消息使用dart:async中使用Future来支持异步消息。
 
 #### Flutter绘制
 一般地来说，计算机系统中，CPU、GPU和显示器以一种特定的方式协作：CPU将计算好的显示内容提交给 GPU，GPU渲染后放入帧缓冲区，然后视频控制器按照 VSync信号从帧缓冲区取帧数据传递给显示器显示。
 
-<img src="/images/blog/pic_flutter_screen_display.png" width="500" height="250" loading="lazy" />
+<img src="/images/blog/pic_flutter_screen_display.webp" width="500" height="250" loading="lazy" />
 
 由于**最终的图形计算和绘制都是由相应的硬件来完成**，而直接操作硬件的指令通常都会有操作系统屏蔽，应用开发者通常不会直接面对硬件，操作系统屏蔽了这些底层硬件操作后会提供一些封装后的API供操作系统之上的应用调用。
 
@@ -112,7 +112,7 @@ Flutter只关心**向 GPU 提供视图数据**，GPU的 VSync信号同步到 UI 
 
 Google官网的渲染流程示意图：
 
-<img src="/images/blog/blogs_flutter_implement_principle.png" width="300" height="470" loading="lazy" />
+<img src="/images/blog/blogs_flutter_implement_principle.webp" width="300" height="470" loading="lazy" />
 
 #### Flutter的测量布局
 Flutter 采用约束进行单次测量布局. 整个布局过程中只需要深度遍历一次，极大的提升效能。
@@ -167,7 +167,7 @@ React 采用组件化的开发方式，开发者能将用户界面拆分成多�
 ### React Native架构
 #### **基于Bridge的架构**
 示意图：
-<img src="/images/blog/blogs_rn_bridge.png" width="200" height="280" loading="lazy" />
+<img src="/images/blog/blogs_rn_bridge.webp" width="200" height="280" loading="lazy" />
 
 * 在开发阶段仍然是聚焦于React Components的开发，Babel会将代码编译成浏览器可识别的表达式，并打包成jsbundle文件存储于App设备本地或者存储于服务器（热更新机制）
 * 打开App后，加载并解析jsbundle文件，在JavascriptCore中进行运行，这个地方Android和IOS的差异就是，IOS原生就带有一个JavascriptCore，而Android中需要重新加载，所以这也造成了Android的初始化过程会比IOS慢一些。
@@ -217,7 +217,7 @@ RN 代码仓库很大, 库比较重, 所以修复 Bug 和开源社区贡献代�
 上层 JavaScript 代码需要一个运行时环境，在 React Native 中这个环境是 JSC（JavaScriptCore）。不同于之前直接将 JavaScript 代码输入给 JSC，新的架构中引入了一层 JSI（JavaScript Interface），作为 JSC 之上的抽象，用来屏蔽 JavaScript 引擎的差异，允许换用不同的 JavaScript 引擎
 
 RN的新版架构图：
-<img src="/images/blog/blogs_rn_jsi.png" width="200" height="380" loading="lazy" />
+<img src="/images/blog/blogs_rn_jsi.webp" width="200" height="380" loading="lazy" />
 
 * JSI（Javascript Interface）：JSI的作用就是让Javascript可以持有C++对象的引用，并调用其方法，同时Native端（Android、IOS）均支持对于C++的支持。从而避免了使用Bridge对JSON的序列化与反序列化，实现了Javascript与Native端直接的通信。
 JSI还屏蔽了不同浏览器引擎之间的差异，允许前端使用不同的浏览器引擎，因此Facebook针对Android 需要加载JavascriptCore的问题，研发了一个更适合Android的开源浏览器引擎Hermes。
@@ -284,7 +284,7 @@ Kotlin的业务逻辑代码向目标平台的代码转换，是在编译器中�
 
 Kotlin官方文档推荐的几种usecases
 
-![](/images/blog/blogs_kmp_usecases.png)
+![](/images/blog/blogs_kmp_usecases.webp)
 
 比较流行KMP应用模式一般是将网络请求，数据库存储等使用KMP改写，在UI逻辑上仍然使用之前的代码来实现，这样可以减少重复代码的编写，提高开发效率。有最大限度保留旧的用户交互逻辑和功能。
 #### Skia引擎

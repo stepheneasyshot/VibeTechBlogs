@@ -6,14 +6,14 @@ pubDate: 2025-03-05
 category: ["跨平台", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cmp_debugmanager_splash.png"
+image: "/images/blog/blogs_cmp_debugmanager_splash.webp"
 ---
 # Compose Multiplatform开发记录之输入框问题
 此前发过一篇文章介绍了我开发的Desktop端端跨平台Android设备调试软件——DebugManager。
 
 包含了基础设备信息，应用管理，文件管理，性能监测，主题切换等。
 
-![blogs\_dark\_deviceinfo.png](/images/blog/blogs_cmp_deviceinfo.png)
+![blogs\_dark\_deviceinfo.png](/images/blog/blogs_cmp_deviceinfo.webp)
 
 ## 本次记录问题点
 
@@ -21,7 +21,7 @@ image: "/images/blog/blogs_cmp_debugmanager_splash.png"
 
 页面如下：
 
-![Snipaste\_2025-03-04\_20-47-00.png](/images/blog/blogs_cmp_debugmanager_ai_chat.png)
+![Snipaste\_2025-03-04\_20-47-00.png](/images/blog/blogs_cmp_debugmanager_ai_chat.webp)
 
 普通用户在电脑程序中对于输入框的期望，就是按Enter键可以直接确认，按Alt+Enter可以输入换行符。
 
@@ -138,7 +138,7 @@ fun WrappedEditText(
 
 问题就是，最后的这个换行符，连同输入的内容一起被添加到了输入框的UI，还有对话气泡中去了。
 
-![huanhang.png](/images/blog/blogs_cmp_debugmanager_ai_chat_enter.png)
+![huanhang.png](/images/blog/blogs_cmp_debugmanager_ai_chat_enter.webp)
 
 ## 第三版——AI提供的传参数方案
 查看官方文档，提供的几个api都会和上面那个按键监听策略一样的问题，换行符和内容混到了一起。
@@ -271,6 +271,6 @@ KeyEvent里面提供了几个重要按键按下的状态回调，我使用内部
 
 处理方法如 `String.processText()`，如果以换行符结尾，再判断这个字符串是不是就只有一个换行符，这种情况就直接置为空字符串，如果有多个字符，就把最后一个换行符给去掉，再传递给外部的调用方，保证了输入框的UI和实际的字符串里都不会显示异常。
 
-![blogs_cmp_debugmanager_chat_fixed.png](/images/blog/blogs_cmp_debugmanager_chat_fixed.png)
+![blogs_cmp_debugmanager_chat_fixed.png](/images/blog/blogs_cmp_debugmanager_chat_fixed.webp)
 
 最终实现组合按键正常换行，单独换行键直接发送对话。后续计划持续跟进，看看这里是不是跨平台库中的一个BUG，还有就是有没有官方封装完善的方案来直接使用。

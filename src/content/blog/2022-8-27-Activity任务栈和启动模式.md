@@ -6,7 +6,7 @@ pubDate: 2022-08-27
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_activity_stack.png"
+image: "/images/blog/blogs_activity_stack.webp"
 ---
 # Activity任务栈和启动模式
 ## 任务栈

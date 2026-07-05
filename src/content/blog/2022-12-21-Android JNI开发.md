@@ -6,7 +6,7 @@ pubDate: 2022-12-21
 category: ["Android", "网络", "C++"]
 featured: false
 draft: false
-image: "/images/blog/blogs_jni.png"
+image: "/images/blog/blogs_jni.webp"
 ---
 # Android JNI开发
 ## 官方文档
@@ -85,7 +85,7 @@ android{
 ```
 文件结构如下：
 
-<img src="/images/blog/blogs_jni_tree.png" alt="pic" width="400" height="300" loading="lazy" />
+<img src="/images/blog/blogs_jni_tree.webp" alt="pic" width="400" height="300" loading="lazy" />
 
 以上是在一个android library里进行的开发，完成后可以打包aar对外提供。
 ## CMakeList写法

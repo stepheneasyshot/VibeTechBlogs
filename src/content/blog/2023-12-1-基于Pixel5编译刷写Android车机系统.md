@@ -6,7 +6,7 @@ pubDate: 2023-12-01
 category: "Android"
 featured: false
 draft: false
-image: "/images/blog/blogs_pixel.png"
+image: "/images/blog/blogs_pixel.webp"
 ---
 # 基于Pixel5编译刷写Android车机系统
 ## Pixel5使用体验
@@ -140,7 +140,7 @@ cd aaos_on_phone
 ```
 为了下载速度能拉满，我没有使用谷歌的官方仓库来拉取同步代码，而是改为使用清华大学的镜像网站，内容是相同的：清华大学开源软件镜像站 | [Tsinghua Open Source Mirror](https://mirrors.tuna.tsinghua.edu.cn/)打开后，可以看到第一个就是AOSP项目。
 
-<img src="/images/blog/blogs_tsinghua.png" alt="tsinghua" width="600" height="300" loading="lazy" />
+<img src="/images/blog/blogs_tsinghua.webp" alt="tsinghua" width="600" height="300" loading="lazy" />
 
 在新建好的工作目录下，使用如下命令通过repo工具拉取AOSP源码，笔者没有WI-FI，直接使用手机流量来硬刚的，大概需要70个G左右，耗时2小时。
 ```
@@ -330,7 +330,7 @@ adb sync vendor
 adb reboot
 ```
 等手机再次reboot重启后就是下面的动画和launcher界面了：
-<img src="/images/blog/blogs_aaos.png" alt="Google_mvi" width="400" height="300" loading="lazy" />
+<img src="/images/blog/blogs_aaos.webp" alt="Google_mvi" width="400" height="300" loading="lazy" />
 
 ## 后续
 刷完了系统，不光是走完了一次体验，还需要找到可以学习的角度，深入改动系统代码，通过定制系统，达到需要的效果。

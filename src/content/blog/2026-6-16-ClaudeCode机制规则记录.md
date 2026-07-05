@@ -6,7 +6,7 @@ pubDate: 2026-06-16
 category: "AI"
 featured: false
 draft: false
-image: "/images/blog/blogs_claude_code_cover2.png"
+image: "/images/blog/blogs_claude_code_cover2.webp"
 ---
 # ClaudeCode机制规则记录
 

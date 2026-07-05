@@ -6,7 +6,7 @@ pubDate: 2026-06-07
 category: ["AI", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_cover_claudecode.png"
+image: "/images/blog/blogs_cover_claudecode.webp"
 ---
 # ClaudeCode初体验与背景知识补齐
 在AI辅助编程的讨论中，人们往往过分迷恋底层大模型（LLM）的参数量和基准测试得分（Benchmark）。但我认为：**Agent（智能体）的工程设计，其重要性与模型本身完全平起平坐，甚至决定了AI能否真正进入生产力核心。**
@@ -36,7 +36,7 @@ image: "/images/blog/blogs_cover_claudecode.png"
 
 **为什么不使用哪些中转站呢？** 相比于将自己的项目信息和工程安全暴露给不知名的某些组织，我更愿意相信大厂的服务，所以还是选择了最近新发布的Deepseek V4系列来作为ClaudeCode的大脑。
 
-![](/images/blog/blogs_claude_code_first_try.png)
+![](/images/blog/blogs_claude_code_first_try.webp)
 
 我看到DeepSeek 官方提供了针对 Anthropic 格式的专属兼容端点。我们只需要在本地终端通过环境变量对 Claude Code 进行重定向代理即可。
 
