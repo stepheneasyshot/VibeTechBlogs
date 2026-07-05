@@ -5,15 +5,7 @@
   aria-hidden="true"
 ></div>
 
-<button
-  type="button"
-  id="back-to-top"
-  class="back-to-top fixed bottom-8 right-8 z-40 flex items-center justify-center w-11 h-11 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant shadow-lg cursor-pointer"
-  aria-label="回到顶部"
-  hidden
->
-  <span class="material-symbols-outlined text-[22px]">keyboard_arrow_up</span>
-</button>
+<!-- 回到顶部按钮在 BaseLayout 中渲染（body 层级），避免 header 的 backdrop-filter 破坏 fixed 定位 -->
 
 <script is:inline>
   (function () {
@@ -21,6 +13,9 @@
     var targetProgress = 0;
     var rafId = 0;
     var reducedMotion = false;
+    // 'post' = 文章页（进度条 + 按钮）；'list' = 列表页（仅按钮，按滚动距离阈值）；'other' = 不显示
+    var pageMode = 'other';
+    var listThreshold = 480;
 
     function lerp(a, b, t) {
       return a + (b - a) * t;
@@ -32,10 +27,22 @@
       return height > 0 ? (scrollTop / height) * 100 : 0;
     }
 
+    function getScrollTop() {
+      return document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+
     function updateBackToTop(progress) {
       var btn = document.getElementById('back-to-top');
       if (!btn) return;
       var show = progress >= 80;
+      btn.hidden = !show;
+      btn.classList.toggle('back-to-top-visible', show);
+    }
+
+    function updateBackToTopByDistance() {
+      var btn = document.getElementById('back-to-top');
+      if (!btn) return;
+      var show = getScrollTop() >= listThreshold;
       btn.hidden = !show;
       btn.classList.toggle('back-to-top-visible', show);
     }
@@ -63,17 +70,29 @@
     }
 
     function onScroll() {
-      var bar = document.getElementById('progress-bar');
-      if (!bar || bar.classList.contains('hidden')) return;
+      if (pageMode === 'post') {
+        var bar = document.getElementById('progress-bar');
+        if (!bar || bar.classList.contains('hidden')) return;
+        targetProgress = getScrollProgress();
+        if (!rafId) rafId = requestAnimationFrame(tick);
+      } else if (pageMode === 'list') {
+        updateBackToTopByDistance();
+      }
+    }
 
-      targetProgress = getScrollProgress();
-      if (!rafId) rafId = requestAnimationFrame(tick);
+    function isListPage(path) {
+      if (path === '/' || path === '') return true;
+      if (path === '/blog/' || path === '/blog') return true;
+      if (path.indexOf('/category/') === 0) return true;
+      return false;
     }
 
     function initReadingProgress() {
       reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var path = window.location.pathname;
       var isPost = /^\/blog\/[^/]+\/?$/.test(path);
+      var isList = !isPost && isListPage(path);
+      pageMode = isPost ? 'post' : isList ? 'list' : 'other';
       var bar = document.getElementById('progress-bar');
       var btn = document.getElementById('back-to-top');
 
@@ -91,9 +110,13 @@
         }
       }
 
-      if (btn && !isPost) {
+      if (btn && pageMode === 'other') {
         btn.hidden = true;
         btn.classList.remove('back-to-top-visible');
+      }
+
+      if (btn && pageMode === 'list') {
+        updateBackToTopByDistance();
       }
 
       if (btn && !btn.dataset.bound) {

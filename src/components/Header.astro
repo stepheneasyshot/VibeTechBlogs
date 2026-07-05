@@ -27,23 +27,23 @@ function isActive(href: string) {
 }
 ---
 
-<header class="fixed top-0 w-full z-50 bg-background border-b border-outline-variant" transition:persist="site-header" transition:animate="none">
+<header class="fixed top-0 w-full z-50 bg-background/70 backdrop-blur-md backdrop-saturate-150 border-b border-outline-variant/60 supports-[backdrop-filter]:bg-background/60" transition:persist="site-header" transition:animate="none">
   <ReadingProgress />
   <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-16">
-    <div class="flex items-center gap-8">
+    <div class="flex items-center gap-4 md:gap-8 min-w-0">
       <a
         href="/"
-        class="font-headline text-headline-md font-bold text-tertiary-fixed-dim tracking-tight"
+        class="font-headline text-[18px] sm:text-headline-sm md:text-headline-md font-bold text-tertiary-fixed-dim tracking-tight whitespace-nowrap"
       >
         {site.name}
       </a>
-      <div class="hidden md:flex gap-6 items-center">
+      <div class="flex gap-4 md:gap-6 items-center">
         {site.nav.map((item) => (
           <a
             href={item.href}
             data-nav-link={item.href}
             class={cn(
-              'font-headline text-[16px] pb-1 transition-colors duration-200 cursor-pointer active:opacity-70',
+              'font-headline text-[15px] md:text-[16px] pb-1 transition-colors duration-200 cursor-pointer active:opacity-70 whitespace-nowrap',
               isActive(item.href)
                 ? 'text-tertiary-fixed-dim border-b-2 border-tertiary-fixed-dim'
                 : 'text-on-surface-variant hover:text-tertiary-fixed-dim',
@@ -54,7 +54,7 @@ function isActive(href: string) {
         ))}
       </div>
     </div>
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-4 min-w-0 flex-1 justify-end">
       <CommandPalette />
       <ThemeToggle />
     </div>
