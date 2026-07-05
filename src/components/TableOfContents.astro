@@ -11,8 +11,8 @@ const tocItems = headings.filter((h) => h.depth <= 3);
 
 {
   tocItems.length > 0 && (
-    <aside class="hidden lg:block w-64 sticky top-24 self-start">
-      <div class="p-6 border border-outline-variant/30 rounded-xl bg-surface-container-lowest">
+    <aside class="hidden lg:block w-64 sticky top-32 self-start">
+      <div class="p-6 border border-outline-variant/30 rounded-xl bg-surface-container-lowest max-h-[calc(100vh-9rem)] overflow-y-auto toc-scroll">
         <h4 class="font-headline text-[16px] uppercase tracking-widest text-on-surface-variant mb-stack-md font-semibold">
           目录
         </h4>
@@ -68,6 +68,19 @@ const tocItems = headings.filter((h) => h.depth <= 3);
 
     const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
     if (!tocLinks.length) return;
+
+    tocLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const id = link.dataset.tocLink;
+        if (!id) return;
+        const target = document.getElementById(id);
+        if (!target) return;
+        event.preventDefault();
+        history.replaceState(null, '', `#${id}`);
+        const y = target.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
 
     const headings = Array.from(tocLinks)
       .map((link) => document.getElementById(link.dataset.tocLink ?? ''))

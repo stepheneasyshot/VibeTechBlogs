@@ -13,11 +13,14 @@ const { currentPath } = Astro.props;
 
 function isActive(href: string) {
   if (href === '/') {
+    return currentPath === '/' || currentPath === '';
+  }
+  if (href === '/blog') {
     return (
-      currentPath === '/'
-      || currentPath.startsWith('/category/')
-      || currentPath === '/blog/'
+      currentPath === '/blog/'
       || currentPath === '/blog'
+      || currentPath.startsWith('/category/')
+      || /^\/blog\/[^/]+\/?$/.test(currentPath)
     );
   }
   return currentPath.startsWith(href);
@@ -61,11 +64,14 @@ function isActive(href: string) {
 <script>
   function isNavActive(href: string, path: string) {
     if (href === '/') {
+      return path === '/' || path === '';
+    }
+    if (href === '/blog') {
       return (
-        path === '/'
-        || path.startsWith('/category/')
-        || path === '/blog/'
+        path === '/blog/'
         || path === '/blog'
+        || path.startsWith('/category/')
+        || /^\/blog\/[^/]+\/?$/.test(path)
       );
     }
     return path.startsWith(href);

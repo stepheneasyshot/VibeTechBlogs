@@ -2,7 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CategoryNav from '../../components/CategoryNav.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import LoadingSpinner from '../../components/LoadingSpinner.astro';
 import { site } from '../../data/site';
+import { categoryTransition } from '../../utils/pageTransitions';
 import {
   getPublishedPosts,
   getCategories,
@@ -24,39 +26,39 @@ interface Props {
   categoryName: string;
 }
 
+const PAGE_SIZE = 12;
+
 const { categoryName } = Astro.props;
 const allPosts = await getPublishedPosts();
 const categories = getCategories(allPosts);
 const posts = filterByCategory(allPosts, categoryName);
 const categoryIcon = site.categoryIcons[categoryName] ?? site.categoryIcons.default;
+const initialPosts = posts.slice(0, PAGE_SIZE);
+const remainingCount = Math.max(0, posts.length - PAGE_SIZE);
 ---
 
 <BaseLayout
   title={`${categoryName} | ${site.name}`}
   description={`${site.name} 中与「${categoryName}」相关的文章。`}
+  pageKind="category"
+  pageTransition={categoryTransition}
 >
   <div class="pt-32 pb-stack-xl max-w-[1200px] mx-auto px-gutter" data-pagefind-ignore="all">
     <div class="flex flex-col lg:flex-row gap-12">
       <CategoryNav categories={categories} activeCategory={categoryName} />
 
-      <section class="flex-grow min-w-0">
-        <a
-          href="/"
-          class="inline-flex items-center gap-2 mb-stack-lg font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors"
-        >
-          <span class="material-symbols-outlined text-[20px]">arrow_back</span>
-          返回主页
-        </a>
-
-        <header class="mb-stack-lg stagger-item" style="--stagger-i: 0">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="material-symbols-outlined text-[28px] text-tertiary-fixed-dim">{categoryIcon}</span>
-            <h1 class="font-headline text-headline-md font-bold">{categoryName}</h1>
-          </div>
-          <p class="font-label text-label-md text-on-surface-variant">
-            共 {posts.length} 篇文章
-          </p>
-        </header>
+      <section id="content-section" class="flex-grow min-w-0" data-site-name={site.name}>
+        <div id="content-header">
+          <header class="mb-stack-lg stagger-item" style="--stagger-i: 0">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="material-symbols-outlined text-[28px] text-tertiary-fixed-dim">{categoryIcon}</span>
+              <h1 class="font-headline text-headline-md font-bold">{categoryName}</h1>
+            </div>
+            <p class="font-label text-label-md text-on-surface-variant">
+              共 {posts.length} 篇文章
+            </p>
+          </header>
+        </div>
 
         {
           posts.length === 0 ? (
@@ -64,10 +66,29 @@ const categoryIcon = site.categoryIcons[categoryName] ?? site.categoryIcons.defa
               该分类下暂无文章。
             </p>
           ) : (
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-              {posts.map((post, index) => (
+            <div id="post-grid" data-total={posts.length} data-category={categoryName} class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+              {initialPosts.map((post, index) => (
                 <BlogCard post={post} staggerIndex={index + 1} />
               ))}
+            </div>
+          )
+        }
+
+        {
+          remainingCount > 0 && (
+            <div id="load-more-wrap" class="flex flex-col items-center gap-3 pt-stack-lg">
+              <button
+                id="load-more-btn"
+                type="button"
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-outline-variant font-label text-label-md text-on-surface hover:bg-surface-container-high hover:border-tertiary-fixed-dim/40 transition-colors"
+              >
+                <span class="load-more-label">加载更多</span>
+                <span class="material-symbols-outlined text-[18px] load-more-icon">expand_more</span>
+                <LoadingSpinner class="load-more-spinner hidden" size={18} />
+              </button>
+              <p id="load-more-hint" class="font-label text-[12px] text-on-surface-variant/70">
+                还有 {remainingCount} 篇
+              </p>
             </div>
           )
         }
@@ -75,3 +96,30 @@ const categoryIcon = site.categoryIcons[categoryName] ?? site.categoryIcons.defa
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  import { initLoadMore } from '../../scripts/loadMore';
+  import { initCategoryNav } from '../../scripts/categoryNav';
+
+  const PAGE_SIZE = 12;
+
+  function setup() {
+    const grid = document.getElementById('post-grid');
+    if (!grid) return;
+    const total = Number(grid.dataset.total ?? '0');
+    const category = grid.dataset.category ?? '';
+    initLoadMore({
+      gridId: 'post-grid',
+      btnId: 'load-more-btn',
+      hintId: 'load-more-hint',
+      total,
+      initialCount: PAGE_SIZE,
+      pageSize: PAGE_SIZE,
+      filterCategory: category,
+    });
+    initCategoryNav();
+  }
+
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>

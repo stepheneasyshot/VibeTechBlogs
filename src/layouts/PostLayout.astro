@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { postTransition } from '../utils/pageTransitions';
 import CoverImage from '../components/CoverImage.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import { site } from '../data/site';
@@ -23,17 +24,21 @@ const readTime = getReadingTime(body);
 <BaseLayout
   title={`${title} | ${site.name}`}
   description={description}
+  pageKind="post"
+  pageTransition={postTransition}
 >
-  <div class="mt-24 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
+  <a
+    href="/"
+    data-post-back
+    class="post-back-fab fixed top-20 left-8 z-40 flex items-center justify-center gap-2 h-11 px-4 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant shadow-lg cursor-pointer transition-colors"
+    aria-label="返回上一级"
+  >
+    <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+    <span class="font-label text-label-md">返回</span>
+  </a>
+  <div class="mt-32 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
+    <TableOfContents headings={headings} />
     <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
-      <a
-        href="/"
-        data-post-back
-        class="inline-flex items-center gap-2 mb-stack-md font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors"
-      >
-        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
-        返回
-      </a>
       <header class="mb-stack-lg">
         <div class="flex items-center gap-3 mb-stack-md flex-wrap">
           {
@@ -94,8 +99,6 @@ const readTime = getReadingTime(body);
         }
       </div>
     </article>
-
-    <TableOfContents headings={headings} />
   </div>
 </BaseLayout>
 

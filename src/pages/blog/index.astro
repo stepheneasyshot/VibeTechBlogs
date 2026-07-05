@@ -2,39 +2,68 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CategoryNav from '../../components/CategoryNav.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import LoadingSpinner from '../../components/LoadingSpinner.astro';
 import { site } from '../../data/site';
+import { listTransition } from '../../utils/pageTransitions';
 import { getPublishedPosts, getCategories } from '../../utils/posts';
+
+const PAGE_SIZE = 12;
 
 const allPosts = await getPublishedPosts();
 const categories = getCategories(allPosts);
+const initialPosts = allPosts.slice(0, PAGE_SIZE);
+const remainingCount = Math.max(0, allPosts.length - PAGE_SIZE);
 ---
 
 <BaseLayout
   title={`全部文章 | ${site.name}`}
   description={`${site.name} 的全部技术文章，共 ${allPosts.length} 篇。`}
+  pageKind="list"
+  pageTransition={listTransition}
 >
   <div class="pt-32 pb-stack-xl max-w-[1200px] mx-auto px-gutter" data-pagefind-ignore="all">
     <div class="flex flex-col lg:flex-row gap-12">
       <CategoryNav categories={categories} activeCategory={null} allHref="/blog/" />
 
-      <section class="flex-grow min-w-0">
-        <header class="mb-stack-lg stagger-item" style="--stagger-i: 0">
-          <h1 class="font-headline text-headline-md font-bold mb-2">全部文章</h1>
-          <p class="font-label text-label-md text-on-surface-variant">
-            共 {allPosts.length} 篇文章
-          </p>
-        </header>
+      <section id="content-section" class="flex-grow min-w-0" data-site-name={site.name}>
+        <div id="content-header">
+          <header class="mb-stack-lg">
+            <h1 class="font-headline text-headline-md font-bold mb-2">全部文章</h1>
+            <p class="font-label text-label-md text-on-surface-variant">
+              共 {allPosts.length} 篇文章
+            </p>
+          </header>
+        </div>
 
         {
-          allPosts.length === 0 ? (
+          initialPosts.length === 0 ? (
             <p class="font-body text-body-md text-on-surface-variant py-12 text-center">
               暂无文章。
             </p>
           ) : (
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-              {allPosts.map((post, index) => (
+            <div id="post-grid" data-total={allPosts.length} class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+              {initialPosts.map((post, index) => (
                 <BlogCard post={post} staggerIndex={index + 1} />
               ))}
+            </div>
+          )
+        }
+
+        {
+          remainingCount > 0 && (
+            <div id="load-more-wrap" class="flex flex-col items-center gap-3 pt-stack-lg">
+              <button
+                id="load-more-btn"
+                type="button"
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-outline-variant font-label text-label-md text-on-surface hover:bg-surface-container-high hover:border-tertiary-fixed-dim/40 transition-colors"
+              >
+                <span class="load-more-label">加载更多</span>
+                <span class="material-symbols-outlined text-[18px] load-more-icon">expand_more</span>
+                <LoadingSpinner class="load-more-spinner hidden" size={18} />
+              </button>
+              <p id="load-more-hint" class="font-label text-[12px] text-on-surface-variant/70">
+                还有 {remainingCount} 篇
+              </p>
             </div>
           )
         }
@@ -42,3 +71,28 @@ const categories = getCategories(allPosts);
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  import { initLoadMore } from '../../scripts/loadMore';
+  import { initCategoryNav } from '../../scripts/categoryNav';
+
+  const PAGE_SIZE = 12;
+
+  function setup() {
+    const grid = document.getElementById('post-grid');
+    if (!grid) return;
+    const total = Number(grid.dataset.total ?? '0');
+    initLoadMore({
+      gridId: 'post-grid',
+      btnId: 'load-more-btn',
+      hintId: 'load-more-hint',
+      total,
+      initialCount: PAGE_SIZE,
+      pageSize: PAGE_SIZE,
+    });
+    initCategoryNav();
+  }
+
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>

@@ -14,14 +14,14 @@ export const site = {
   },
   hero: {
     eyebrow: 'Android 应用层 · 智能座舱 · 移动端 AI',
-    title: '以应用层视角，联接Agent系统与 AI 原生移动体验',
+    title: '以应用层视角，联接 Agent 系统与 AI 原生移动体验',
     description:
       '聚焦 Android 应用层与移动端 AI，曾参与智能座舱车控 IVI 系统研发，现探索 AI 原生个人记忆与效率应用。本站汇集跨车载与消费级场景的工程实践、架构洞察，以及对智能化交互演进的前瞻思考。',
   },
   nav: [
-    { href: '/', label: '博客' },
+    { href: '/', label: '首页' },
+    { href: '/blog', label: '博客' },
     { href: '/about', label: '关于' },
-    { href: '/links', label: '链接' },
   ],
   social: {
     github: '#',

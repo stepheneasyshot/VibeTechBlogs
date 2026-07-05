@@ -1,0 +1,60 @@
+---
+import { cn } from '../utils/cn';
+
+interface Props {
+  size?: number;
+  class?: string;
+  label?: string;
+}
+
+const { size = 24, class: className, label = '加载中' } = Astro.props;
+---
+
+<span
+  class={cn('loading-spinner inline-flex items-center gap-2', className)}
+  role="status"
+  aria-label={label}
+  style={`--spinner-size: ${size}px`}
+>
+  <span class="loading-spinner__dot" aria-hidden="true"></span>
+  <span class="loading-spinner__dot" aria-hidden="true"></span>
+  <span class="loading-spinner__dot" aria-hidden="true"></span>
+</span>
+
+<style is:global>
+  .loading-spinner {
+    --spinner-size: 24px;
+    --dot-size: calc(var(--spinner-size) * 0.22);
+    color: var(--color-tertiary-fixed-dim);
+  }
+
+  .loading-spinner__dot {
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: 9999px;
+    background: currentColor;
+    display: inline-block;
+    animation: loading-spinner-bounce 1.2s var(--delay, 0s) infinite ease-in-out both;
+  }
+  .loading-spinner__dot:nth-child(1) { --delay: -0.32s; }
+  .loading-spinner__dot:nth-child(2) { --delay: -0.16s; }
+  .loading-spinner__dot:nth-child(3) { --delay: 0s; }
+
+  @keyframes loading-spinner-bounce {
+    0%, 80%, 100% {
+      transform: scale(0.6);
+      opacity: 0.4;
+    }
+    40% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loading-spinner__dot {
+      animation: none;
+      opacity: 0.7;
+    }
+  }
+</style>

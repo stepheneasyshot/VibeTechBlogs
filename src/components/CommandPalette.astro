@@ -7,15 +7,15 @@ const navItems = site.nav;
 <button
   type="button"
   id="command-trigger"
-  class="flex items-center gap-2 px-3 py-2 rounded-full border border-outline-variant/30 bg-surface-container-low text-on-surface-variant hover:border-tertiary-fixed-dim/40 hover:text-on-surface transition-colors cursor-pointer"
+  class="flex items-center gap-2.5 px-5 py-1 min-w-[220px] rounded-full border border-outline-variant/30 bg-surface-container-low text-on-surface-variant hover:border-tertiary-fixed-dim/40 hover:text-on-surface transition-colors cursor-pointer"
   aria-label="打开命令面板"
   aria-haspopup="dialog"
   aria-expanded="false"
   aria-controls="command-palette"
 >
-  <span class="material-symbols-outlined text-[20px]">search</span>
+  <span class="material-symbols-outlined text-[18px]">search</span>
   <span class="hidden md:inline font-label text-label-md">搜索…</span>
-  <kbd class="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-outline-variant/40 bg-surface-container font-label text-[11px] text-on-surface-variant/70">
+  <kbd class="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0 rounded border border-outline-variant/40 bg-surface-container font-label text-[11px] text-on-surface-variant/70">
     <span id="command-kbd-mod">⌘</span>K
   </kbd>
 </button>

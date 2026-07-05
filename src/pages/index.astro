@@ -1,125 +1,331 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CategoryNav from '../components/CategoryNav.astro';
-import BlogCard from '../components/BlogCard.astro';
 import CoverImage from '../components/CoverImage.astro';
 import { site } from '../data/site';
+import { friendLinks, recommendedReading } from '../data/links';
 import {
   getPublishedPosts,
-  getCategories,
-  getFeaturedPost,
-  getNonFeaturedPosts,
-  HOME_GRID_POST_LIMIT,
-  formatDate,
-  getPostUrl,
   getPostSlug,
-  getReadingTime,
+  getPostUrl,
+  formatDate,
 } from '../utils/posts';
+import { listTransition } from '../utils/pageTransitions';
+
+const CAROUSEL_POST_LIMIT = 5;
 
 const allPosts = await getPublishedPosts();
-const categories = getCategories(allPosts);
-const featured = getFeaturedPost(allPosts);
-const gridPosts = getNonFeaturedPosts(allPosts, featured);
-const previewPosts = gridPosts.slice(0, HOME_GRID_POST_LIMIT);
-const hasMorePosts = gridPosts.length > HOME_GRID_POST_LIMIT;
+const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
 ---
 
-<BaseLayout title={site.title} description={site.description}>
+<BaseLayout title={site.title} description={site.description} pageKind="list" pageTransition={listTransition}>
   <div class="pt-32 pb-stack-xl max-w-[1200px] mx-auto px-gutter" data-pagefind-ignore="all">
+    <!-- Hero / Manifesto + Carousel -->
     <section class="mb-stack-xl">
-      <div class="max-w-content-width">
-        <p
-          class="font-label text-label-md text-on-primary-container mb-2 tracking-widest uppercase stagger-item"
-          style="--stagger-i: 0"
-        >
-          {site.hero.eyebrow}
-        </p>
+      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(380px,560px)] gap-12 lg:gap-14 items-start">
+        <!-- Manifesto -->
+        <div class="max-w-content-width">
+          <p
+            class="font-label text-label-md text-on-primary-container mb-4 tracking-widest uppercase stagger-item"
+            style="--stagger-i: 0"
+          >
+            {site.hero.eyebrow}
+          </p>
         <h1
-          class="font-headline text-headline-lg mb-stack-md leading-tight font-bold stagger-item"
+          class="font-headline text-headline-md mb-stack-md leading-tight font-bold stagger-item"
           style="--stagger-i: 1"
         >
           {site.hero.title}
         </h1>
-        <p
-          class="font-body text-body-lg text-on-surface-variant max-w-[600px] stagger-item"
-          style="--stagger-i: 2"
-        >
-          {site.hero.description}
-        </p>
+          <p
+            class="font-body text-body-lg text-on-surface-variant max-w-[560px] stagger-item"
+            style="--stagger-i: 2"
+          >
+            {site.hero.description}
+          </p>
+
+          <div class="flex flex-wrap gap-3 mt-stack-md stagger-item" style="--stagger-i: 3">
+            <a
+              href="/blog/"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-tertiary-fixed-dim text-on-tertiary-fixed font-label text-label-md hover:bg-tertiary-fixed transition-colors"
+            >
+              阅读博客
+              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Latest posts carousel -->
+        {
+          carouselPosts.length > 0 && (
+            <div
+              class="home-carousel stagger-item relative lg:sticky lg:top-24"
+              style="--stagger-i: 4"
+              data-carousel
+              data-interval="4500"
+            >
+              <div class="home-carousel__viewport relative aspect-video rounded-2xl border border-outline-variant bg-surface-container-lowest overflow-hidden">
+                <div class="home-carousel__track absolute inset-0">
+                  {carouselPosts.map((post, index) => {
+                    const slug = getPostSlug(post);
+                    return (
+                      <article
+                        class="home-carousel__slide absolute inset-0"
+                        data-slide={index}
+                        style={`--slide-i: ${index}`}
+                        transition:name={`post-${slug}`}
+                      >
+                        <a href={getPostUrl(post)} class="group block h-full">
+                          <CoverImage
+                            src={post.data.image}
+                            alt={post.data.title}
+                            class="absolute inset-0 h-full w-full rounded-none border-0"
+                            imgClass="group-hover:scale-105 transition-transform duration-700"
+                            transitionName={`cover-${slug}`}
+                          />
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                          <div class="absolute inset-x-0 bottom-0 p-7 text-white">
+                            <p class="font-label text-label-md text-white/70 mb-3 tracking-wider">
+                              {formatDate(post.data.pubDate)}
+                            </p>
+                            <h2
+                              class="font-headline text-[1.125rem] leading-snug font-semibold mb-3 line-clamp-2"
+                              transition:name={`title-${slug}`}
+                            >
+                              {post.data.title}
+                            </h2>
+                            <p class="font-body text-[13px] text-white/75 line-clamp-2">
+                              {post.data.description}
+                            </p>
+                          </div>
+                        </a>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <!-- Prev / Next -->
+                <button
+                  type="button"
+                  class="home-carousel__btn home-carousel__btn--prev absolute top-1/2 left-3 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
+                  data-carousel-prev
+                  aria-label="上一篇"
+                >
+                  <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                </button>
+                <button
+                  type="button"
+                  class="home-carousel__btn home-carousel__btn--next absolute top-1/2 right-3 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
+                  data-carousel-next
+                  aria-label="下一篇"
+                >
+                  <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                </button>
+              </div>
+
+              <!-- Dots -->
+              <div class="home-carousel__dots mt-4 flex items-center justify-center gap-2">
+                {carouselPosts.map((_, index) => (
+                  <button
+                    type="button"
+                    class="home-carousel__dot"
+                    data-carousel-dot={index}
+                    aria-label={`第 ${index + 1} 篇`}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
     </section>
 
-    <div class="flex flex-col lg:flex-row gap-12" id="articles">
-      <CategoryNav categories={categories} activeCategory={null} />
-
-      <section class="flex-grow min-w-0">
-        <div class="flex flex-col gap-12">
-          {
-            featured && (
-              <article class="group stagger-item" style="--stagger-i: 3" transition:name={`post-${getPostSlug(featured)}`}>
-                <a href={getPostUrl(featured)} class="block cursor-pointer">
-                  <CoverImage
-                    src={featured.data.image}
-                    alt={featured.data.title}
-                    class="mb-6 w-full rounded-xl border border-outline-variant bg-surface-container-lowest"
-                    imgClass="group-hover:scale-105 transition-transform duration-700"
-                    transitionName={`cover-${getPostSlug(featured)}`}
-                  />
-                  <div class="max-w-[720px]">
-                    <div class="flex items-center gap-3 mb-3 flex-wrap">
-                      <span class="font-label text-label-md text-tertiary-fixed-dim bg-primary-container px-2 py-0.5 rounded">
-                        精选
-                      </span>
-                      <span class="font-label text-label-md text-on-surface-variant">
-                        {formatDate(featured.data.pubDate)} · {getReadingTime(featured.body ?? featured.data.description)}
-                      </span>
-                    </div>
-                    <h2
-                      class="font-headline text-headline-md mb-3 group-hover:text-on-primary-container transition-colors font-semibold"
-                      transition:name={`title-${getPostSlug(featured)}`}
-                    >
-                      {featured.data.title}
-                    </h2>
-                    <p class="font-body text-body-md text-on-surface-variant mb-6">
-                      {featured.data.description}
-                    </p>
-                    <span class="font-label text-label-md text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
-                      阅读全文
-                      <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-                    </span>
-                  </div>
-                </a>
-              </article>
-            )
-          }
-
-          {featured && previewPosts.length > 0 && <div class="h-px bg-outline-variant/30" />}
-
-          {
-            previewPosts.length > 0 && (
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-                {previewPosts.map((post, index) => (
-                  <BlogCard post={post} staggerIndex={index + 4} />
-                ))}
-              </div>
-            )
-          }
-
-          {
-            hasMorePosts && (
-              <div class="flex justify-center pt-4">
+    <!-- Tech resources / Friend links -->
+    <section class="mb-stack-xl">
+      <div class="flex items-center gap-2 mb-stack-lg border-l-4 border-tertiary-fixed-dim pl-4">
+        <h2 class="font-headline text-headline-sm text-on-surface font-semibold">技术资源</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+        {
+          friendLinks.map((link) => (
+            <div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-xl hover:shadow-lg transition-all duration-300 group hover:-translate-y-1">
+              <div class="flex items-start justify-between mb-4">
+                <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+                  <span class="material-symbols-outlined">{link.icon}</span>
+                </div>
                 <a
-                  href="/blog/"
-                  class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-outline-variant font-label text-label-md text-on-surface hover:bg-surface-container-high hover:border-tertiary-fixed-dim/40 transition-colors"
+                  href={link.url}
+                  class="text-tertiary-fixed-dim group-hover:translate-x-1 transition-transform"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  查看全部
-                  <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  <span class="material-symbols-outlined">arrow_outward</span>
                 </a>
               </div>
-            )
-          }
+              <h3 class="font-headline text-headline-sm mb-2 text-on-surface font-semibold">{link.title}</h3>
+              <p class="font-label text-label-md text-on-surface-variant mb-6 min-h-[60px]">{link.description}</p>
+              <a
+                href={link.url}
+                class="block w-full py-2 border border-outline text-on-surface font-label text-label-md rounded-lg hover:bg-surface-container-high transition-colors text-center"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                访问站点
+              </a>
+            </div>
+          ))
+        }
+        <div class="relative overflow-hidden rounded-xl h-full min-h-[200px] border border-outline-variant placeholder-cover flex items-center justify-center p-6 text-center">
+          <p class="font-headline text-headline-sm text-on-surface font-semibold drop-shadow-sm">加入网络</p>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <!-- Recommended reading -->
+    <section class="max-w-[720px]">
+      <div class="flex items-center gap-2 mb-stack-lg border-l-4 border-tertiary-fixed-dim pl-4">
+        <h2 class="font-headline text-headline-sm text-on-surface font-semibold">推荐阅读</h2>
+      </div>
+      <div class="space-y-4">
+        {
+          recommendedReading.map((item) => (
+            <a
+              href={item.url}
+              class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg border border-outline-variant/30 hover:bg-secondary-container/20 transition-colors group"
+            >
+              <div class="flex items-center gap-4">
+                <span class="material-symbols-outlined text-secondary">{item.icon}</span>
+                <div>
+                  <p class="font-label text-label-md text-on-surface font-bold">{item.title}</p>
+                  <p class="text-sm text-on-surface-variant">{item.description}</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
   </div>
 </BaseLayout>
+
+<style>
+  .home-carousel__slide {
+    opacity: 0;
+    transform: scale(1.02);
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+  .home-carousel__slide.is-active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  .home-carousel__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--color-outline-variant);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition:
+      width 0.3s ease,
+      background 0.3s ease;
+  }
+  .home-carousel__dot.is-active {
+    width: 20px;
+    background: var(--color-tertiary-fixed-dim);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-carousel__slide {
+      transition: opacity 0.2s linear;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function initCarousel(root: HTMLElement) {
+      if (root.dataset.carouselReady === 'true') return;
+      root.dataset.carouselReady = 'true';
+
+      const slides = Array.from(
+        root.querySelectorAll<HTMLElement>('.home-carousel__slide'),
+      );
+      const dots = Array.from(
+        root.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]'),
+      );
+      const prevBtn = root.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+      const nextBtn = root.querySelector<HTMLButtonElement>('[data-carousel-next]');
+      if (slides.length === 0) return;
+
+      const interval = Number(root.dataset.interval ?? '4500');
+      let current = 0;
+      let timer: number | undefined;
+
+      function show(index: number) {
+        current = (index + slides.length) % slides.length;
+        slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
+        dots.forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+      }
+
+      function next() {
+        show(current + 1);
+      }
+
+      function prev() {
+        show(current - 1);
+      }
+
+      function start() {
+        stop();
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        timer = window.setInterval(next, interval);
+      }
+
+      function stop() {
+        if (timer !== undefined) {
+          window.clearInterval(timer);
+          timer = undefined;
+        }
+      }
+
+      nextBtn?.addEventListener('click', () => {
+        next();
+        start();
+      });
+      prevBtn?.addEventListener('click', () => {
+        prev();
+        start();
+      });
+      dots.forEach((dot, i) =>
+        dot.addEventListener('click', () => {
+          show(i);
+          start();
+        }),
+      );
+
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      root.addEventListener('focusin', stop);
+      root.addEventListener('focusout', start);
+
+      show(0);
+      start();
+    }
+
+    function initAll() {
+      document
+        .querySelectorAll<HTMLElement>('[data-carousel]')
+        .forEach(initCarousel);
+    }
+
+    initAll();
+    document.addEventListener('astro:page-load', initAll);
+  })();
+</script>

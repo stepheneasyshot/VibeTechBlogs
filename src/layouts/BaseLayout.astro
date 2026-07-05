@@ -4,48 +4,23 @@ import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
+import { listTransition, type PageKind, type PageTransition } from '../utils/pageTransitions';
 
 interface Props {
   title?: string;
   description?: string;
+  pageKind?: PageKind;
+  pageTransition?: PageTransition;
 }
 
 const {
   title = site.title,
   description = site.description,
+  pageKind = 'list',
+  pageTransition = listTransition,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-
-const pageTransition = {
-  forwards: {
-    old: {
-      name: 'page-fade-out',
-      duration: '0.22s',
-      easing: 'ease-in',
-      fillMode: 'forwards' as const,
-    },
-    new: {
-      name: 'page-fade-in',
-      duration: '0.32s',
-      easing: 'ease-out',
-      delay: '0.04s',
-    },
-  },
-  backwards: {
-    old: {
-      name: 'page-fade-out',
-      duration: '0.22s',
-      easing: 'ease-in',
-      fillMode: 'forwards' as const,
-    },
-    new: {
-      name: 'page-fade-in',
-      duration: '0.32s',
-      easing: 'ease-out',
-    },
-  },
-};
 ---
 
 <!doctype html>
@@ -72,26 +47,57 @@ const pageTransition = {
     <script is:inline>
       (function () {
         function isDarkTheme() {
-          const stored = localStorage.getItem('theme');
+          var stored = localStorage.getItem('theme');
           if (stored === 'dark') return true;
           if (stored === 'light') return false;
           return true;
         }
 
         function applyTheme(doc) {
-          const root = doc?.documentElement ?? document.documentElement;
+          var root = doc && doc.documentElement ? doc.documentElement : document.documentElement;
           root.classList.toggle('dark', isDarkTheme());
         }
 
+        function getPageKind(pathname) {
+          if (/^\/blog\/[^/]+\/?$/.test(pathname)) return 'post';
+          if (pathname.indexOf('/category/') === 0) return 'category';
+          if (/^\/about\/?$/.test(pathname)) return 'static';
+          return 'list';
+        }
+
         applyTheme();
-        document.addEventListener('astro:before-swap', (e) => applyTheme(e.newDocument));
-        document.addEventListener('astro:page-load', () => applyTheme());
+        document.documentElement.dataset.pageKind = getPageKind(window.location.pathname);
+
+        document.addEventListener('astro:before-preparation', function (event) {
+          var from = getPageKind(window.location.pathname);
+          var to = getPageKind(new URL(event.to, window.location.href).pathname);
+          var direction = event.direction || 'forward';
+          document.documentElement.dataset.transitionFrom = from;
+          document.documentElement.dataset.transitionTo = to;
+          document.documentElement.dataset.transitionPair = direction + ':' + from + '->' + to;
+        });
+
+        document.addEventListener('astro:before-swap', function (e) {
+          applyTheme(e.newDocument);
+          var nextPath = e.newDocument.location.pathname;
+          document.documentElement.dataset.pageKind = getPageKind(nextPath);
+        });
+
+        document.addEventListener('astro:page-load', function () {
+          applyTheme();
+          document.documentElement.dataset.pageKind = getPageKind(window.location.pathname);
+        });
       })();
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
     <Header currentPath={Astro.url.pathname} />
-    <main class="flex-1" transition:name="main-content" transition:animate={pageTransition}>
+    <main
+      class="flex-1"
+      data-page-kind={pageKind}
+      transition:name="main-content"
+      transition:animate={pageTransition}
+    >
       <slot />
     </main>
     <Footer />
