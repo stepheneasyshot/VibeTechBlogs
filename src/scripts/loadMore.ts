@@ -17,15 +17,20 @@ export function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;');
 }
 
-export function renderCard(post: PostMeta, staggerIndex: number): string {
+export function renderCard(
+  post: PostMeta,
+  staggerIndex: number,
+  variant: 'initial' | 'incremental' = 'initial',
+): string {
   const cats = post.categories.join(' · ');
   const coverInner = post.image
     ? `<img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.title)}" loading="lazy" class="absolute inset-0 block h-full w-full object-cover" />`
     : '';
   const coverPlaceholder = post.image ? '' : 'placeholder-cover';
+  const staggerClass = variant === 'incremental' ? 'stagger-item-incremental' : 'stagger-item';
   return `
     <article
-      class="group cursor-pointer stagger-item"
+      class="group cursor-pointer ${staggerClass}"
       style="--stagger-i: ${staggerIndex}; view-transition-name: post-${escapeHtml(post.slug)}"
     >
       <a href="${escapeHtml(post.url)}" class="block">
@@ -102,9 +107,16 @@ export function initLoadMore(opts: LoadMoreOptions): void {
     if (!hint) return;
     if (remaining <= 0) {
       hint.textContent = '已全部加载完毕';
-      btn.classList.add('hidden');
+      // 用内联 display 而非 .hidden 类：按钮带 inline-flex，而 .hidden 在 CSS 中
+      // 排在 .inline-flex 之前，类层叠会被 inline-flex 覆盖，导致按钮藏不掉。
+      btn.style.display = 'none';
+      btn.setAttribute('aria-hidden', 'true');
+      btn.tabIndex = -1;
     } else {
       hint.textContent = `还有 ${remaining} 篇`;
+      btn.style.display = '';
+      btn.removeAttribute('aria-hidden');
+      btn.tabIndex = 0;
     }
   }
 
@@ -119,7 +131,7 @@ export function initLoadMore(opts: LoadMoreOptions): void {
       const batch = filtered.slice(renderedCount, renderedCount + pageSize);
       const frag = document.createElement('div');
       frag.innerHTML = batch
-        .map((p, i) => renderCard(p, renderedCount + i + 1))
+        .map((p, i) => renderCard(p, i, 'incremental'))
         .join('');
       Array.from(frag.children).forEach((node) => grid.appendChild(node));
       renderedCount += batch.length;

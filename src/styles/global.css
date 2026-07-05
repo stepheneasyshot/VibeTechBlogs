@@ -369,6 +369,12 @@
     animation-delay: calc(80ms + var(--stagger-i, 0) * 60ms);
   }
 
+  /* 加载更多批次：起始无延迟、stagger 间隔更短，避免卡片在淡入前长时间占位留白 */
+  .stagger-item-incremental {
+    animation: stagger-fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--stagger-i, 0) * 45ms);
+  }
+
   #content-section {
     transition: opacity 0.15s ease;
   }
@@ -513,7 +519,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .stagger-item {
+    .stagger-item,
+    .stagger-item-incremental {
       animation: none;
     }
 
