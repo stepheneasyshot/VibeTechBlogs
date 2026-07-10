@@ -109,7 +109,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </main>
     <Footer />
 
-    <!-- 回到顶部按钮：放在 body 层级，避免 header 的 backdrop-filter 破坏 fixed 定位 -->
+    <!-- 回到顶部按钮：放在 body 层级，避免被 header 层叠上下文影响 fixed 定位 -->
     <button
       type="button"
       id="back-to-top"

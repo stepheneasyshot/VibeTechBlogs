@@ -27,7 +27,16 @@ function isActive(href: string) {
 }
 ---
 
-<header class="fixed top-0 w-full z-50 bg-background/70 backdrop-blur-md backdrop-saturate-150 border-b border-outline-variant/60 supports-[backdrop-filter]:bg-background/60" transition:persist="site-header" transition:animate="none">
+<!--
+  实色背景（无毛玻璃）。transition:name 必须显式设为 site-header：
+  persist 的值只是匹配 key，不会设置 view-transition-name。
+-->
+<header
+  class="fixed top-0 w-full z-50 bg-background border-b border-outline-variant/60"
+  transition:persist="site-header"
+  transition:name="site-header"
+  transition:animate="none"
+>
   <ReadingProgress />
   <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-12">
     <div class="flex items-center gap-3 md:gap-6 min-w-0">
@@ -78,8 +87,17 @@ function isActive(href: string) {
     return path.startsWith(href);
   }
 
-  function updateHeader(pathArg?: string) {
+  function setNavLinksTransition(enabled: boolean) {
+    document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((link) => {
+      link.style.transition = enabled ? '' : 'none';
+    });
+  }
+
+  function updateHeader(pathArg?: string, options?: { instant?: boolean }) {
     const path = pathArg ?? window.location.pathname;
+    const instant = options?.instant === true;
+
+    if (instant) setNavLinksTransition(false);
 
     document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((link) => {
       const href = link.dataset.navLink;
@@ -89,13 +107,17 @@ function isActive(href: string) {
       link.classList.toggle('border-tertiary-fixed-dim', active);
       link.classList.toggle('border-transparent', !active);
       link.classList.toggle('text-on-surface-variant', !active);
-      // 当前 tab 已激活时，阻止再次点击触发导航（避免刷新闪烁）
       if (active) {
         link.setAttribute('aria-current', 'page');
       } else {
         link.removeAttribute('aria-current');
       }
     });
+
+    if (instant) {
+      // 强制 reflow，确保随后的 VT OLD 快照捕获到最终颜色
+      void document.body.offsetWidth;
+    }
   }
 
   function handleNavClick(event: MouseEvent) {
@@ -107,14 +129,22 @@ function isActive(href: string) {
     if (isNavActive(href, window.location.pathname)) {
       event.preventDefault();
       event.stopPropagation();
+      return;
     }
+    // 在 ClientRouter 启动 VT、捕获 OLD 快照之前就切好 active，
+    // 使新旧 header 快照一致，避免 tab 下划线在过渡层闪一下。
+    updateHeader(href, { instant: true });
   }
 
   updateHeader();
   document.addEventListener('click', handleNavClick, true);
-  // 在 DOM 交换前就把 active tab 切到目标页，使 persisted header 的过渡快照与最终状态一致，避免下划线跳动
+
   document.addEventListener('astro:before-swap', (event) => {
-    updateHeader(event.newDocument.location.pathname);
+    updateHeader(event.newDocument.location.pathname, { instant: true });
   });
-  document.addEventListener('astro:page-load', () => updateHeader());
+
+  document.addEventListener('astro:page-load', () => {
+    setNavLinksTransition(true);
+    updateHeader();
+  });
 </script>

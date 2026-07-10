@@ -348,9 +348,36 @@
     z-index: 1;
   }
 
-  /* Header 始终在主内容层之上，避免 slide 过渡时被主内容快照遮挡导致闪烁 */
+  /*
+   * 页面导航：关闭 root cross-fade，只让 main-content 做过渡。
+   * root 淡入淡出时，固定顶栏区域容易出现一帧「被内容穿透 / 叠层」的闪烁。
+   * 主题切换的 circular reveal 走 .theme-revealing，不受影响。
+   */
+  html:not(.theme-revealing)::view-transition-old(root),
+  html:not(.theme-revealing)::view-transition-new(root) {
+    animation: none !important;
+    mix-blend-mode: normal;
+  }
+
+  html:not(.theme-revealing)::view-transition-old(root) {
+    opacity: 0;
+  }
+
+  /* Header：恒定顶栏，不参与位移动画；实色垫底防止任何叠层透出 */
   ::view-transition-group(site-header) {
-    z-index: 3;
+    z-index: 50;
+    animation: none !important;
+  }
+
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header) {
+    animation: none !important;
+    mix-blend-mode: normal;
+    background-color: var(--color-background);
+  }
+
+  ::view-transition-old(site-header) {
+    opacity: 0;
   }
 
   /* 列表 → 文章：主内容快速退场，让 morph 更突出 */
