@@ -117,7 +117,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
               data-carousel
               data-interval="4500"
             >
-              <div class="home-carousel__viewport relative aspect-video rounded-2xl border border-outline-variant bg-surface-container-lowest overflow-hidden">
+              <div class="home-carousel__viewport relative aspect-video rounded-2xl border border-outline-variant bg-surface-container-lowest overflow-hidden touch-pan-y">
                 <div class="home-carousel__track absolute inset-0">
                   {carouselPosts.map((post, index) => {
                     return (
@@ -319,10 +319,14 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
 
 <script>
   (function () {
+    const SWIPE_THRESHOLD = 40;
+    const SWIPE_AXIS_RATIO = 1.2;
+
     function initCarousel(root: HTMLElement) {
       if (root.dataset.carouselReady === 'true') return;
       root.dataset.carouselReady = 'true';
 
+      const viewport = root.querySelector<HTMLElement>('.home-carousel__viewport');
       const slides = Array.from(
         root.querySelectorAll<HTMLElement>('.home-carousel__slide'),
       );
@@ -378,6 +382,100 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
           start();
         }),
       );
+
+      // 触摸 / 指针滑动翻页（横滑切页，竖滑仍交给页面滚动）
+      if (viewport && slides.length > 1) {
+        let pointerId: number | null = null;
+        let startX = 0;
+        let startY = 0;
+        let tracking = false;
+        let locked: 'x' | 'y' | null = null;
+        let swiped = false;
+
+        function onPointerDown(event: PointerEvent) {
+          if (event.pointerType === 'mouse' && event.button !== 0) return;
+          // 按钮自己处理点击，不参与滑动
+          if ((event.target as Element | null)?.closest?.('button')) return;
+
+          pointerId = event.pointerId;
+          startX = event.clientX;
+          startY = event.clientY;
+          tracking = true;
+          locked = null;
+          swiped = false;
+          stop();
+        }
+
+        function onPointerMove(event: PointerEvent) {
+          if (!tracking || event.pointerId !== pointerId) return;
+
+          const dx = event.clientX - startX;
+          const dy = event.clientY - startY;
+
+          if (!locked) {
+            if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+            locked =
+              Math.abs(dx) > Math.abs(dy) * SWIPE_AXIS_RATIO
+                ? 'x'
+                : Math.abs(dy) > Math.abs(dx) * SWIPE_AXIS_RATIO
+                  ? 'y'
+                  : null;
+            if (locked === 'y') {
+              tracking = false;
+              start();
+              return;
+            }
+          }
+
+          if (locked === 'x') {
+            // 已判定为横滑：阻止默认，避免拖出文字选中 / 误触链接
+            event.preventDefault();
+          }
+        }
+
+        function onPointerUp(event: PointerEvent) {
+          if (!tracking || event.pointerId !== pointerId) return;
+
+          const dx = event.clientX - startX;
+          const dy = event.clientY - startY;
+          tracking = false;
+          pointerId = null;
+
+          if (locked === 'x' && Math.abs(dx) >= SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
+            swiped = true;
+            if (dx < 0) next();
+            else prev();
+          }
+
+          locked = null;
+          start();
+        }
+
+        function onPointerCancel(event: PointerEvent) {
+          if (event.pointerId !== pointerId) return;
+          tracking = false;
+          pointerId = null;
+          locked = null;
+          start();
+        }
+
+        // 滑动结束后吞掉紧随其后的 click，避免误进文章
+        viewport.addEventListener(
+          'click',
+          (event) => {
+            if (!swiped) return;
+            event.preventDefault();
+            event.stopPropagation();
+            swiped = false;
+          },
+          true,
+        );
+
+        viewport.addEventListener('pointerdown', onPointerDown);
+        viewport.addEventListener('pointermove', onPointerMove, { passive: false });
+        viewport.addEventListener('pointerup', onPointerUp);
+        viewport.addEventListener('pointercancel', onPointerCancel);
+      }
 
       root.addEventListener('mouseenter', stop);
       root.addEventListener('mouseleave', start);
