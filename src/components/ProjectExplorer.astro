@@ -1,0 +1,273 @@
+---
+import { openSourceProjects } from '../data/projects';
+
+const initial = openSourceProjects[0];
+const projectsJson = JSON.stringify(openSourceProjects);
+const initialParagraphs = initial.detail.split('\n\n');
+---
+
+<div
+  class="project-explorer grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-gutter lg:gap-10 items-start"
+  data-project-explorer
+>
+  <div class="project-explorer__scroller relative min-w-0 -mx-gutter lg:mx-0 lg:contents">
+    <div
+      class="project-explorer__fade project-explorer__fade--left lg:hidden"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="project-explorer__fade project-explorer__fade--right lg:hidden"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="project-explorer__list flex flex-row lg:flex-col gap-2 lg:gap-1.5 overflow-x-auto overflow-y-hidden lg:overflow-visible pb-1 lg:pb-0"
+      role="listbox"
+      aria-label="开源项目列表"
+      data-project-list
+    >
+      <span class="project-explorer__inset shrink-0 lg:hidden" aria-hidden="true"></span>
+      {
+        openSourceProjects.map((project, index) => (
+          <button
+            type="button"
+            role="option"
+            aria-selected={index === 0 ? 'true' : 'false'}
+            data-project-item
+            data-index={String(index)}
+            class="project-explorer__item group shrink-0 lg:w-full text-left rounded-lg px-3.5 py-2.5 lg:px-4 lg:py-3 transition-colors cursor-pointer"
+          >
+            {/* 窄屏：仅标题 */}
+            <span class="font-headline text-headline-sm font-semibold whitespace-nowrap lg:hidden">
+              {project.title}
+            </span>
+
+            {/* 宽屏：图标 + 标题 + 语言 + 摘要 */}
+            <span class="hidden lg:flex items-center gap-3">
+              <span class="project-explorer__icon w-9 h-9 rounded-md flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[18px]">{project.icon}</span>
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-baseline justify-between gap-2">
+                  <span class="font-headline text-headline-sm font-semibold truncate">{project.title}</span>
+                  <span class="font-label text-[11px] opacity-70 shrink-0">{project.language}</span>
+                </span>
+                <span class="font-label text-label-md opacity-80 line-clamp-1 mt-0.5 block">
+                  {project.summary}
+                </span>
+              </span>
+            </span>
+          </button>
+        ))
+      }
+      <span class="project-explorer__inset shrink-0 lg:hidden" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <aside class="project-explorer__detail self-start pt-1 lg:pt-2" data-project-detail>
+    <p class="font-label text-label-md text-on-surface-variant tracking-wide" data-detail-language>
+      {initial.language}
+    </p>
+    <h3 class="font-headline text-headline-md text-on-surface font-semibold mt-1 mb-3" data-detail-title>
+      {initial.title}
+    </h3>
+    <p class="font-label text-label-md text-on-surface-variant mb-4" data-detail-summary>
+      {initial.summary}
+    </p>
+    <div class="space-y-3 mb-6" data-detail-body>
+      {
+        initialParagraphs.map((paragraph) => (
+          <p class="font-body text-body-md text-on-surface-variant leading-relaxed">{paragraph}</p>
+        ))
+      }
+    </div>
+    <a
+      href={initial.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1.5 font-label text-label-md text-primary hover:text-tertiary-fixed-dim transition-colors no-underline"
+      data-detail-link
+    >
+      在 GitHub 查看仓库
+      <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+    </a>
+  </aside>
+</div>
+
+<script type="application/json" id="project-explorer-data" set:html={projectsJson}></script>
+
+<style>
+  .project-explorer__item {
+    background-color: var(--color-surface-container-low);
+    color: var(--color-on-surface);
+  }
+
+  .project-explorer__item:hover {
+    background-color: var(--color-surface-container-high);
+  }
+
+  .project-explorer__item[aria-selected='true'] {
+    background-color: var(--color-secondary-container);
+    color: var(--color-on-secondary-container);
+  }
+
+  .project-explorer__item[aria-selected='true']:hover {
+    background-color: var(--color-secondary-container);
+  }
+
+  .project-explorer__icon {
+    background-color: color-mix(in srgb, var(--color-secondary-container) 80%, transparent);
+    color: var(--color-on-secondary-container);
+  }
+
+  .project-explorer__item[aria-selected='true'] .project-explorer__icon {
+    background-color: color-mix(in srgb, var(--color-on-secondary-container) 12%, transparent);
+    color: var(--color-on-secondary-container);
+  }
+
+  .project-explorer__detail {
+    transition: opacity 0.15s ease;
+  }
+
+  .project-explorer__detail.is-switching {
+    opacity: 0.45;
+  }
+
+  /* 窄屏横向滑动：隐藏滚动条，保留滑动 */
+  .project-explorer__list {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .project-explorer__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 首尾占位：初始留白，滑动后可让卡片贴到屏幕边缘 */
+  .project-explorer__inset {
+    width: var(--spacing-gutter);
+    height: 1px;
+  }
+
+  .project-explorer__fade {
+    position: absolute;
+    top: 0;
+    bottom: 0.25rem;
+    width: 5rem;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .project-explorer__fade--left {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      var(--color-page) 0%,
+      var(--color-page) 28%,
+      color-mix(in srgb, var(--color-page) 92%, transparent) 48%,
+      color-mix(in srgb, var(--color-page) 45%, transparent) 72%,
+      transparent 100%
+    );
+  }
+
+  .project-explorer__fade--right {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      var(--color-page) 0%,
+      var(--color-page) 28%,
+      color-mix(in srgb, var(--color-page) 92%, transparent) 48%,
+      color-mix(in srgb, var(--color-page) 45%, transparent) 72%,
+      transparent 100%
+    );
+  }
+
+  @media (min-width: 1024px) {
+    .project-explorer__list {
+      scrollbar-width: auto;
+    }
+  }
+</style>
+
+<script>
+  type Project = {
+    title: string;
+    language: string;
+    icon: string;
+    url: string;
+    summary: string;
+    detail: string;
+    gradient: string;
+  };
+
+  function readProjects(): Project[] {
+    const dataEl = document.getElementById('project-explorer-data');
+    if (!dataEl?.textContent) return [];
+    try {
+      return JSON.parse(dataEl.textContent) as Project[];
+    } catch {
+      return [];
+    }
+  }
+
+  function renderDetailBody(container: HTMLElement, detail: string) {
+    container.replaceChildren(
+      ...detail.split('\n\n').map((paragraph) => {
+        const p = document.createElement('p');
+        p.className = 'font-body text-body-md text-on-surface-variant leading-relaxed';
+        p.textContent = paragraph;
+        return p;
+      }),
+    );
+  }
+
+  function bindProjectExplorer() {
+    document.querySelectorAll<HTMLElement>('[data-project-explorer]').forEach((root) => {
+      if (root.dataset.bound === '1') return;
+      root.dataset.bound = '1';
+
+      const projects = readProjects();
+      if (!projects.length) return;
+
+      const items = root.querySelectorAll<HTMLButtonElement>('[data-project-item]');
+      const detail = root.querySelector<HTMLElement>('[data-project-detail]');
+      if (!detail) return;
+
+      const language = detail.querySelector<HTMLElement>('[data-detail-language]');
+      const title = detail.querySelector<HTMLElement>('[data-detail-title]');
+      const summary = detail.querySelector<HTMLElement>('[data-detail-summary]');
+      const body = detail.querySelector<HTMLElement>('[data-detail-body]');
+      const link = detail.querySelector<HTMLAnchorElement>('[data-detail-link]');
+
+      const select = (index: number) => {
+        const project = projects[index];
+        if (!project) return;
+
+        items.forEach((item, i) => {
+          item.setAttribute('aria-selected', i === index ? 'true' : 'false');
+        });
+
+        const active = items[index];
+        active?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
+        detail.classList.add('is-switching');
+        window.setTimeout(() => {
+          if (language) language.textContent = project.language;
+          if (title) title.textContent = project.title;
+          if (summary) summary.textContent = project.summary;
+          if (body) renderDetailBody(body, project.detail);
+          if (link) link.href = project.url;
+          detail.classList.remove('is-switching');
+        }, 120);
+      };
+
+      items.forEach((item) => {
+        item.addEventListener('click', () => {
+          select(Number(item.dataset.index ?? '0'));
+        });
+      });
+    });
+  }
+
+  bindProjectExplorer();
+  document.addEventListener('astro:page-load', bindProjectExplorer);
+</script>

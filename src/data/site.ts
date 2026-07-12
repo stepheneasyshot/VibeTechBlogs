@@ -26,6 +26,7 @@ export const site = {
   social: {
     github: 'https://github.com/stepheneasyshot',
     juejin: 'https://juejin.cn/user/1227473764497976',
+    email: '17371554705@126.com',
   },
   skills: [
     'Android / Kotlin',
