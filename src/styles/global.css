@@ -151,10 +151,6 @@
   background-color: var(--color-surface-wash);
 }
 
-@utility bg-surface-wash-header {
-  background-color: color-mix(in srgb, var(--color-surface-wash) 92%, transparent);
-}
-
 @utility bg-page {
   background-color: var(--color-page);
 }

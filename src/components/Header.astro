@@ -28,11 +28,12 @@ function isActive(href: string) {
 ---
 
 <!--
-  实色背景（无毛玻璃）。transition:name 必须显式设为 site-header：
+  实色背景（无毛玻璃）：VT 快照无法携带 backdrop-filter，半透明 header
+  会在页面切换时透出主内容。transition:name 必须显式设为 site-header，
   persist 的值只是匹配 key，不会设置 view-transition-name。
 -->
 <header
-  class="fixed top-0 w-full z-50 bg-surface-wash-header backdrop-blur-md elevation-1"
+  class="fixed top-0 w-full z-50 bg-surface-wash elevation-1"
   transition:persist="site-header"
   transition:name="site-header"
   transition:animate="none"

@@ -20,10 +20,10 @@ import { staticTransition } from '../utils/pageTransitions';
         <span class="font-label text-label-md text-on-surface-variant tracking-widest block mb-2 uppercase">
           {site.author.role} & 作者
         </span>
-        <h1 class="font-headline text-headline-lg mb-4 text-on-surface font-bold">
+        <h1 class="font-headline text-headline-md mb-4 text-on-surface font-bold">
           你好，我是 {site.author.name}。
         </h1>
-        <div class="font-body text-body-lg text-on-surface-variant leading-relaxed space-y-4">
+        <div class="font-body text-body-md text-on-surface-variant leading-relaxed space-y-4">
           {
             site.author.bio.split('\n\n').map((paragraph) => (
               <p>{paragraph}</p>
@@ -43,8 +43,8 @@ import { staticTransition } from '../utils/pageTransitions';
     </section>
 
     <section class="mb-stack-xl">
-      <h2 class="font-headline text-headline-md mb-stack-lg text-center font-semibold">我的历程</h2>
-      <div class="relative max-w-[800px] mx-auto pt-8 before:content-[''] before:absolute before:left-2 before:top-8 before:bottom-0 before:w-px before:bg-outline-variant md:before:hidden">
+      <h2 class="font-headline text-headline-md mb-stack-md text-center font-semibold">我的历程</h2>
+      <div class="relative max-w-[800px] mx-auto pt-4 before:content-[''] before:absolute before:left-2 before:top-4 before:bottom-0 before:w-px before:bg-outline-variant md:before:hidden">
         <div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-px h-full bg-outline-variant" aria-hidden="true"></div>
         {
           site.timeline.map((item, i) => (
@@ -71,18 +71,7 @@ import { staticTransition } from '../utils/pageTransitions';
     </section>
 
     <section class="mb-stack-xl">
-      <div class="flex flex-col items-center gap-2 mb-stack-lg">
-        <h2 class="font-headline text-headline-md text-center font-semibold">开源项目</h2>
-        <a
-          href={site.social.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim transition-colors inline-flex items-center gap-1"
-        >
-          GitHub · @stepheneasyshot
-          <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
-        </a>
-      </div>
+      <h2 class="font-headline text-headline-md mb-stack-lg text-center font-semibold">开源项目</h2>
       <ProjectExplorer />
     </section>
 
