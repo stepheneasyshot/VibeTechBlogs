@@ -118,15 +118,15 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
               data-interval="4500"
             >
               <div class="home-carousel__viewport relative aspect-video rounded-2xl border border-outline-variant bg-surface-container-lowest overflow-hidden touch-pan-y">
-                <div class="home-carousel__track absolute inset-0">
+                <div class="home-carousel__track absolute inset-y-0 left-0 flex h-full w-full" data-carousel-track>
                   {carouselPosts.map((post, index) => {
                     return (
                       <article
-                        class="home-carousel__slide absolute inset-0"
+                        class="home-carousel__slide relative h-full shrink-0 grow-0 basis-full"
                         data-slide={index}
                         style={`--slide-i: ${index}`}
                       >
-                        <a href={getPostUrl(post)} class="group block h-full">
+                        <a href={getPostUrl(post)} class="group block h-full relative">
                           <CoverImage
                             src={post.data.image}
                             alt={post.data.title}
@@ -156,7 +156,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
                 <!-- Prev / Next -->
                 <button
                   type="button"
-                  class="home-carousel__btn home-carousel__btn--prev absolute top-1/2 left-3 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
+                  class="home-carousel__btn home-carousel__btn--prev absolute top-1/2 left-3 z-10 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
                   data-carousel-prev
                   aria-label="上一篇"
                 >
@@ -164,7 +164,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
                 </button>
                 <button
                   type="button"
-                  class="home-carousel__btn home-carousel__btn--next absolute top-1/2 right-3 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
+                  class="home-carousel__btn home-carousel__btn--next absolute top-1/2 right-3 z-10 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
                   data-carousel-next
                   aria-label="下一篇"
                 >
@@ -278,18 +278,15 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
 </BaseLayout>
 
 <style>
-  .home-carousel__slide {
-    opacity: 0;
-    transform: scale(1.02);
-    transition:
-      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    pointer-events: none;
+  .home-carousel__track {
+    will-change: transform;
+    transition: transform 0.48s cubic-bezier(0.22, 1.28, 0.36, 1);
   }
-  .home-carousel__slide.is-active {
-    opacity: 1;
-    transform: scale(1);
-    pointer-events: auto;
+  .home-carousel__track.is-dragging {
+    transition: none;
+  }
+  .home-carousel__track.is-jumping {
+    transition: none;
   }
 
   .home-carousel__dot {
@@ -310,54 +307,135 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .home-carousel__slide {
-      transition: opacity 0.2s linear;
-      transform: none;
+    .home-carousel__track {
+      transition: none;
     }
   }
 </style>
 
 <script>
   (function () {
-    const SWIPE_THRESHOLD = 40;
-    const SWIPE_AXIS_RATIO = 1.2;
+    const AXIS_RATIO = 1.15;
+    const SNAP_RATIO = 0.2;
+    const VELOCITY_THRESHOLD = 0.45; // px/ms
+    const DRAG_CLICK_LOCK = 10; // px — 超过则吞掉 click
+
+    function rubberBand(overscroll: number, dimension: number) {
+      const c = 0.55;
+      return (overscroll * dimension * c) / (dimension + c * Math.abs(overscroll));
+    }
 
     function initCarousel(root: HTMLElement) {
       if (root.dataset.carouselReady === 'true') return;
       root.dataset.carouselReady = 'true';
 
       const viewport = root.querySelector<HTMLElement>('.home-carousel__viewport');
-      const slides = Array.from(
-        root.querySelectorAll<HTMLElement>('.home-carousel__slide'),
-      );
+      const track = root.querySelector<HTMLElement>('[data-carousel-track]');
       const dots = Array.from(
         root.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]'),
       );
       const prevBtn = root.querySelector<HTMLButtonElement>('[data-carousel-prev]');
       const nextBtn = root.querySelector<HTMLButtonElement>('[data-carousel-next]');
-      if (slides.length === 0) return;
+      if (!viewport || !track) return;
 
-      const interval = Number(root.dataset.interval ?? '4500');
-      let current = 0;
+      const realSlides = Array.from(
+        track.querySelectorAll<HTMLElement>(':scope > .home-carousel__slide'),
+      );
+      if (realSlides.length === 0) return;
+
+      const loop = realSlides.length > 1;
+      const reducedMotion = () =>
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 首尾克隆，滑动循环时视觉连续
+      if (loop) {
+        const firstClone = realSlides[0].cloneNode(true) as HTMLElement;
+        const lastClone = realSlides[realSlides.length - 1].cloneNode(true) as HTMLElement;
+        for (const clone of [firstClone, lastClone]) {
+          clone.removeAttribute('data-slide');
+          clone.setAttribute('aria-hidden', 'true');
+          clone.querySelectorAll('a').forEach((a) => a.setAttribute('tabindex', '-1'));
+        }
+        track.insertBefore(lastClone, realSlides[0]);
+        track.appendChild(firstClone);
+      }
+
+      // DOM: [lastClone?][reals...][firstClone?]；真实页从 index 1 开始（有循环时）
+      const slideCount = track.children.length;
+      let index = loop ? 1 : 0;
       let timer: number | undefined;
+      const interval = Number(root.dataset.interval ?? '4500');
 
-      function show(index: number) {
-        current = (index + slides.length) % slides.length;
-        slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
-        dots.forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+      function width() {
+        return viewport.offsetWidth || 1;
+      }
+
+      function setOffset(px: number, mode: 'animate' | 'drag' | 'jump' = 'animate') {
+        track.classList.toggle('is-dragging', mode === 'drag');
+        track.classList.toggle('is-jumping', mode === 'jump');
+        track.style.transform = `translate3d(${px}px, 0, 0)`;
+        if (mode === 'jump') {
+          // 强制重绘后再去掉 jumping，避免下一次 animate 被吃掉
+          void track.offsetWidth;
+          track.classList.remove('is-jumping');
+        }
+      }
+
+      function offsetFor(i: number) {
+        return -i * width();
+      }
+
+      function readTranslateX() {
+        const raw = getComputedStyle(track).transform;
+        if (!raw || raw === 'none') return offsetFor(index);
+        try {
+          return new DOMMatrixReadOnly(raw).m41;
+        } catch {
+          return offsetFor(index);
+        }
+      }
+
+      function realIndex() {
+        if (!loop) return index;
+        if (index === 0) return realSlides.length - 1;
+        if (index === slideCount - 1) return 0;
+        return index - 1;
+      }
+
+      function syncDots() {
+        const r = realIndex();
+        dots.forEach((dot, i) => dot.classList.toggle('is-active', i === r));
+      }
+
+      function normalizeIndex() {
+        if (!loop) return;
+        if (index === 0) {
+          index = realSlides.length;
+          setOffset(offsetFor(index), 'jump');
+        } else if (index === slideCount - 1) {
+          index = 1;
+          setOffset(offsetFor(index), 'jump');
+        }
+      }
+
+      function goTo(nextIndex: number, mode: 'animate' | 'jump' = 'animate') {
+        index = Math.max(0, Math.min(slideCount - 1, nextIndex));
+        setOffset(offsetFor(index), reducedMotion() ? 'jump' : mode);
+        syncDots();
+        if (mode === 'jump' || reducedMotion()) normalizeIndex();
       }
 
       function next() {
-        show(current + 1);
+        goTo(index + 1);
       }
 
       function prev() {
-        show(current - 1);
+        goTo(index - 1);
       }
 
       function start() {
         stop();
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (!loop || reducedMotion()) return;
         timer = window.setInterval(next, interval);
       }
 
@@ -367,6 +445,11 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
           timer = undefined;
         }
       }
+
+      track.addEventListener('transitionend', (event) => {
+        if (event.target !== track || event.propertyName !== 'transform') return;
+        normalizeIndex();
+      });
 
       nextBtn?.addEventListener('click', () => {
         next();
@@ -378,111 +461,180 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
       });
       dots.forEach((dot, i) =>
         dot.addEventListener('click', () => {
-          show(i);
+          goTo(loop ? i + 1 : i);
           start();
         }),
       );
 
-      // 触摸 / 指针滑动翻页（横滑切页，竖滑仍交给页面滚动）
-      if (viewport && slides.length > 1) {
-        let pointerId: number | null = null;
-        let startX = 0;
-        let startY = 0;
-        let tracking = false;
-        let locked: 'x' | 'y' | null = null;
-        let swiped = false;
+      // —— 跟手拖拽 + 松手吸边 ——
+      let pointerId: number | null = null;
+      let startX = 0;
+      let startY = 0;
+      let dragBase = 0;
+      let tracking = false;
+      let locked: 'x' | 'y' | null = null;
+      let dragOffset = 0;
+      let moved = false;
+      let lastX = 0;
+      let lastT = 0;
+      let velocity = 0;
 
-        function onPointerDown(event: PointerEvent) {
-          if (event.pointerType === 'mouse' && event.button !== 0) return;
-          // 按钮自己处理点击，不参与滑动
-          if ((event.target as Element | null)?.closest?.('button')) return;
+      function onPointerDown(event: PointerEvent) {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        if ((event.target as Element | null)?.closest?.('button')) return;
 
-          pointerId = event.pointerId;
-          startX = event.clientX;
-          startY = event.clientY;
-          tracking = true;
-          locked = null;
-          swiped = false;
-          stop();
-        }
+        pointerId = event.pointerId;
+        startX = event.clientX;
+        startY = event.clientY;
+        lastX = startX;
+        lastT = event.timeStamp;
+        velocity = 0;
+        dragOffset = 0;
+        tracking = true;
+        locked = null;
+        moved = false;
+        stop();
 
-        function onPointerMove(event: PointerEvent) {
-          if (!tracking || event.pointerId !== pointerId) return;
+        // 从当前视觉位置接手（含动画中途），避免跟手时跳动
+        dragBase = readTranslateX();
+        const w = width();
+        index = Math.max(0, Math.min(slideCount - 1, Math.round(-dragBase / w)));
+        setOffset(dragBase, 'drag');
+      }
 
-          const dx = event.clientX - startX;
-          const dy = event.clientY - startY;
+      function onPointerMove(event: PointerEvent) {
+        if (!tracking || event.pointerId !== pointerId) return;
 
-          if (!locked) {
-            if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-            locked =
-              Math.abs(dx) > Math.abs(dy) * SWIPE_AXIS_RATIO
-                ? 'x'
-                : Math.abs(dy) > Math.abs(dx) * SWIPE_AXIS_RATIO
-                  ? 'y'
-                  : null;
-            if (locked === 'y') {
-              tracking = false;
-              start();
-              return;
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+
+        if (!locked) {
+          if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+          locked =
+            Math.abs(dx) > Math.abs(dy) * AXIS_RATIO
+              ? 'x'
+              : Math.abs(dy) > Math.abs(dx) * AXIS_RATIO
+                ? 'y'
+                : null;
+          if (locked === 'y') {
+            tracking = false;
+            setOffset(offsetFor(index), 'animate');
+            start();
+            return;
+          }
+          if (locked === 'x') {
+            try {
+              viewport.setPointerCapture(pointerId);
+            } catch {
+              /* ignore */
             }
           }
-
-          if (locked === 'x') {
-            // 已判定为横滑：阻止默认，避免拖出文字选中 / 误触链接
-            event.preventDefault();
-          }
         }
 
-        function onPointerUp(event: PointerEvent) {
-          if (!tracking || event.pointerId !== pointerId) return;
+        if (locked !== 'x') return;
+        event.preventDefault();
 
-          const dx = event.clientX - startX;
-          const dy = event.clientY - startY;
-          tracking = false;
-          pointerId = null;
+        const dt = event.timeStamp - lastT;
+        if (dt > 0) {
+          velocity = (event.clientX - lastX) / dt;
+        }
+        lastX = event.clientX;
+        lastT = event.timeStamp;
 
-          if (locked === 'x' && Math.abs(dx) >= SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
-            swiped = true;
-            if (dx < 0) next();
-            else prev();
-          }
+        const w = width();
+        let nextPx = dragBase + dx;
+        const min = offsetFor(slideCount - 1);
+        const max = 0;
 
-          locked = null;
-          start();
+        if (nextPx > max) {
+          nextPx = max + rubberBand(nextPx - max, w);
+        } else if (nextPx < min) {
+          nextPx = min - rubberBand(min - nextPx, w);
         }
 
-        function onPointerCancel(event: PointerEvent) {
-          if (event.pointerId !== pointerId) return;
-          tracking = false;
-          pointerId = null;
-          locked = null;
-          start();
-        }
-
-        // 滑动结束后吞掉紧随其后的 click，避免误进文章
-        viewport.addEventListener(
-          'click',
-          (event) => {
-            if (!swiped) return;
-            event.preventDefault();
-            event.stopPropagation();
-            swiped = false;
-          },
-          true,
-        );
-
-        viewport.addEventListener('pointerdown', onPointerDown);
-        viewport.addEventListener('pointermove', onPointerMove, { passive: false });
-        viewport.addEventListener('pointerup', onPointerUp);
-        viewport.addEventListener('pointercancel', onPointerCancel);
+        dragOffset = nextPx - offsetFor(index);
+        if (Math.abs(dx) > DRAG_CLICK_LOCK) moved = true;
+        setOffset(nextPx, 'drag');
       }
+
+      function onPointerUp(event: PointerEvent) {
+        if (!tracking || event.pointerId !== pointerId) return;
+        tracking = false;
+
+        try {
+          if (pointerId !== null && viewport.hasPointerCapture(pointerId)) {
+            viewport.releasePointerCapture(pointerId);
+          }
+        } catch {
+          /* ignore */
+        }
+        pointerId = null;
+
+        if (locked === 'x') {
+          const w = width();
+          let target = index;
+          const goNext =
+            velocity < -VELOCITY_THRESHOLD || dragOffset < -w * SNAP_RATIO;
+          const goPrev =
+            velocity > VELOCITY_THRESHOLD || dragOffset > w * SNAP_RATIO;
+
+          if (goNext) target = index + 1;
+          else if (goPrev) target = index - 1;
+
+          target = Math.max(0, Math.min(slideCount - 1, target));
+          goTo(target, 'animate');
+        } else {
+          setOffset(offsetFor(index), 'animate');
+        }
+
+        locked = null;
+        dragOffset = 0;
+        velocity = 0;
+        start();
+      }
+
+      function onPointerCancel(event: PointerEvent) {
+        if (event.pointerId !== pointerId) return;
+        tracking = false;
+        pointerId = null;
+        locked = null;
+        dragOffset = 0;
+        setOffset(offsetFor(index), 'animate');
+        start();
+      }
+
+      viewport.addEventListener(
+        'click',
+        (event) => {
+          if (!moved) return;
+          event.preventDefault();
+          event.stopPropagation();
+          moved = false;
+        },
+        true,
+      );
+
+      viewport.addEventListener('pointerdown', onPointerDown);
+      viewport.addEventListener('pointermove', onPointerMove, { passive: false });
+      viewport.addEventListener('pointerup', onPointerUp);
+      viewport.addEventListener('pointercancel', onPointerCancel);
+
+      const onResize = () => {
+        if (!root.isConnected) {
+          window.removeEventListener('resize', onResize);
+          return;
+        }
+        setOffset(offsetFor(index), 'jump');
+      };
+      window.addEventListener('resize', onResize, { passive: true });
 
       root.addEventListener('mouseenter', stop);
       root.addEventListener('mouseleave', start);
       root.addEventListener('focusin', stop);
       root.addEventListener('focusout', start);
 
-      show(0);
+      setOffset(offsetFor(index), 'jump');
+      syncDots();
       start();
     }
 

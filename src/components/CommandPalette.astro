@@ -7,17 +7,13 @@ const navItems = site.nav;
 <button
   type="button"
   id="command-trigger"
-  class="flex items-center gap-2 px-3 md:px-4 py-0.5 min-w-0 w-auto md:w-full md:max-w-[360px] rounded-full border border-outline-variant/30 bg-surface-container-low text-on-surface-variant hover:border-tertiary-fixed-dim/40 hover:text-on-surface transition-colors cursor-pointer leading-none"
-  aria-label="打开命令面板"
+  class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2 cursor-pointer"
+  aria-label="搜索"
   aria-haspopup="dialog"
   aria-expanded="false"
   aria-controls="command-palette"
 >
-  <span class="material-symbols-outlined text-[15px] leading-none shrink-0">search</span>
-  <span class="hidden md:block flex-1 min-w-0 truncate font-label text-[13px] leading-none text-left text-on-surface-variant/55">搜索文章或跳转页面…</span>
-  <kbd class="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0 shrink-0 rounded border border-outline-variant/40 bg-surface-container font-label text-[11px] leading-none text-on-surface-variant/70">
-    <span id="command-kbd-mod">⌘</span>K
-  </kbd>
+  search
 </button>
 
 <script define:vars={{ navItems }}>
@@ -26,10 +22,6 @@ const navItems = site.nav;
   let currentItems = [];
   let searchTimeout;
   let reducedMotion = false;
-
-  function getModKey() {
-    return /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl';
-  }
 
   async function loadPagefind() {
     if (pagefind) return pagefind;
@@ -50,7 +42,6 @@ const navItems = site.nav;
       input: document.getElementById('command-input'),
       list: document.getElementById('command-list'),
       trigger: document.getElementById('command-trigger'),
-      kbdMod: document.getElementById('command-kbd-mod'),
     };
   }
 
@@ -199,11 +190,10 @@ const navItems = site.nav;
   let keydownBound = false;
 
   function initCommandPalette() {
-    const { trigger, input, list, kbdMod, panel, palette } = getElements();
+    const { trigger, input, list, panel, palette } = getElements();
     if (!trigger || !input || !list || !panel || !palette) return;
 
     reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (kbdMod) kbdMod.textContent = getModKey();
 
     panel.classList.add('command-panel-closed');
 
