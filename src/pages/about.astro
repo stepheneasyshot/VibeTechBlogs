@@ -56,8 +56,12 @@ import { staticTransition } from '../utils/pageTransitions';
                 class={`absolute left-2 md:left-1/2 -translate-x-1/2 top-1 w-3 md:w-4 h-3 md:h-4 rounded-full border-2 md:border-4 border-surface z-10 ${item.active ? 'bg-tertiary-fixed-dim' : 'bg-outline-variant'}`}
                 aria-hidden="true"
               ></div>
-              <div class={`md:w-1/2 ${i % 2 === 1 ? 'md:order-1 md:text-right' : ''}`}>
-                <p class="text-on-surface-variant font-body">{item.description}</p>
+              <div class={`md:w-1/2 space-y-1.5 ${i % 2 === 1 ? 'md:order-1 md:text-right' : ''}`}>
+                {
+                  item.description.split('\n').map((line) => (
+                    <p class="text-on-surface-variant font-body text-body-md leading-relaxed">{line}</p>
+                  ))
+                }
               </div>
             </div>
           ))
