@@ -116,11 +116,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       })();
     </script>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col relative">
+    <!-- 氛围背景：色斑跟随 data-theme / 明暗；文章页自动减弱 -->
+    <div
+      class="site-ambient"
+      aria-hidden="true"
+      transition:persist="site-ambient"
+    >
+      <div class="site-ambient__glow site-ambient__glow--a"></div>
+      <div class="site-ambient__glow site-ambient__glow--b"></div>
+      <div class="site-ambient__glow site-ambient__glow--c"></div>
+      <div class="site-ambient__grain"></div>
+    </div>
     <Header currentPath={Astro.url.pathname} />
     <CommandPaletteDialog />
     <main
-      class="flex-1"
+      class="flex-1 relative z-[1]"
       data-page-kind={pageKind}
       transition:name="main-content"
     >

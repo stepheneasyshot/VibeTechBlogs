@@ -208,6 +208,138 @@
     color: var(--color-on-background);
   }
 
+  /* —— Ambient page atmosphere (brand-tinted drifting glows) —— */
+  .site-ambient {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    contain: paint;
+  }
+
+  .site-ambient__glow {
+    position: absolute;
+    /* 不用 border-radius 裁切：径向渐变本身成圆，裁切易在边缘留下硬边 */
+    opacity: 1;
+  }
+
+  .site-ambient__glow--a {
+    width: min(85vw, 920px);
+    height: min(85vw, 920px);
+    top: -22%;
+    left: -18%;
+    background: radial-gradient(
+      circle at 40% 40%,
+      color-mix(in srgb, var(--color-primary) 34%, transparent) 0%,
+      color-mix(in srgb, var(--color-primary) 18%, transparent) 28%,
+      color-mix(in srgb, var(--color-primary) 7%, transparent) 52%,
+      transparent 78%
+    );
+    animation: ambient-drift-a 14s ease-in-out infinite;
+  }
+
+  .site-ambient__glow--b {
+    width: min(72vw, 760px);
+    height: min(72vw, 760px);
+    top: 8%;
+    right: -20%;
+    background: radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--color-tertiary) 28%, transparent) 0%,
+      color-mix(in srgb, var(--color-tertiary) 14%, transparent) 30%,
+      color-mix(in srgb, var(--color-tertiary) 5%, transparent) 55%,
+      transparent 80%
+    );
+    animation: ambient-drift-b 18s ease-in-out infinite;
+  }
+
+  .site-ambient__glow--c {
+    width: min(68vw, 700px);
+    height: min(68vw, 700px);
+    bottom: -18%;
+    left: 18%;
+    background: radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--color-tertiary-fixed-dim) 26%, transparent) 0%,
+      color-mix(in srgb, var(--color-tertiary-fixed-dim) 12%, transparent) 32%,
+      color-mix(in srgb, var(--color-tertiary-fixed-dim) 4%, transparent) 58%,
+      transparent 82%
+    );
+    animation: ambient-drift-c 22s ease-in-out infinite;
+  }
+
+  .site-ambient__grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      color-mix(in srgb, var(--color-on-surface) 55%, transparent) 1px,
+      transparent 0
+    );
+    background-size: 20px 20px;
+  }
+
+  html.dark .site-ambient__glow {
+    opacity: 0.85;
+  }
+
+  html.dark .site-ambient__grain {
+    opacity: 0.045;
+  }
+
+  /* 文章页：减弱氛围，避免干扰长文阅读 */
+  html[data-page-kind='post'] .site-ambient {
+    opacity: 0.45;
+  }
+
+  /* 位移用 vw/vh：百分比相对自身尺寸，大色斑几乎看不出移动 */
+  @keyframes ambient-drift-a {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    33% {
+      transform: translate3d(14vw, 10vh, 0) scale(1.12);
+    }
+    66% {
+      transform: translate3d(6vw, 18vh, 0) scale(0.94);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes ambient-drift-b {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    33% {
+      transform: translate3d(-12vw, 8vh, 0) scale(1.1);
+    }
+    66% {
+      transform: translate3d(-4vw, 16vh, 0) scale(0.92);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
+  @keyframes ambient-drift-c {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    33% {
+      transform: translate3d(10vw, -12vh, 0) scale(1.08);
+    }
+    66% {
+      transform: translate3d(-8vw, -4vh, 0) scale(0.95);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+  }
+
   .dark {
     /* Elevation for dark mode */
     --shadow-elevation-1: 0 1px 3px 1px rgb(0 0 0 / 0.28), 0 1px 2px 0 rgb(0 0 0 / 0.2);
@@ -649,6 +781,10 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .site-ambient__glow {
+      animation: none;
+    }
+
     .stagger-item,
     .stagger-item-incremental {
       animation: none;
