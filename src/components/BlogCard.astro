@@ -21,15 +21,15 @@ const slug = getPostSlug(post);
     <CoverImage
       src={image}
       alt={title}
-      class="mb-4 w-full rounded-xl border border-outline-variant shadow-sm"
+      class="mb-4 w-full rounded-lg elevation-1"
       imgClass="group-hover:scale-[1.02] transition-transform duration-500"
       transitionName={`cover-${slug}`}
     />
-    <p class="font-label text-label-md text-secondary mb-2">
+    <p class="font-label text-label-md text-on-surface-variant mb-2">
       {categories.join(' · ')} · {formatDate(pubDate)}
     </p>
     <h3
-      class="font-headline text-headline-sm mb-3 group-hover:text-on-primary-container transition-colors font-semibold"
+      class="font-headline text-headline-sm mb-3 group-hover:text-tertiary-fixed-dim transition-colors font-semibold"
       transition:name={`title-${slug}`}
     >
       {title}

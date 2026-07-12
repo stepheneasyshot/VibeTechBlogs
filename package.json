@@ -3,8 +3,12 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "generate:themes": "node --experimental-strip-types scripts/generate-themes.ts",
+    "verify:themes": "node --experimental-strip-types scripts/verify-themes.ts",
+    "predev": "npm run generate:themes",
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist && node scripts/verify-transitions.mjs",
+    "prebuild": "npm run generate:themes",
+    "build": "astro build && pagefind --site dist && npm run verify:themes && node scripts/verify-transitions.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

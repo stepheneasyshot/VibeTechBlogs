@@ -79,7 +79,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
         <!-- Manifesto -->
         <div class="max-w-content-width">
           <p
-            class="font-label text-label-md text-on-primary-container mb-4 tracking-widest uppercase stagger-item"
+            class="font-label text-label-md text-on-surface-variant mb-4 tracking-widest uppercase stagger-item"
             style="--stagger-i: 0"
           >
             {site.hero.eyebrow}
@@ -100,7 +100,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
           <div class="flex flex-wrap gap-3 mt-stack-md stagger-item" style="--stagger-i: 3">
             <a
               href="/blog/"
-              class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-tertiary-fixed-dim text-on-tertiary-fixed font-label text-label-md hover:bg-tertiary-fixed transition-colors"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-on-primary font-label text-label-md elevation-1 hover:brightness-110 transition-[filter,box-shadow]"
             >
               阅读博客
               <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -117,7 +117,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
               data-carousel
               data-interval="4500"
             >
-              <div class="home-carousel__viewport relative aspect-video rounded-2xl border border-outline-variant bg-surface-container-lowest overflow-hidden touch-pan-y">
+              <div class="home-carousel__viewport relative aspect-video rounded-xl bg-surface-container-lowest elevation-2 overflow-hidden touch-pan-y">
                 <div class="home-carousel__track absolute inset-y-0 left-0 flex h-full w-full" data-carousel-track>
                   {carouselPosts.map((post, index) => {
                     return (
@@ -133,9 +133,9 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
                             class="absolute inset-0 h-full w-full rounded-none border-0"
                             imgClass="group-hover:scale-105 transition-transform duration-700"
                           />
-                          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                          <div class="absolute inset-x-0 bottom-0 p-5 text-white">
-                            <p class="font-label text-label-md text-white/70 mb-2 tracking-wider">
+                          <div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/30 to-transparent" />
+                          <div class="absolute inset-x-0 bottom-0 p-5 text-inverse-on-surface">
+                            <p class="font-label text-label-md text-inverse-on-surface/70 mb-2 tracking-wider">
                               {formatDate(post.data.pubDate)}
                             </p>
                             <h2
@@ -143,7 +143,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
                             >
                               {post.data.title}
                             </h2>
-                            <p class="font-body text-[12px] text-white/75 line-clamp-2">
+                            <p class="font-body text-[12px] text-inverse-on-surface/75 line-clamp-2">
                               {post.data.description}
                             </p>
                           </div>
@@ -156,7 +156,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
                 <!-- Prev / Next -->
                 <button
                   type="button"
-                  class="home-carousel__btn home-carousel__btn--prev absolute top-1/2 left-3 z-10 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
+                  class="home-carousel__btn home-carousel__btn--prev absolute top-1/2 left-3 z-10 -translate-y-1/2 w-10 h-10 rounded-full bg-inverse-surface/50 text-inverse-on-surface hover:bg-inverse-surface/70 backdrop-blur-sm flex items-center justify-center transition-colors"
                   data-carousel-prev
                   aria-label="上一篇"
                 >
@@ -164,7 +164,7 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
                 </button>
                 <button
                   type="button"
-                  class="home-carousel__btn home-carousel__btn--next absolute top-1/2 right-3 z-10 -translate-y-1/2 w-9 h-9 rounded-full bg-black/40 text-white hover:bg-black/60 backdrop-blur-sm flex items-center justify-center transition-colors"
+                  class="home-carousel__btn home-carousel__btn--next absolute top-1/2 right-3 z-10 -translate-y-1/2 w-10 h-10 rounded-full bg-inverse-surface/50 text-inverse-on-surface hover:bg-inverse-surface/70 backdrop-blur-sm flex items-center justify-center transition-colors"
                   data-carousel-next
                   aria-label="下一篇"
                 >
@@ -201,18 +201,18 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="relative overflow-hidden border border-outline-variant rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 block"
+              class="resource-card relative isolate rounded-xl bg-surface-container-low elevation-1 transition-shadow duration-300 group block"
             >
               {link.gradient && (
                 <div
-                  class="absolute inset-0"
+                  class="absolute inset-0 rounded-[inherit]"
                   style={`background-image: ${link.gradient};`}
                   aria-hidden="true"
                 />
               )}
               {link.gradient && (
                 <div
-                  class="absolute inset-0 backdrop-blur-md backdrop-saturate-150 bg-surface-container-lowest/60 dark:bg-surface-container-lowest/55"
+                  class="absolute inset-0 rounded-[inherit] bg-surface-container-low/80"
                   aria-hidden="true"
                 />
               )}
@@ -246,15 +246,15 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="relative overflow-hidden border border-outline-variant rounded-lg bg-surface-container-lowest shadow-sm hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 block"
+              class="resource-card relative isolate rounded-lg bg-surface-container-low elevation-1 transition-shadow duration-300 group block"
             >
               <div
-                class="absolute inset-0"
+                class="absolute inset-0 rounded-[inherit]"
                 style={`background-image: ${readingGradients[i]};`}
                 aria-hidden="true"
               />
               <div
-                class="absolute inset-0 backdrop-blur-md backdrop-saturate-150 bg-surface-container-lowest/60 dark:bg-surface-container-lowest/55"
+                class="absolute inset-0 rounded-[inherit] bg-surface-container-low/80"
                 aria-hidden="true"
               />
               <div class="relative p-3 flex flex-col h-full min-h-[96px]">
@@ -278,6 +278,11 @@ const readingGradients = pickReadingGradients(recommendedReading.length);
 </BaseLayout>
 
 <style>
+  /* Round decorative cards without overflow:hidden + blur (avoids jagged AA edges) */
+  .resource-card:hover {
+    box-shadow: var(--shadow-elevation-2);
+  }
+
   .home-carousel__track {
     will-change: transform;
     transition: transform 0.48s cubic-bezier(0.22, 1.28, 0.36, 1);

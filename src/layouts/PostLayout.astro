@@ -45,7 +45,7 @@ const readTime = getReadingTime(body);
             categories.map((cat) => (
               <a
                 href={getCategoryUrl(cat)}
-                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full hover:opacity-80 transition-opacity"
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full hover:brightness-95 transition-[filter]"
               >
                 {cat}
               </a>
@@ -78,7 +78,7 @@ const readTime = getReadingTime(body);
       <CoverImage
         src={image}
         alt={title}
-        class="mb-stack-xl rounded-xl border border-outline-variant/20 shadow-sm"
+        class="mb-stack-xl rounded-xl elevation-1"
         transitionName={`cover-${slug}`}
       />
 
@@ -91,7 +91,7 @@ const readTime = getReadingTime(body);
           categories.map((cat) => (
             <a
               href={getCategoryUrl(cat)}
-              class="px-4 py-1.5 bg-surface-container-high rounded-full font-label text-label-md text-on-surface-variant hover:text-tertiary-fixed-dim hover:bg-surface-container transition-colors"
+              class="px-4 py-1.5 bg-surface-container-high rounded-full font-label text-label-md text-on-surface-variant hover:text-on-secondary-container hover:bg-secondary-container transition-colors"
             >
               #{cat.toLowerCase()}
             </a>

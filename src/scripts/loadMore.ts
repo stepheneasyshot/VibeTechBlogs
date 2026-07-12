@@ -35,16 +35,16 @@ export function renderCard(
     >
       <a href="${escapeHtml(post.url)}" class="block">
         <div
-          class="relative w-full aspect-video overflow-hidden mb-4 w-full rounded-xl border border-outline-variant ${coverPlaceholder}"
+          class="relative w-full aspect-video overflow-hidden mb-4 w-full rounded-lg elevation-1 ${coverPlaceholder}"
           style="view-transition-name: cover-${escapeHtml(post.slug)}"
         >
           ${coverInner}
         </div>
-        <p class="font-label text-label-md text-secondary mb-2">
+        <p class="font-label text-label-md text-on-surface-variant mb-2">
           ${escapeHtml(cats)} · ${escapeHtml(post.pubDate)}
         </p>
         <h3
-          class="font-headline text-headline-sm mb-3 group-hover:text-on-primary-container transition-colors font-semibold"
+          class="font-headline text-headline-sm mb-3 group-hover:text-tertiary-fixed-dim transition-colors font-semibold"
           style="view-transition-name: title-${escapeHtml(post.slug)}"
         >
           ${escapeHtml(post.title)}

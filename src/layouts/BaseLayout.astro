@@ -25,7 +25,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="forest">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -53,15 +53,34 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <ClientRouter />
     <script is:inline>
       (function () {
+        var DEFAULT_PALETTE = 'forest';
+        var KNOWN_PALETTES = {
+          default: 1,
+          ocean: 1,
+          forest: 1,
+          blossom: 1,
+          violet: 1,
+          ember: 1,
+          indigo: 1,
+          sand: 1,
+        };
+
         function isDarkTheme() {
           var stored = localStorage.getItem('theme');
           if (stored === 'dark') return true;
           if (stored === 'light') return false;
-          return true;
+          return false;
+        }
+
+        function getPalette() {
+          var stored = localStorage.getItem('palette');
+          if (stored && KNOWN_PALETTES[stored]) return stored;
+          return DEFAULT_PALETTE;
         }
 
         function applyTheme(doc) {
           var root = doc && doc.documentElement ? doc.documentElement : document.documentElement;
+          root.setAttribute('data-theme', getPalette());
           root.classList.toggle('dark', isDarkTheme());
         }
 
@@ -109,15 +128,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </main>
     <Footer />
 
-    <!-- 回到顶部按钮：放在 body 层级，避免被 header 层叠上下文影响 fixed 定位 -->
+    <!-- 回到顶部 FAB：surface + elevation，无描边框 -->
     <button
       type="button"
       id="back-to-top"
-      class="back-to-top fixed bottom-8 right-8 z-40 flex items-center justify-center w-11 h-11 rounded-full border border-outline-variant bg-surface-container-lowest text-on-surface-variant shadow-lg cursor-pointer"
+      class="back-to-top fixed bottom-8 right-8 z-40 flex items-center justify-center w-14 h-14 rounded-xl bg-primary-container text-on-primary-container elevation-3 cursor-pointer hover:brightness-110 transition-[filter,box-shadow]"
       aria-label="回到顶部"
       hidden
     >
-      <span class="material-symbols-outlined text-[22px]">keyboard_arrow_up</span>
+      <span class="material-symbols-outlined text-[24px]">keyboard_arrow_up</span>
     </button>
   </body>
 </html>

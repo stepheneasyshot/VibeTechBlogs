@@ -1,27 +1,92 @@
-<button
-  id="theme-toggle"
-  type="button"
-  class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-2 cursor-pointer"
-  aria-label="切换主题"
->
-  light_mode
-</button>
+---
+import { themePickerMeta } from '../styles/themes/index';
+---
 
-<script>
+<div class="relative" id="theme-picker-root" data-theme-picker>
+  <button
+    id="theme-picker-trigger"
+    type="button"
+    class="inline-flex items-center justify-center w-10 h-10 rounded-full text-tertiary-fixed-dim hover:bg-primary/10 transition-colors cursor-pointer"
+    aria-label="选择主题"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls="theme-picker-panel"
+  >
+    <span class="material-symbols-outlined text-[22px]">palette</span>
+  </button>
+
+  <div
+    id="theme-picker-panel"
+    class="theme-picker-panel absolute right-0 top-[calc(100%+8px)] z-[60] w-[min(20rem,calc(100vw-2rem))] rounded-xl bg-surface-container-high elevation-3 p-4 hidden"
+    role="dialog"
+    aria-label="主题设置"
+    aria-hidden="true"
+  >
+    <p class="font-label text-label-md text-on-surface-variant mb-2">外观</p>
+    <div class="grid grid-cols-2 gap-2 mb-4">
+      <button
+        type="button"
+        data-theme-mode="light"
+        class="theme-picker-option flex flex-col items-stretch gap-2 p-2 rounded-lg border-2 border-transparent hover:bg-surface-container-highest transition-colors cursor-pointer text-left"
+      >
+        <span
+          class="block h-10 rounded-md border border-outline-variant/40"
+          style={`background: ${themePickerMeta.modeLightSwatch}`}
+        ></span>
+        <span class="font-label text-[12px] text-on-surface px-0.5">浅色</span>
+      </button>
+      <button
+        type="button"
+        data-theme-mode="dark"
+        class="theme-picker-option flex flex-col items-stretch gap-2 p-2 rounded-lg border-2 border-transparent hover:bg-surface-container-highest transition-colors cursor-pointer text-left"
+      >
+        <span
+          class="block h-10 rounded-md border border-outline-variant/40"
+          style={`background: ${themePickerMeta.modeDarkSwatch}`}
+        ></span>
+        <span class="font-label text-[12px] text-on-surface px-0.5">深色</span>
+      </button>
+    </div>
+
+    <p class="font-label text-label-md text-on-surface-variant mb-2">主题色</p>
+    <div class="grid grid-cols-4 gap-2">
+      {
+        themePickerMeta.colors.map((theme) => (
+          <button
+            type="button"
+            data-theme-palette={theme.id}
+            class="theme-picker-option flex flex-col items-center gap-1.5 p-1.5 rounded-lg border-2 border-transparent hover:bg-surface-container-highest transition-colors cursor-pointer"
+            title={theme.label}
+            aria-label={theme.label}
+          >
+            <span
+              class="theme-swatch block w-8 h-8 rounded-md elevation-1"
+              style={`background-color: ${theme.swatch}`}
+            ></span>
+            <span class="font-label text-[10px] text-on-surface-variant leading-none">{theme.label}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ themePickerMeta }}>
   const FALLBACK_TRANSITION_MS = 400;
+  const BASE_PALETTE = themePickerMeta.baseId;
+  const VALID_PALETTES = new Set(themePickerMeta.colors.map((t) => t.id));
 
-  function updateToggleIcon(dark: boolean) {
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.textContent = dark ? 'dark_mode' : 'light_mode';
+  function getPalette() {
+    const stored = localStorage.getItem('palette');
+    if (stored && VALID_PALETTES.has(stored)) return stored;
+    return BASE_PALETTE;
   }
 
-  function applyThemeClass(dark: boolean) {
-    document.documentElement.classList.toggle('dark', dark);
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-    updateToggleIcon(dark);
+  function isDark() {
+    return document.documentElement.classList.contains('dark');
   }
 
-  function getRevealRadius(x: number, y: number) {
+  function getRevealRadius(x, y) {
     return (
       Math.hypot(
         Math.max(x, window.innerWidth - x),
@@ -30,37 +95,45 @@
     );
   }
 
-  function setThemeFallback(dark: boolean) {
+  /** Apply palette and/or mode independently. Pass undefined to keep current. */
+  function applyAppearance(opts, origin) {
     const root = document.documentElement;
-    root.classList.add('theme-transition');
-    void root.offsetWidth;
-    applyThemeClass(dark);
-    window.setTimeout(() => root.classList.remove('theme-transition'), FALLBACK_TRANSITION_MS);
-  }
+    const nextPalette =
+      opts.palette !== undefined
+        ? VALID_PALETTES.has(opts.palette)
+          ? opts.palette
+          : BASE_PALETTE
+        : getPalette();
+    const nextDark = opts.dark !== undefined ? opts.dark : isDark();
 
-  function setThemeWithReveal(dark: boolean, origin: { x: number; y: number }) {
+    const apply = () => {
+      root.setAttribute('data-theme', nextPalette);
+      root.classList.toggle('dark', nextDark);
+      localStorage.setItem('palette', nextPalette);
+      localStorage.setItem('theme', nextDark ? 'dark' : 'light');
+      syncPickerSelection();
+    };
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const canReveal =
-      !reducedMotion && typeof document.startViewTransition === 'function';
+      !reducedMotion &&
+      origin &&
+      typeof document.startViewTransition === 'function';
 
     if (!canReveal) {
-      setThemeFallback(dark);
+      root.classList.add('theme-transition');
+      void root.offsetWidth;
+      apply();
+      window.setTimeout(() => root.classList.remove('theme-transition'), FALLBACK_TRANSITION_MS);
       return;
     }
 
-    const root = document.documentElement;
-    const { x, y } = origin;
-    const radius = getRevealRadius(x, y);
-
-    root.style.setProperty('--theme-reveal-x', `${x}px`);
-    root.style.setProperty('--theme-reveal-y', `${y}px`);
-    root.style.setProperty('--theme-reveal-r', `${radius}px`);
+    root.style.setProperty('--theme-reveal-x', `${origin.x}px`);
+    root.style.setProperty('--theme-reveal-y', `${origin.y}px`);
+    root.style.setProperty('--theme-reveal-r', `${getRevealRadius(origin.x, origin.y)}px`);
     root.classList.add('theme-revealing');
 
-    const transition = document.startViewTransition(() => {
-      applyThemeClass(dark);
-    });
-
+    const transition = document.startViewTransition(apply);
     transition.finished.finally(() => {
       root.classList.remove('theme-revealing');
       root.style.removeProperty('--theme-reveal-x');
@@ -69,21 +142,103 @@
     });
   }
 
-  function initThemeToggle() {
-    const btn = document.getElementById('theme-toggle');
-    if (!btn || btn.dataset.bound === '1') return;
-    btn.dataset.bound = '1';
+  function syncPickerSelection() {
+    const palette = getPalette();
+    const dark = isDark();
 
-    updateToggleIcon(document.documentElement.classList.contains('dark'));
+    document.querySelectorAll('[data-theme-mode]').forEach((btn) => {
+      const mode = btn.getAttribute('data-theme-mode');
+      const selected = (mode === 'dark' && dark) || (mode === 'light' && !dark);
+      btn.classList.toggle('border-primary', selected);
+      btn.classList.toggle('bg-surface-container-highest', selected);
+      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
 
-    btn.onclick = (event) => {
-      const rect = btn.getBoundingClientRect();
-      const x = event instanceof MouseEvent ? event.clientX : rect.left + rect.width / 2;
-      const y = event instanceof MouseEvent ? event.clientY : rect.top + rect.height / 2;
-      setThemeWithReveal(!document.documentElement.classList.contains('dark'), { x, y });
-    };
+    document.querySelectorAll('[data-theme-palette]').forEach((btn) => {
+      const id = btn.getAttribute('data-theme-palette');
+      const selected = id === palette;
+      btn.classList.toggle('border-primary', selected);
+      btn.classList.toggle('bg-surface-container-highest', selected);
+      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
   }
 
-  initThemeToggle();
-  document.addEventListener('astro:page-load', initThemeToggle);
+  function setPanelOpen(open) {
+    const panel = document.getElementById('theme-picker-panel');
+    const trigger = document.getElementById('theme-picker-trigger');
+    if (!panel || !trigger) return;
+    panel.classList.toggle('hidden', !open);
+    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) syncPickerSelection();
+  }
+
+  function isPanelOpen() {
+    const panel = document.getElementById('theme-picker-panel');
+    return panel ? !panel.classList.contains('hidden') : false;
+  }
+
+  function eventOrigin(event, fallbackEl) {
+    if (event instanceof MouseEvent) return { x: event.clientX, y: event.clientY };
+    const rect = fallbackEl.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  }
+
+  function initThemePicker() {
+    const root = document.getElementById('theme-picker-root');
+    const trigger = document.getElementById('theme-picker-trigger');
+    const panel = document.getElementById('theme-picker-panel');
+    if (!root || !trigger || !panel || root.dataset.bound === '1') return;
+    root.dataset.bound = '1';
+
+    document.documentElement.setAttribute('data-theme', getPalette());
+    syncPickerSelection();
+
+    trigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      setPanelOpen(!isPanelOpen());
+    });
+
+    panel.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const target = event.target instanceof Element ? event.target : null;
+      const modeBtn = target?.closest?.('[data-theme-mode]');
+      const paletteBtn = target?.closest?.('[data-theme-palette]');
+      const origin = eventOrigin(event, trigger);
+
+      if (modeBtn) {
+        const mode = modeBtn.getAttribute('data-theme-mode');
+        // Mode only — keep current color scheme
+        applyAppearance({ dark: mode === 'dark' }, origin);
+        return;
+      }
+
+      if (paletteBtn) {
+        const next = paletteBtn.getAttribute('data-theme-palette') || BASE_PALETTE;
+        // Palette only — keep current light/dark
+        applyAppearance({ palette: next }, origin);
+      }
+    });
+
+    document.addEventListener(
+      'click',
+      (event) => {
+        if (!isPanelOpen()) return;
+        const t = event.target;
+        if (t instanceof Node && root.contains(t)) return;
+        setPanelOpen(false);
+      },
+      true,
+    );
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isPanelOpen()) {
+        setPanelOpen(false);
+        trigger.focus();
+      }
+    });
+  }
+
+  initThemePicker();
+  document.addEventListener('astro:page-load', initThemePicker);
 </script>

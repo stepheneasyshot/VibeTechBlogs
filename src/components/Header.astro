@@ -32,13 +32,13 @@ function isActive(href: string) {
   persist 的值只是匹配 key，不会设置 view-transition-name。
 -->
 <header
-  class="fixed top-0 w-full z-50 bg-background border-b border-outline-variant/60"
+  class="fixed top-0 w-full z-50 bg-surface-wash-header backdrop-blur-md elevation-1"
   transition:persist="site-header"
   transition:name="site-header"
   transition:animate="none"
 >
   <ReadingProgress />
-  <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-12">
+  <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-14">
     <div class="flex items-center gap-3 md:gap-6 min-w-0">
       <a
         href="/"

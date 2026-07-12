@@ -66,7 +66,7 @@ function renderLoadMore(remaining: number): string {
       <button
         id="load-more-btn"
         type="button"
-        class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-outline-variant font-label text-label-md text-on-surface hover:bg-surface-container-high hover:border-tertiary-fixed-dim/40 transition-colors"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-outline-variant font-label text-label-md text-on-surface hover:bg-surface-container-high transition-colors"
       >
         <span class="load-more-label">加载更多</span>
         <span class="material-symbols-outlined text-[18px] load-more-icon">expand_more</span>
@@ -80,8 +80,8 @@ function renderLoadMore(remaining: number): string {
     </div>`;
 }
 
-const ACTIVE_LINK_CLASSES = ['bg-secondary-container', 'text-on-secondary-container', 'border-tertiary-fixed-dim'];
-const INACTIVE_LINK_CLASSES = ['text-on-surface-variant', 'border-transparent', 'hover:bg-surface-container-high'];
+const ACTIVE_LINK_CLASSES = ['bg-secondary-container', 'text-on-secondary-container'];
+const INACTIVE_LINK_CLASSES = ['text-on-surface-variant', 'hover:bg-surface-container-high'];
 
 function updateActive(category: string | null) {
   document.querySelectorAll<HTMLAnchorElement>('[data-cat-link]').forEach((a) => {

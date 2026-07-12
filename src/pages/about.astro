@@ -7,7 +7,7 @@ import { staticTransition } from '../utils/pageTransitions';
 <BaseLayout title={`关于 | ${site.name}`} description={site.author.bio} pageKind="static" pageTransition={staticTransition}>
   <div class="pt-20 pb-stack-md max-w-[1200px] mx-auto px-gutter">
     <section class="flex flex-col md:flex-row items-center gap-stack-lg mb-stack-xl">
-      <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-outline-variant p-2 shrink-0">
+      <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden elevation-2 p-1.5 bg-surface-container-highest shrink-0">
         <img
           class="w-full h-full object-cover rounded-full"
           src={site.author.avatar}
@@ -16,10 +16,10 @@ import { staticTransition } from '../utils/pageTransitions';
         />
       </div>
       <div class="max-w-[720px]">
-        <span class="font-label text-label-md text-secondary tracking-widest block mb-2 uppercase">
+        <span class="font-label text-label-md text-on-surface-variant tracking-widest block mb-2 uppercase">
           {site.author.role} & 作者
         </span>
-        <h1 class="font-headline text-headline-lg mb-4 text-primary font-bold">
+        <h1 class="font-headline text-headline-lg mb-4 text-on-surface font-bold">
           你好，我是 {site.author.name}。
         </h1>
         <div class="font-body text-body-lg text-on-surface-variant leading-relaxed space-y-4">
@@ -32,7 +32,7 @@ import { staticTransition } from '../utils/pageTransitions';
         <div class="flex flex-wrap gap-2 mt-6">
           {
             site.skills.map((skill) => (
-              <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-lg">
+              <span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-label-md rounded-full">
                 {skill}
               </span>
             ))
@@ -49,8 +49,8 @@ import { staticTransition } from '../utils/pageTransitions';
           site.timeline.map((item, i) => (
             <div class="mb-stack-lg last:mb-0 relative flex flex-col md:flex-row items-start md:items-start gap-6 md:gap-8 pl-8 md:pl-0">
               <div class={`md:w-1/2 ${i % 2 === 1 ? 'md:order-2' : 'md:text-right'}`}>
-                <h3 class="font-headline text-headline-sm text-primary font-semibold">{item.title}</h3>
-                <p class="font-label text-label-md text-secondary">{item.period}</p>
+                <h3 class="font-headline text-headline-sm text-on-surface font-semibold">{item.title}</h3>
+                <p class="font-label text-label-md text-on-surface-variant">{item.period}</p>
               </div>
               <div
                 class={`absolute left-2 md:left-1/2 -translate-x-1/2 top-1 w-3 md:w-4 h-3 md:h-4 rounded-full border-2 md:border-4 border-surface z-10 ${item.active ? 'bg-tertiary-fixed-dim' : 'bg-outline-variant'}`}
