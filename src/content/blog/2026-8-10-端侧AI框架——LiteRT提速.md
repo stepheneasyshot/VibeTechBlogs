@@ -11,7 +11,7 @@ image: "/images/blog/blogs_litert_performance_cover.webp"
 # 端侧AI框架——LiteRT提速
 如果你关注的是 **Android 端 Edge AI / LiteRT 推理性能**，现在 LiteRT 生态里真正有效的提速手段，已经不只是以前 TFLite 那种“开 XNNPACK / GPU Delegate”了。到 2026 年，Google 的主线明显变成：
 
-**模型优化 → CompiledModel → CPU / GPU / NPU 自动或显式调度 → AOT 编译 → 厂商 NPU Accelerator。** LiteRT 目前已经把 CPU、GPU、NPU 加速统一到一套运行时体系里。([Google AI for Developers][1])
+**模型优化 → CompiledModel → CPU / GPU / NPU 自动或显式调度 → AOT 编译 → 厂商 NPU Accelerator。** LiteRT 目前已经把 CPU、GPU、NPU 加速统一到一套运行时体系里。[Google AI for Developers](https://ai.google.dev/edge/litert)
 
 我按照“实际收益”和 Android 落地价值给你分一下。
 
@@ -19,14 +19,14 @@ image: "/images/blog/blogs_litert_performance_cover.webp"
 
 这是现在 LiteRT 提速最大的方向。
 
-LiteRT 已经支持通过 `CompiledModel API` 调用不同 SoC 的 NPU，并且 Google 正在逐步把 Qualcomm、MediaTek、Google Tensor 这些平台统一起来。([Google AI for Developers][2])
+LiteRT 已经支持通过 `CompiledModel API` 调用不同 SoC 的 NPU，并且 Google 正在逐步把 Qualcomm、MediaTek、Google Tensor 这些平台统一起来。[Google AI for Developers](https://ai.google.dev/edge/litert/android/npu/overview)
 
 以 Qualcomm 为例，现在已经有新的 **LiteRT Qualcomm AI Engine Direct / QNN Accelerator**，支持两种方式：
 
 * On-device compilation：模型首次运行时在设备端针对 SoC 编译
 * AOT compilation：开发阶段直接针对目标 SoC 预编译
 
-Google 自己给出的部分 benchmark 中，QNN NPU 相对 CPU 最高达到约 **100×**，相对 GPU 最高约 **10×**；当然这是特定模型、特定旗舰 SoC 下的上限，不应该理解成普遍性能倍率。([Google 开发者博客][3])
+Google 自己给出的部分 benchmark 中，QNN NPU 相对 CPU 最高达到约 **100×**，相对 GPU 最高约 **10×**；当然这是特定模型、特定旗舰 SoC 下的上限，不应该理解成普遍性能倍率。[Google 开发者博客](https://developers.googleblog.com/unlocking-peak-performance-on-qualcomm-npu-with-litert/)
 
 对于手机厂或者能够控制设备 SKU 的场景，我会把优先级排成：
 
@@ -55,7 +55,7 @@ AOT 是 LiteRT 这一代架构非常重要的变化。
 * NPU graph compilation
 * 首次加载 latency
 
-Google 现在甚至支持把不同 SoC 的编译产物封装进 **AI Pack**，然后通过 Google Play for On-device AI 根据设备下发对应版本。([Google 开发者博客][3])
+Google 现在甚至支持把不同 SoC 的编译产物封装进 **AI Pack**，然后通过 Google Play for On-device AI 根据设备下发对应版本。[Google 开发者博客](https://developers.googleblog.com/unlocking-peak-performance-on-qualcomm-npu-with-litert/)
 
 这对商业 App 很重要，因为端侧 AI 不只是关注 `tokens/s` 或单次 inference latency，还要考虑：
 
@@ -67,7 +67,7 @@ Google 现在甚至支持把不同 SoC 的编译产物封装进 **AI Pack**，�
 
 如果不能保证 NPU 支持，我反而会优先考虑 GPU。
 
-LiteRT 新的 GPU backend 相比旧 TFLite GPU delegate 也在继续优化。Google 2026 年公开资料中给出的指标是，新 LiteRT GPU 路径相比旧 TFLite GPU 最多大约 **1.4×** 性能提升。([Google 开发者博客][4])
+LiteRT 新的 GPU backend 相比旧 TFLite GPU delegate 也在继续优化。Google 2026 年公开资料中给出的指标是，新 LiteRT GPU 路径相比旧 TFLite GPU 最多大约 **1.4×** 性能提升。[Google 开发者博客](https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/)
 
 GPU 比 NPU 最大的优势是：
 
@@ -85,7 +85,7 @@ Android 手机上：
 
 **NPU → GPU → CPU fallback**
 
-LiteRT 自己现在也在往自动硬件选择方向发展。([Google AI for Developers][5])
+LiteRT 自己现在也在往自动硬件选择方向发展。[Google AI for Developers](https://ai.google.dev/edge/litert/inference)
 
 ---
 
@@ -123,7 +123,7 @@ unsupported op → CPU
 
 > **full delegation 往往比理论算力更重要。**
 
-Google 在 Qualcomm NPU benchmark 里也特别强调了 full model delegation：支持更多 LiteRT op 后，72 个模型里有 64 个可以完整委托给 NPU，这也是性能提升的重要来源。([Google 开发者博客][3])
+Google 在 Qualcomm NPU benchmark 里也特别强调了 full model delegation：支持更多 LiteRT op 后，72 个模型里有 64 个可以完整委托给 NPU，这也是性能提升的重要来源。[Google 开发者博客](https://developers.googleblog.com/unlocking-peak-performance-on-qualcomm-npu-with-litert/)
 
 ---
 
@@ -177,7 +177,7 @@ INT4 ≈ 1.5 GB
 * bandwidth
 * token latency
 
-Google 的 AI Edge Quantizer 目前也提供 layer-level quantization 配置，用来在精度和性能之间做权衡。([Google 开发者博客][6])
+Google 的 AI Edge Quantizer 目前也提供 layer-level quantization 配置，用来在精度和性能之间做权衡。[Google 开发者博客](https://developers.googleblog.com/litertjs-googles-high-performance-web-ai-inference/)
 
 ---
 
@@ -199,7 +199,7 @@ LiteRT-LM 本质上是在 LiteRT runtime 上面增加了一整套针对 GenAI �
 * multimodal pipeline
 * Multi-Token Prediction
 
-其中 Google 对其新的 Multi-Token Prediction 路径公开宣称，在适用条件下可以达到最高约 **2.2×** 的生成速度提升。([Google 开发者博客][7])
+其中 Google 对其新的 Multi-Token Prediction 路径公开宣称，在适用条件下可以达到最高约 **2.2×** 的生成速度提升。[Google 开发者博客](https://developers.googleblog.com/blazing-fast-on-device-genai-with-litert-lm/)
 
 因此：
 
@@ -368,14 +368,16 @@ GPU
 
 **Transformer → INT4/INT8 → LiteRT-LM → KV Cache → CompiledModel → QNN/MediaTek NPU → AOT → AI Pack**
 
-这基本就是目前 Google Edge AI 技术栈里性能上限最高的一条路线。([Google 开发者博客][7])
+这基本就是目前 Google Edge AI 技术栈里性能上限最高的一条路线。[Google 开发者博客](https://developers.googleblog.com/blazing-fast-on-device-genai-with-litert-lm/)
 
 如果你的目标设备是 **骁龙 Android 手机**，我还可以进一步给你拆成一张「LiteRT CPU / GPU / QNN NPU / llama.cpp / MNN / ExecuTorch」端侧 LLM 性能技术路线对比，会更适合你现在做手机端 EdgeAI 的选型。
 
-[1]: https://ai.google.dev/edge/litert?utm_source=chatgpt.com "LiteRT: High-Performance On-Device Machine Learning ..."
-[2]: https://ai.google.dev/edge/litert/android/npu/overview?utm_source=chatgpt.com "LiteRT delegate for NPUs | Google AI Edge"
-[3]: https://developers.googleblog.com/unlocking-peak-performance-on-qualcomm-npu-with-litert/?utm_source=chatgpt.com "Unlocking Peak Performance on Qualcomm NPU with LiteRT"
-[4]: https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/?utm_source=chatgpt.com "LiteRT: The Universal Framework for On-Device AI"
-[5]: https://ai.google.dev/edge/litert/inference?utm_source=chatgpt.com "On-device Inference with LiteRT | Google AI Edge"
-[6]: https://developers.googleblog.com/litertjs-googles-high-performance-web-ai-inference/?utm_source=chatgpt.com "LiteRT.js, Google's high performance Web AI Inference"
-[7]: https://developers.googleblog.com/blazing-fast-on-device-genai-with-litert-lm/?utm_source=chatgpt.com "Blazing fast on-device GenAI with LiteRT-LM"
+## 参考资料
+
+1. [LiteRT：面向端侧机器学习的高性能运行时](https://ai.google.dev/edge/litert)
+2. [LiteRT NPU Delegate 概览](https://ai.google.dev/edge/litert/android/npu/overview)
+3. [使用 LiteRT 释放 Qualcomm NPU 的峰值性能](https://developers.googleblog.com/unlocking-peak-performance-on-qualcomm-npu-with-litert/)
+4. [LiteRT：通用端侧 AI 框架](https://developers.googleblog.com/litert-the-universal-framework-for-on-device-ai/)
+5. [LiteRT 端侧推理](https://ai.google.dev/edge/litert/inference)
+6. [LiteRT.js：Google 的高性能 Web AI 推理方案](https://developers.googleblog.com/litertjs-googles-high-performance-web-ai-inference/)
+7. [使用 LiteRT-LM 加速端侧生成式 AI](https://developers.googleblog.com/blazing-fast-on-device-genai-with-litert-lm/)
