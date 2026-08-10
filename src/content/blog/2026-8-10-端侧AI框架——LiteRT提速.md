@@ -8,7 +8,7 @@ draft: false
 image: "/images/blog/blogs_litert_performance_cover.webp"
 ---
 
-# 端侧AI之LiteRT提速
+# 端侧AI框架——LiteRT提速
 如果你关注的是 **Android 端 Edge AI / LiteRT 推理性能**，现在 LiteRT 生态里真正有效的提速手段，已经不只是以前 TFLite 那种“开 XNNPACK / GPU Delegate”了。到 2026 年，Google 的主线明显变成：
 
 **模型优化 → CompiledModel → CPU / GPU / NPU 自动或显式调度 → AOT 编译 → 厂商 NPU Accelerator。** LiteRT 目前已经把 CPU、GPU、NPU 加速统一到一套运行时体系里。([Google AI for Developers][1])
