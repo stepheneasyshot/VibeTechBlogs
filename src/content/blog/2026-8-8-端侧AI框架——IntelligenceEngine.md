@@ -1,11 +1,11 @@
 ---
-title: "三种 AI 编程框架工作原理研究：Spec Kit / OpenSpec / Superpowers"
-description: "拆解三种 AI 编程框架的设计哲学与工作流。"
-pubDate: 2026-07-06
-category: ["AI", "工程实践"]
+title: "端侧 AI 框架——IntelligenceEngine"
+description: "记录端侧 AI 推理引擎的架构设计与性能调优实践。"
+pubDate: 2026-08-08
+category: ["AI", "Android"]
 featured: false
 draft: false
-image: "/images/blog/blogs_ai_coding_frameworks.webp"
+image: "/images/blog/blogs_intelligence_engine_cover.webp"
 ---
 
 # 端侧AI框架——IntelligenceEngine
