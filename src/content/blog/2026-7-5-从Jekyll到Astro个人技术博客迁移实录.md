@@ -3,7 +3,7 @@ title: "从 Jekyll 到 Astro：个人技术博客的迁移实录"
 description: "Jekyll 博客迁移至 Astro 5 的完整记录。"
 pubDate: 2026-07-05
 category: ["Web", "工程实践"]
-featured: true
+featured: false
 draft: false
 image: "/images/blog/blogs_jekyll_to_astro_cover.webp"
 ---

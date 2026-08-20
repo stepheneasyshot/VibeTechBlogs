@@ -13,9 +13,7 @@ import { listTransition } from '../utils/pageTransitions';
 const CAROUSEL_POST_LIMIT = 5;
 
 const allPosts = await getPublishedPosts();
-const featuredPosts = allPosts.filter((p) => p.data.featured);
-const restPosts = allPosts.filter((p) => !p.data.featured);
-const carouselPosts = [...featuredPosts, ...restPosts].slice(0, CAROUSEL_POST_LIMIT);
+const carouselPosts = allPosts.slice(0, CAROUSEL_POST_LIMIT);
 
 // Recommended reading: random gradient palette with hue-distance guard so
 // adjacent cards don't share a similar color family. Same two-radial-spot +
