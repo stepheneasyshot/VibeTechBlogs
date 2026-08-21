@@ -6,7 +6,7 @@ pubDate: 2025-08-09
 category: ["AI", "Android", "跨平台"]
 featured: false
 draft: false
-image: "/images/blog/blogs_ai_doubao_cover.webp"
+image: "/images/blog/doubao-vision-calorie-recognition-cover.webp"
 ---
 # 集成doubao-vision视觉api实现卡路里识别
 这个功能实现很早了，在开源项目 `PeachAssistant` 里已经有体现了，利用CMP跨平台技术在Android和IOS平台均完成了功能的集成。现记录一下api的介绍和两个平台的执行流程。
