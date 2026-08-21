@@ -28,36 +28,35 @@ function isActive(href: string) {
 ---
 
 <!--
-  实色背景（无毛玻璃）：VT 快照无法携带 backdrop-filter，半透明 header
-  会在页面切换时透出主内容。transition:name 必须显式设为 site-header，
-  persist 的值只是匹配 key，不会设置 view-transition-name。
+  页面内使用半透明 Surface + backdrop blur；VT 快照层由 global.css 提供
+  实色垫底，避免切页时内容穿透。transition:name 必须显式设置。
 -->
 <header
-  class="fixed top-0 w-full z-50 bg-surface-wash elevation-1"
+  class="site-top-app-bar fixed top-0 w-full z-50 border-b border-outline-variant/20"
   transition:persist="site-header"
   transition:name="site-header"
   transition:animate="none"
 >
   <ReadingProgress />
-  <nav class="max-w-[1200px] mx-auto px-gutter flex items-center justify-between h-14">
-    <div class="flex items-center gap-3 md:gap-6 min-w-0">
+  <nav class="max-w-[1200px] mx-auto px-3 sm:px-gutter flex items-center justify-between h-14">
+    <div class="flex items-center gap-1 md:gap-5 min-w-0">
       <a
         href="/"
         data-nav-root
-        class="font-headline text-[15px] sm:text-[17px] md:text-[18px] font-bold text-tertiary-fixed-dim tracking-tight whitespace-nowrap"
+        class="site-brand inline-flex items-center h-10 px-1 md:px-2 font-headline text-[15px] sm:text-[17px] md:text-[20px] font-bold text-primary tracking-tight whitespace-nowrap rounded-full transition-colors hover:bg-primary/8"
       >
         {site.name}
       </a>
-      <div class="flex gap-3 md:gap-5 items-stretch">
+      <div class="flex gap-0.5 md:gap-1 items-center h-14">
         {site.nav.map((item) => (
           <a
             href={item.href}
             data-nav-link={item.href}
             class={cn(
-              'font-headline text-[13px] md:text-[14px] flex items-center border-b-2 -mb-px transition-colors duration-200 cursor-pointer active:opacity-70 whitespace-nowrap',
+              'site-nav-tab font-label text-[13px] md:text-[14px] font-medium inline-flex items-center justify-center h-10 px-2 md:px-4 rounded-full transition-colors duration-200 cursor-pointer whitespace-nowrap',
               isActive(item.href)
-                ? 'text-tertiary-fixed-dim border-tertiary-fixed-dim'
-                : 'text-on-surface-variant border-transparent hover:text-tertiary-fixed-dim',
+                ? 'site-nav-tab-active text-primary'
+                : 'text-on-surface-variant',
             )}
           >
             {item.label}
@@ -89,6 +88,7 @@ function isActive(href: string) {
   }
 
   function setNavLinksTransition(enabled: boolean) {
+    document.querySelector('.site-top-app-bar')?.classList.toggle('site-nav-transitions-disabled', !enabled);
     document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]').forEach((link) => {
       link.style.transition = enabled ? '' : 'none';
     });
@@ -104,9 +104,8 @@ function isActive(href: string) {
       const href = link.dataset.navLink;
       if (!href) return;
       const active = isNavActive(href, path);
-      link.classList.toggle('text-tertiary-fixed-dim', active);
-      link.classList.toggle('border-tertiary-fixed-dim', active);
-      link.classList.toggle('border-transparent', !active);
+      link.classList.toggle('site-nav-tab-active', active);
+      link.classList.toggle('text-primary', active);
       link.classList.toggle('text-on-surface-variant', !active);
       if (active) {
         link.setAttribute('aria-current', 'page');

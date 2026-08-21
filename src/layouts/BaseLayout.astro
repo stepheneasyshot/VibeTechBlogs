@@ -49,6 +49,36 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
     />
+    <script is:inline>
+      (function () {
+        var readyClass = 'material-symbols-ready';
+        var root = document.documentElement;
+
+        function revealIcons() {
+          root.classList.add(readyClass);
+        }
+
+        if (!document.fonts || !document.fonts.load) {
+          revealIcons();
+          return;
+        }
+
+        document.fonts
+          .load('400 24px "Material Symbols Outlined"')
+          .then(function (fonts) {
+            if (fonts.length > 0) revealIcons();
+          })
+          .catch(function () {
+            // 加载失败时保持隐藏，避免把 ligature 源文本显示成英文单词。
+          });
+
+        document.addEventListener('astro:before-swap', function (event) {
+          if (root.classList.contains(readyClass)) {
+            event.newDocument.documentElement.classList.add(readyClass);
+          }
+        });
+      })();
+    </script>
     <title>{title}</title>
     <ClientRouter />
     <script is:inline>

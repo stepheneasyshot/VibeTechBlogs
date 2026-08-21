@@ -9,12 +9,12 @@ const { headings } = Astro.props;
 const tocItems = headings.filter((h) => h.depth <= 3);
 ---
 
-<aside class="hidden lg:block w-64 sticky top-20 self-start">
-  <div class="p-6 rounded-xl bg-surface-container-low elevation-1 max-h-[calc(100vh-6rem)] overflow-y-auto toc-scroll">
+<aside class="post-toc hidden lg:block sticky top-[4.5rem] self-start">
+  <div class="p-4 rounded-lg bg-surface-container-low elevation-1 max-h-[calc(100vh-5.5rem)] overflow-y-auto toc-scroll">
     <a
       href="/"
       data-post-back
-      class="flex items-center gap-2 h-9 px-3 -mx-2 mb-stack-md rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors cursor-pointer"
+      class="flex items-center gap-2 h-8 px-2 -mx-1 mb-3 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors cursor-pointer"
       aria-label="返回上一级"
     >
       <span class="material-symbols-outlined text-[20px]">arrow_back</span>
@@ -22,25 +22,25 @@ const tocItems = headings.filter((h) => h.depth <= 3);
     </a>
     {tocItems.length > 0 && (
       <>
-        <div class="h-px bg-outline-variant/30 mb-stack-md" />
-        <h4 class="font-headline text-[14px] uppercase tracking-widest text-on-surface-variant mb-stack-md font-semibold">
+        <div class="h-px bg-outline-variant/30 mb-3" />
+        <h4 class="font-headline text-[13px] tracking-wider text-on-surface-variant mb-3 font-semibold">
           目录
         </h4>
-        <ul class="space-y-4">
+        <ul class="space-y-2.5">
           {tocItems.map((heading) => (
             <li style={heading.depth === 3 ? 'padding-left: 1rem' : undefined}>
               <a
                 href={`#${heading.slug}`}
                 data-toc-link={heading.slug}
-                class="toc-link font-label text-label-md text-on-surface-variant hover:text-primary transition-colors duration-200 flex items-center border-l-2 border-transparent pl-3 -ml-[2px]"
+                class="toc-link font-label text-[13px] leading-[1.25rem] text-on-surface-variant hover:text-primary transition-colors duration-200 flex items-center border-l-2 border-transparent pl-2.5 -ml-[2px]"
               >
                 {heading.text}
               </a>
             </li>
           ))}
         </ul>
-        <div class="mt-stack-lg pt-stack-md border-t border-outline-variant/20">
-          <p class="font-label text-label-md text-on-surface-variant mb-4">分享文章</p>
+        <div class="mt-5 pt-3 border-t border-outline-variant/20">
+          <p class="font-label text-[13px] text-on-surface-variant mb-3">分享文章</p>
           <div class="flex gap-4">
             <button
               type="button"

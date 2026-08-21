@@ -27,9 +27,9 @@ const readTime = getReadingTime(body);
   pageKind="post"
   pageTransition={postTransition}
 >
-  <div class="mt-20 mb-stack-xl max-w-[1200px] mx-auto px-gutter flex flex-col lg:flex-row gap-stack-xl items-start">
+  <div class="post-layout mt-[4.5rem] mb-stack-xl mx-auto px-gutter">
     <TableOfContents headings={headings} />
-    <article class="w-full lg:max-w-[720px] mx-auto" transition:name={`post-${slug}`}>
+    <article class="post-article w-full min-w-0 mx-auto" transition:name={`post-${slug}`}>
       <a
         href="/"
         data-post-back
@@ -39,7 +39,7 @@ const readTime = getReadingTime(body);
         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         <span>返回</span>
       </a>
-      <header class="mb-stack-lg">
+      <header class="post-reading-column mb-stack-lg">
         <div class="flex items-center gap-3 mb-stack-md flex-wrap">
           {
             categories.map((cat) => (
@@ -75,18 +75,20 @@ const readTime = getReadingTime(body);
         </div>
       </header>
 
-      <CoverImage
-        src={image}
-        alt={title}
-        class="mb-stack-xl rounded-xl elevation-1"
-        transitionName={`cover-${slug}`}
-      />
+      <div class="post-reading-column">
+        <CoverImage
+          src={image}
+          alt={title}
+          class="mb-stack-lg rounded-xl elevation-1"
+          transitionName={`cover-${slug}`}
+        />
+      </div>
 
       <div class="prose-blog">
         <slot />
       </div>
 
-      <div class="mt-stack-xl pt-stack-md border-t border-outline-variant/30 flex flex-wrap gap-2">
+      <div class="post-reading-column mt-stack-xl pt-stack-md border-t border-outline-variant/30 flex flex-wrap gap-2">
         {
           categories.map((cat) => (
             <a
