@@ -1102,6 +1102,7 @@
 
   .code-block-wrapper {
     --code-block-bg: var(--color-surface-container-lowest);
+    --code-block-header-bg: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface-container-high));
     --code-block-label: var(--color-on-surface-variant);
     @apply my-stack-md rounded-lg overflow-hidden elevation-2 border border-outline-variant/40;
   }
@@ -1142,8 +1143,9 @@
 
   .code-block-header {
     @apply px-4 py-2 flex items-center justify-between;
-    background-color: var(--code-block-bg);
+    background-color: var(--code-block-header-bg);
     color: var(--code-block-label);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 18%, var(--color-outline-variant));
   }
 
   .code-block-lang,
